@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	
+    'gunicorn'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'usm.urls'
+ROOT_URLCONF = 'settings.urls'
 
-WSGI_APPLICATION = 'usm.wsgi.application'
+WSGI_APPLICATION = 'settings.wsgi.application'
 
 
 # Database
