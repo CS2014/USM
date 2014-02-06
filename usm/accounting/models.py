@@ -3,11 +3,34 @@
 	date:		2014/2/6
 
 	Models representing the accounting system.
+
+	TODO: 
+	- Many of the classes share the same attributes, eg. name | ammount 
+	  Is there a way to implement DRY in this respect?
 """
 
 from django.db import models
 import datetime
 from django.utils import timezone
+
+class Log(models.Model):
+		'''
+		Meta data for reviewing changes to enteries over timezone
+
+		TODO:
+		- Create the user relationship
+		- Have some sort of array of ammounts|dates|users to see changes
+			over time to an entry
+		- Have modified_date update automagically.
+
+		CONSIDER:
+		- Why is ammount stored here?
+		- The log should store who made/edited an entry?
+		'''
+		description = models.CharField(max_length=30)
+		creation_date = models.DateTimeField(default=timezone.now, editable=False)
+		modified_date = models.DateTimeField('modified date')
+		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 
 class Transaction(models.Model):
 		''' 
@@ -15,14 +38,13 @@ class Transaction(models.Model):
 		Can be given a tag to visualise spending by area.
 
 		TODO:
-		-method
-		-category
-		-many to many (log)
+		- Make bank_reconlliation_date manditory if cheque is the payment method.
 		'''
 
+		logs = models.ManyToManyField(Log)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		submit_date = models.DateTimeField('submission date')
-		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date')
+		submit_date = models.DateTimeField(default=timezone.now, editable=False)
+		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
 		description = models.CharField(max_length=300)
 
 		def __unicode__(self):
@@ -34,7 +56,7 @@ class TransactionCategory(models.Model):
 		Each transaction has a tag summarising the transaction's purpose.
 
 		TODO:
-		- Create a forignKey relationship with a transcation.
+		- Implement a system to allow only certain, society defined, tags be used.
 		'''
 		name = models.CharField(max_length=20)
 		transaction = models.ForeignKey(Transaction)
@@ -49,12 +71,16 @@ class TransactionMethod(models.Model):
 		eg. was it in cash|cheque
 
 		TODO:
-		-have it so that name can only be certain things, eg: cash/cheque.
 		-reconsider the description field.
 		'''
 
+		PAYMENT_CHOICES = ( 
+			('Cash', 'cash') ,
+			('Cheque', 'cheque'),
+		)
+
 		transaction = models.ForeignKey(Transaction)
-		name = models.CharField(max_length=30)
+		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		description = models.CharField(max_length=300)
 
 
@@ -65,12 +91,12 @@ class Bill(models.Model):
 
 		TODO:
 		-functionality for a recurring bill.
-		-many to many (log)
 
 		CONSIDER:
 		-adding a transactionCategory?
 		'''
 
+		logs = models.ManyToManyField(Log)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 		description = models.CharField(max_length=300)
 		'''
@@ -85,10 +111,9 @@ class Invoice(models.Model):
 		An outstanding obligation of the society.
 		Eg. accomodation|travel fee. 
 
-		TODO:
-		- many to many (log)
 		'''
 
+		logs = models.ManyToManyField(Log)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 		description = models.CharField(max_length=300)
 		invoicee = models.CharField(max_length=30)
@@ -109,16 +134,3 @@ class Grant(models.Model):
 		category = models.CharField(max_length=30)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 
-class Log(models.Model):
-		'''
-		Meta data for reviewing changes to enteries over timezone
-
-		TODO:
-		- Create the user relationship
-		- Have some sort of array of ammounts|dates|users to see changes
-			over time to an entry
-		'''
-		description = models.CharField(max_length=30)
-		creation_date = models.DateTimeField('creation date')
-		modified_date = models.DateTimeField('modified date')
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
