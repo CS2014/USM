@@ -20,26 +20,35 @@ class TransactionMethodInLine(admin.TabularInline):
 
 class TransactionCategoryInLine(admin.TabularInline):
 		model = TransactionCategory
-		extra = 1		
+		extra = 1
+
+class TransactionInLine(admin.TabularInline):
+		model = Transaction
+		extra = 3		
 
 class TransactionAdmin(admin.ModelAdmin):
+		'''
+		TODO:
+		- Be able to select method and category when creating transaction.
+
+		'''
 		fields = [ 'ammount', 'description', 'bank_reconlliation_date' ]
-		inlines = [TransactionMethodInLine, TransactionCategoryInLine]
-		list_display = ('description', 'ammount', 'get_category', 'get_method','bank_reconlliation_date')
+		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method')
+		
 
-		'''
-		Custom definitions to get the tags of the transaction category and method.
+class TransactionCategoryAdmin(admin.ModelAdmin):
+		fields = [ 'name' ]
+		inlines = [ TransactionInLine ]
 
-		The first element of the TransactionCategory|method object set is retrieved and its
-		name field is returned.
-		The column is labeled Category|Payment method, as opposed the object's name.
-		'''
-		def get_category(self,obj):
-			return obj.transactioncategory_set.all()[0].name
-		get_category.short_description = 'Category'
+class TransactionMethodAdmin(admin.ModelAdmin):
+		fields = [ 'name', 'description' ]
+		inlines = [ TransactionInLine ]		
 
-		def get_method(self,obj):
-			return obj.transactionmethod_set.all()[0].name
-		get_method.short_description = 'Payment method'
+class LogAdmin(admin.ModelAdmin):
+		fields = [ 'description', 'modified_date', 'ammount' ]
+
 
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(TransactionCategory, TransactionCategoryAdmin)
+admin.site.register(TransactionMethod, TransactionMethodAdmin)
+admin.site.register(Log,LogAdmin)

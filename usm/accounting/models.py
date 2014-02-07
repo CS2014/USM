@@ -32,23 +32,6 @@ class Log(models.Model):
 		modified_date = models.DateTimeField('modified date')
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 
-class Transaction(models.Model):
-		''' 
-		A single transaction made by a society.
-		Can be given a tag to visualise spending by area.
-
-		TODO:
-		- Make bank_reconlliation_date manditory if cheque is the payment method.
-		'''
-
-		logs = models.ManyToManyField(Log)
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		submit_date = models.DateTimeField(default=timezone.now, editable=False)
-		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
-		description = models.CharField(max_length=300)
-
-		def __unicode__(self):
-			return self.description
 
 class TransactionCategory(models.Model):
 		'''
@@ -59,7 +42,6 @@ class TransactionCategory(models.Model):
 		- Implement a system to allow only certain, society defined, tags be used.
 		'''
 		name = models.CharField(max_length=20)
-		transaction = models.ForeignKey(Transaction)
 		
 		def __unicode__(self):
 			return self.name
@@ -79,9 +61,33 @@ class TransactionMethod(models.Model):
 			('Cheque', 'cheque'),
 		)
 
-		transaction = models.ForeignKey(Transaction)
 		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		description = models.CharField(max_length=300)
+		def __unicode__(self):
+			return self.name
+
+
+class Transaction(models.Model):
+		''' 
+		A single transaction made by a society.
+		Can be given a tag to visualise spending by area.
+
+		TODO:
+		- Make bank_reconlliation_date manditory if cheque is the payment method.
+		'''
+
+		logs = models.ManyToManyField(Log)
+		transaction_category = models.ForeignKey(TransactionCategory)
+		transaction_method = models.ForeignKey(TransactionMethod)
+
+		ammount = models.DecimalField(max_digits=8, decimal_places=2)
+		submit_date = models.DateTimeField(default=timezone.now, editable=False)
+		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
+		description = models.CharField(max_length=300)
+
+
+		def __unicode__(self):
+			return self.description
 
 
 class Bill(models.Model):
@@ -133,4 +139,3 @@ class Grant(models.Model):
 		creation_date = models.DateTimeField('creation date')
 		category = models.CharField(max_length=30)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-
