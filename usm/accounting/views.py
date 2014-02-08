@@ -11,7 +11,6 @@ from django.shortcuts import render, get_object_or_404
 
 from accounting.models import Transaction
 
-
 # Displays all the transactions in the list
 # Currently not working as intended.
 def index(request):
