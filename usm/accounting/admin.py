@@ -28,11 +28,12 @@ class TransactionInLine(admin.TabularInline):
 
 class TransactionAdmin(admin.ModelAdmin):
 		'''
-		TODO:
-		- Be able to select method and category when creating transaction.
+		Creates a transaction :: bank_reconlliation_date is optional.
 
+		TODO:
+		- Have bank_reconlliation_date only appear when cheque payment method is selceted.
 		'''
-		fields = [ 'ammount', 'description', 'bank_reconlliation_date' ]
+		fields = [ 'ammount', 'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date' ]
 		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method')
 		
 
