@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 
     'accounting',
     'minutes',
+    'communications',
 )
 
 MIDDLEWARE_CLASSES = (
