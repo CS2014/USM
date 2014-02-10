@@ -38,8 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	
     'gunicorn',
-    'accounting',
     'south',
+
+    'accounting',
+    'minutes',
 )
 
 MIDDLEWARE_CLASSES = (
