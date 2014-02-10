@@ -39,6 +39,7 @@ INSTALLED_APPS = (
 	
     'gunicorn',
     'accounting',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
