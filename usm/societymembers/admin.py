@@ -2,8 +2,8 @@
 	author: Ross Kinsella
 	date:   2014/feb/10
 
-	Adds functionality for creating and editing Meetings, 
-	their Minutes and their Agendas.
+	Adds functionality for creating and editing Society Members, 
+	their Tags and their Memership fees.
 
 	TODO:
 	- Add society to fields once it has been implemented.
