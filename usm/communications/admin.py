@@ -10,10 +10,10 @@ from django.contrib import admin
 from communications.models import TextMessage, Email
 
 class TextMessageAdmin(admin.ModelAdmin):
-	fields = ['name', 'tag', 'content', 'source_phone_number'] 
+	fields = ['name', 'society', 'recipients' ,'tag', 'content', 'source_phone_number'] 
 
 class EmailAdmin(admin.ModelAdmin):
-	fields = ['name', 'tag', 'content', 'sending_address' ]
+	fields = ['name', 'society', 'recipients' ,'tag', 'content', 'sending_address' ]
 
 admin.site.register(TextMessage,TextMessageAdmin)
 admin.site.register(Email,EmailAdmin)

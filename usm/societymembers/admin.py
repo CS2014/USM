@@ -13,10 +13,10 @@ from django.contrib import admin
 from societymembers.models import Tag, SocietyMember, MembershipFee
 
 class TagAdmin(admin.ModelAdmin):
-	fields = [ 'name' ]
+	fields = [ 'name', 'society' ]
 
 class SocietyMemberAdmin(admin.ModelAdmin):
-	fields = [ 'name', 'phone_number', 'email_address', 'join_date', 'tags']
+	fields = [ 'society', 'name', 'phone_number', 'email_address', 'join_date', 'tags']
 	list_display = ('name', 'get_tags')
 
 class MembershipFeeAdmin(admin.ModelAdmin):

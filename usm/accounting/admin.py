@@ -12,7 +12,7 @@
 '''
 
 from django.contrib import admin
-from accounting.models import Transaction, TransactionMethod, TransactionCategory, Log
+from accounting.models import Account, Transaction, TransactionMethod, TransactionCategory, Log
 
 class TransactionMethodInLine(admin.TabularInline):
 		model = TransactionMethod
@@ -26,6 +26,9 @@ class TransactionInLine(admin.TabularInline):
 		model = Transaction
 		extra = 3		
 
+class AccountAdmin(admin.ModelAdmin):
+	fields = ['society']
+
 class TransactionAdmin(admin.ModelAdmin):
 		'''
 		Creates a transaction :: bank_reconlliation_date is optional.
@@ -33,7 +36,7 @@ class TransactionAdmin(admin.ModelAdmin):
 		TODO:
 		- Have bank_reconlliation_date only appear when cheque payment method is selceted.
 		'''
-		fields = [ 'ammount', 'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date' ]
+		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date' ]
 		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method')
 		
 
@@ -53,3 +56,4 @@ admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(TransactionCategory, TransactionCategoryAdmin)
 admin.site.register(TransactionMethod, TransactionMethodAdmin)
 admin.site.register(Log,LogAdmin)
+admin.site.register(Account,AccountAdmin)

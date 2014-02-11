@@ -6,12 +6,13 @@
 
 	TODO: 
 	- Validators for source_phone_number and sending_address.
-	- A list of recipients for both texts and emails.
 	- A sending time.
-	- A send method.
+	- A send_message|email method. There is a library for it from django.
 """
  	 
 from django.db import models
+from main.models import Society
+from societymembers.models import SocietyMember
 
 class TextMessage(models.Model):
 	'''
@@ -23,6 +24,10 @@ class TextMessage(models.Model):
 	source_phone_number is stored in a char field to allow for white space
 	and '-' formating.
 	'''
+	society = models.ForeignKey(Society)
+	recipients = models.ForeignKey(SocietyMember)
+
+
 	name = models.CharField(max_length=40)
 	tag = models.CharField(max_length=30)
 	content = models.CharField(max_length=160)
@@ -35,6 +40,9 @@ class Email(models.Model):
 	'''
 	An email to be sent to a list of users.
 	'''
+	society = models.ForeignKey(Society)
+	recipients = models.ForeignKey(SocietyMember)
+
 	name = models.CharField(max_length=40)
 	tag = models.CharField(max_length=30)
 	content = models.CharField(max_length=160)

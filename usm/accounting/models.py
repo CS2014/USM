@@ -5,6 +5,9 @@
 	Models representing the accounting system.
 
 	TODO: 
+	- Crate functionality for Account.
+	   eg. updateBalance()
+
 	- Many of the classes share the same attributes, eg. name | ammount 
 	  Is there a way to implement DRY in this respect?
 """
@@ -12,6 +15,20 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+from main.models import Society
+
+
+class Account(models.Model):
+	'''
+	A holder of all of the above instances for a single Society.
+
+	TODO:
+	- Balance field.
+	'''
+	society = models.OneToOneField(Society)
+
+	def __unicode__(self):
+		return self.society.name
 
 class Log(models.Model):
 		'''
@@ -32,6 +49,9 @@ class Log(models.Model):
 		modified_date = models.DateTimeField('modified date')
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 
+		def __unicode__(self):
+			return self.description
+
 
 class TransactionCategory(models.Model):
 		'''
@@ -41,6 +61,8 @@ class TransactionCategory(models.Model):
 		TODO:
 		- Implement a system to allow only certain, society defined, tags be used.
 		'''
+		#account = models.ForeignKey(Account)	
+
 		name = models.CharField(max_length=20)
 		
 		def __unicode__(self):
@@ -60,6 +82,7 @@ class TransactionMethod(models.Model):
 			('Cash', 'cash') ,
 			('Cheque', 'cheque'),
 		)
+		#account = models.ForeignKey(Account)
 
 		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		description = models.CharField(max_length=300)
@@ -75,7 +98,7 @@ class Transaction(models.Model):
 		TODO:
 		- Make bank_reconlliation_date manditory if cheque is the payment method.
 		'''
-
+		account = models.ForeignKey(Account)
 		logs = models.ManyToManyField(Log)
 		transaction_category = models.ForeignKey(TransactionCategory)
 		transaction_method = models.ForeignKey(TransactionMethod)
@@ -101,10 +124,11 @@ class Bill(models.Model):
 		CONSIDER:
 		-adding a transactionCategory?
 		'''
-
+		account = models.ForeignKey(Account)
 		logs = models.ManyToManyField(Log)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 		description = models.CharField(max_length=300)
+
 		'''
 		biller == payee | the receiver of the due ammount
 		'''
@@ -112,19 +136,26 @@ class Bill(models.Model):
 		creation_date = models.DateTimeField('creation date')
 		due_date = models.DateTimeField('due date')
 
+		def __unicode__(self):
+			return self.description
+
 class Invoice(models.Model):
 		'''
 		An outstanding obligation of the society.
 		Eg. accomodation|travel fee. 
 
 		'''
-
+		account = models.ForeignKey(Account)
 		logs = models.ManyToManyField(Log)
+
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 		description = models.CharField(max_length=300)
 		invoicee = models.CharField(max_length=30)
 		creation_date = models.DateTimeField('creation date')
 		due_date = models.DateTimeField('due date')
+
+		def __unicode__(self):
+			return self.description
 
 class Grant(models.Model):
 		'''
@@ -135,6 +166,7 @@ class Grant(models.Model):
 		- add a tagging system?
 		- add a log relationsip?
 		'''
+		account = models.ForeignKey(Account)
 
 		creation_date = models.DateTimeField('creation date')
 		category = models.CharField(max_length=30)

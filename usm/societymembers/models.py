@@ -11,6 +11,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+from main.models import Society
 
 class Tag(models.Model):
 	'''
@@ -18,10 +19,8 @@ class Tag(models.Model):
 	For example: A 'Goal keeper' tag or 'Django developer' tag.
 	'''
 	name = models.CharField(max_length=30)
-	'''
-	TODO:
 	society = models.ForeignKey(Society)
-	'''
+
 	def __unicode__(self):
 		return self.name	
 
@@ -33,12 +32,8 @@ class SocietyMember(models.Model):
 	The phone_number field is stored in a char field to allow for white space
 	and '-' formating.
 	'''
-
 	tags = models.ManyToManyField(Tag)
-	'''
-	TODO: 
 	society = models.ForeignKey(Society)
-	'''
 
 	name = models.CharField(max_length=30)
 	phone_number = models.CharField(max_length=25)

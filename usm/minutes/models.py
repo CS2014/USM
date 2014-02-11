@@ -3,14 +3,13 @@
 	date:		2014/2/10
 
 	Models representing the minutes system.
-
-	TODO: 
-	- implement and import Society | SocietyMember class.
 """
 from django.db import models
 import datetime
 from django.utils import timezone
 from accounting.models import Log
+from main.models import Society
+from societymembers.models import SocietyMember
 
 class Meeting(models.Model):
 	'''
@@ -20,12 +19,14 @@ class Meeting(models.Model):
 	- Include the venue?
 	- Create a meeting -- society ForeignKey relationship?
 	'''
+	society = models.ForeignKey(Society)
+	society_members = models.ManyToManyField(SocietyMember)
+
 	date = models.DateTimeField()
 	title = models.CharField(max_length = 100)
-	'''
-	TODO:
-	society_members = models.ManyToManyField(SocieryMember)
-	'''
+
+	def __unicode__(self):
+		return self.title
 
 class Agenda(models.Model):
 	'''
@@ -40,6 +41,9 @@ class Agenda(models.Model):
 	meeting = models.OneToOneField(Meeting, primary_key=True)
 	log = models.ManyToManyField(Log)
 
+	def __unicode__(self):
+		return self.title
+
 
 class Minutes(models.Model):
 	'''
@@ -49,13 +53,13 @@ class Minutes(models.Model):
 	TODO:
 	- Allow users to import a document as the text?
 	'''
+	society = models.ForeignKey(Society) 
+	attendence = models.ManyToManyField(SocietyMember)
+
 	creation_date = models.DateTimeField(default=timezone.now, editable=False)
 	log = models.ManyToManyField(Log)
 	text = models.CharField(max_length=10000)
 	meeting = models.OneToOneField(Meeting, primary_key = True)
-	'''
-	TODO:
-	society = models.ForeignKey(Society) 
-	attendence = models.ManyToManyField(SocietyMember)
-	'''
 
+	def __unicode__(self):
+		return self.text

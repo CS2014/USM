@@ -13,13 +13,13 @@ from django.contrib import admin
 from minutes.models import Meeting, Minutes, Agenda
 
 class MeetingAdmin(admin.ModelAdmin):
-	fields = [ 'date', 'title' ]
+	fields = [ 'society', 'society_members' ,'date', 'title' ]
 
 class AgendaAdmin(admin.ModelAdmin):
 	fields = [ 'date', 'title', 'content', 'meeting', 'log']
 
 class MinutesAdmin(admin.ModelAdmin):
-	fields = [ 'creation_date', 'log', 'text', 'meeting' ] 
+	fields = [ 'society', 'meeting', 'attendence', 'log', 'text'] 
 
 admin.site.register(Meeting,MeetingAdmin)
 admin.site.register(Minutes,MinutesAdmin)
