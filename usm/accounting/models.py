@@ -4,12 +4,18 @@
 
 	Models representing the accounting system.
 
+	Transaction, Bill and Invoice have a hook save which creteas a Log
+	instance whenever they are created / edited.
+
 	TODO: 
 	- Crate functionality for Account.
 	   eg. updateBalance()
 
 	- Many of the classes share the same attributes, eg. name | ammount 
 	  Is there a way to implement DRY in this respect?
+
+	BUGS:
+	- get_logs in bill & invoice returns blank, although the hook save is working.
 """
 
 from django.db import models
@@ -121,9 +127,17 @@ class Transaction(models.Model):
 		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
 		description = models.CharField(max_length=300)
 
+		def save(self, *args, **kwargs):
+			super(Transaction, self).save(*args, **kwargs)
+			log = Log.objects.create(user = User(id=1), description="test") 
+			log.save																											  
+
+		def get_logs(self):
+			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
+		get_logs.short_description = 'Logs'
 
 		def __unicode__(self):
-			return self.description
+			return self.description 
 
 
 class Bill(models.Model):
@@ -149,6 +163,15 @@ class Bill(models.Model):
 		creation_date = models.DateTimeField('creation date')
 		due_date = models.DateTimeField('due date')
 
+		def save(self, *args, **kwargs):
+			super(Bill, self).save(*args, **kwargs)
+			log = Log.objects.create(user = User(id=1), description="bill test") 
+			log.save
+
+		def get_logs(self):	
+			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
+		get_logs.short_description = 'Logs'
+
 		def __unicode__(self):
 			return self.description
 
@@ -166,6 +189,15 @@ class Invoice(models.Model):
 		invoicee = models.CharField(max_length=30)
 		creation_date = models.DateTimeField('creation date')
 		due_date = models.DateTimeField('due date')
+
+		def save(self, *args, **kwargs):
+			super(Invoice, self).save(*args, **kwargs)
+			log = Log.objects.create(user = User(id=1), description="invoice test") 
+			log.save
+
+		def get_logs(self):	
+			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
+		get_logs.short_description = 'Logs'
 
 		def __unicode__(self):
 			return self.description

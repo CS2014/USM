@@ -12,22 +12,20 @@
 '''
 
 from django.contrib import admin
-from accounting.models import Account, Transaction, TransactionMethod, TransactionCategory, Log
+from accounting.models import Account, Transaction, TransactionMethod, TransactionCategory
+from accounting.models import Log, Bill, Invoice
 
-class TransactionMethodInLine(admin.TabularInline):
-		model = TransactionMethod
-		extra = 1
-
-class TransactionCategoryInLine(admin.TabularInline):
-		model = TransactionCategory
-		extra = 1
-
-class TransactionInLine(admin.TabularInline):
-		model = Transaction
-		extra = 3		
+class LogAdmin(admin.ModelAdmin):
+		fields = [ 'user', 'description']
 
 class AccountAdmin(admin.ModelAdmin):
 	fields = ['society']
+
+class TransactionCategoryAdmin(admin.ModelAdmin):
+		fields = [ 'name' ]
+
+class TransactionMethodAdmin(admin.ModelAdmin):
+		fields = [ 'name', 'description' ]
 
 class TransactionAdmin(admin.ModelAdmin):
 		'''
@@ -36,20 +34,16 @@ class TransactionAdmin(admin.ModelAdmin):
 		TODO:
 		- Have bank_reconlliation_date only appear when cheque payment method is selceted.
 		'''
-		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date' ]
-		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method')
-		
+		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date']
+		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method', 'get_logs' )	
 
-class TransactionCategoryAdmin(admin.ModelAdmin):
-		fields = [ 'name' ]
-		inlines = [ TransactionInLine ]
+class BillAdmin(admin.ModelAdmin):
+	fields = [ 'account', 'ammount', 'description', 'biller', 'creation_date' ,'due_date' ]
+	list_display = [ 'account', 'ammount', 'description', 'biller', 'creation_date' ,'due_date', 'get_logs' ]
 
-class TransactionMethodAdmin(admin.ModelAdmin):
-		fields = [ 'name', 'description' ]
-		inlines = [ TransactionInLine ]		
-
-class LogAdmin(admin.ModelAdmin):
-		fields = [ 'description', 'modified_date', 'ammount' ]
+class InvoiceAdmin(admin.ModelAdmin):
+	fields = [ 'account', 'ammount' ,'description', 'invoicee', 'creation_date', 'due_date' ]
+	list_display = [ 'account', 'ammount' ,'description', 'invoicee', 'creation_date', 'due_date' , 'get_logs']
 
 
 admin.site.register(Transaction, TransactionAdmin)
@@ -57,3 +51,5 @@ admin.site.register(TransactionCategory, TransactionCategoryAdmin)
 admin.site.register(TransactionMethod, TransactionMethodAdmin)
 admin.site.register(Log,LogAdmin)
 admin.site.register(Account,AccountAdmin)
+admin.site.register(Bill, BillAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
