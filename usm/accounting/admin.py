@@ -22,10 +22,10 @@ class AccountAdmin(admin.ModelAdmin):
 	fields = ['society']
 
 class TransactionCategoryAdmin(admin.ModelAdmin):
-		fields = [ 'name' ]
+		fields = [ 'account', 'name' ]
 
 class TransactionMethodAdmin(admin.ModelAdmin):
-		fields = [ 'name', 'description' ]
+		fields = [ 'account', 'name', 'description' ]
 
 class TransactionAdmin(admin.ModelAdmin):
 		'''

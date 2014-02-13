@@ -75,10 +75,9 @@ class TransactionCategory(models.Model):
 		A tagging system for transactions to aid in representations.
 		Each transaction has a tag summarising the transaction's purpose.
 
-		TODO:
-		- Implement a system to allow only certain, society defined, tags be used.
+		Societies create their own tags.
 		'''
-		#account = models.ForeignKey(Account)	
+		account = models.ForeignKey(Account)	
 
 		name = models.CharField(max_length=20)
 		
@@ -91,6 +90,8 @@ class TransactionMethod(models.Model):
 		A tag descriping how the transaction was conducted;
 		eg. was it in cash|cheque
 
+		Societies create their own tags.
+
 		TODO:
 		-reconsider the description field.
 		'''
@@ -99,7 +100,7 @@ class TransactionMethod(models.Model):
 			('Cash', 'cash') ,
 			('Cheque', 'cheque'),
 		)
-		#account = models.ForeignKey(Account)
+		account = models.ForeignKey(Account)
 
 		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		description = models.CharField(max_length=300)
