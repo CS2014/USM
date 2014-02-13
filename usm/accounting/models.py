@@ -16,6 +16,7 @@ from django.db import models
 import datetime
 from django.utils import timezone
 from main.models import Society
+from django.contrib.auth.models import User
 
 
 class Account(models.Model):
@@ -35,19 +36,29 @@ class Log(models.Model):
 		Meta data for reviewing changes to enteries over timezone
 
 		TODO:
-		- Create the user relationship
 		- Have some sort of array of ammounts|dates|users to see changes
 			over time to an entry
-		- Have modified_date update automagically.
 
-		CONSIDER:
-		- Why is ammount stored here?
-		- The log should store who made/edited an entry?
+		NB: 
+		-- When I added a user field and auto migrated I got this: --
+		The field 'Log.user' does not have a default specified, yet is NOT NULL.
+ 		? Since you are adding this field, you MUST specify a default
+ 		? value to use for existing rows. Would you like to:
+ 		?  1. Quit now, and add a default to the field in models.py
+ 		?  2. Specify a one-off value to use for existing columns now
+ 		? Please select a choice: 2
+ 		? Please enter Python code for your one-off default value.
+ 		>>> 0
+	  + Added field user on accounting.Log
+		Created 0002_auto__del_field_log_modified_date__add_field_log_user.py.
+
+		-- Likewise, when I removed ammount, I set it to 0 -- 
 		'''
+
+		user = models.ForeignKey(User)
+
 		description = models.CharField(max_length=30)
 		creation_date = models.DateTimeField(default=timezone.now, editable=False)
-		modified_date = models.DateTimeField('modified date')
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
 
 		def __unicode__(self):
 			return self.description
@@ -86,6 +97,8 @@ class TransactionMethod(models.Model):
 
 		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		description = models.CharField(max_length=300)
+		requires_bank_reconciliation = models.BooleanField(default = False)
+
 		def __unicode__(self):
 			return self.name
 
