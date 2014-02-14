@@ -8,7 +8,9 @@
 	instance whenever they are created / edited.
 
 	TODO: 
-	- Crate functionality for Account.
+	- Have the forms know which society it is.
+
+	- Create functionality for Account.
 	   eg. updateBalance()
 
 	- Many of the classes share the same attributes, eg. name | ammount 
@@ -77,6 +79,11 @@ class TransactionCategory(models.Model):
 		def __unicode__(self):
 			return self.name
 
+class TransactionCategoryForm(ModelForm):
+	class Meta:
+		model = TransactionCategory
+		fields = '__all__'
+
 
 class TransactionMethod(models.Model):
 		'''
@@ -101,6 +108,11 @@ class TransactionMethod(models.Model):
 
 		def __unicode__(self):
 			return self.name
+
+class TransactionMethodForm(ModelForm):
+	class Meta:
+		model = TransactionMethod
+		fields = '__all__'
 
 
 class Transaction(models.Model):
@@ -131,7 +143,12 @@ class Transaction(models.Model):
 		get_logs.short_description = 'Logs'
 
 		def __unicode__(self):
-			return self.description 
+			return self.description
+
+class TransactionForm(ModelForm):
+	class Meta:
+		model = Transaction
+		fields = '__all__' 
 
 
 class Bill(models.Model):
@@ -169,6 +186,12 @@ class Bill(models.Model):
 		def __unicode__(self):
 			return self.description
 
+class BillForm(ModelForm):
+	class Meta:
+		model = Bill
+		fields = '__all__' 
+
+
 class Invoice(models.Model):
 		'''
 		An outstanding obligation of the society.
@@ -196,6 +219,12 @@ class Invoice(models.Model):
 		def __unicode__(self):
 			return self.description
 
+class InvoiceForm(ModelForm):
+	class Meta:
+		model = Invoice
+		fields = '__all__' 
+
+
 class Grant(models.Model):
 		'''
 		Money received by the society.
@@ -210,3 +239,8 @@ class Grant(models.Model):
 		creation_date = models.DateTimeField('creation date')
 		category = models.CharField(max_length=30)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
+
+class GrantForm(ModelForm):
+	class Meta:
+		model = Grant
+		fields = '__all__' 
