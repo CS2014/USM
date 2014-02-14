@@ -19,10 +19,13 @@
 """
 
 from django.db import models
+from django.forms import ModelForm
 import datetime
 from django.utils import timezone
 from main.models import Society
 from django.contrib.auth.models import User
+
+
 
 
 class Account(models.Model):
@@ -37,6 +40,11 @@ class Account(models.Model):
 	def __unicode__(self):
 		return self.society.name
 
+class AccountForm(ModelForm):
+	class Meta:
+		model = Account
+		fields = '__all__'
+
 class Log(models.Model):
 		'''
 		Meta data for reviewing changes to enteries over timezone
@@ -44,21 +52,6 @@ class Log(models.Model):
 		TODO:
 		- Have some sort of array of ammounts|dates|users to see changes
 			over time to an entry
-
-		NB: 
-		-- When I added a user field and auto migrated I got this: --
-		The field 'Log.user' does not have a default specified, yet is NOT NULL.
- 		? Since you are adding this field, you MUST specify a default
- 		? value to use for existing rows. Would you like to:
- 		?  1. Quit now, and add a default to the field in models.py
- 		?  2. Specify a one-off value to use for existing columns now
- 		? Please select a choice: 2
- 		? Please enter Python code for your one-off default value.
- 		>>> 0
-	  + Added field user on accounting.Log
-		Created 0002_auto__del_field_log_modified_date__add_field_log_user.py.
-
-		-- Likewise, when I removed ammount, I set it to 0 -- 
 		'''
 
 		user = models.ForeignKey(User)
