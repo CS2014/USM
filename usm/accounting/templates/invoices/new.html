@@ -1,0 +1,5 @@
+<form method="post" action="/accounting/invoices/">
+	{% csrf_token %}
+  {{ form }}
+  <p><input type="submit" value="Create"/></p>
+</form>
