@@ -236,6 +236,7 @@ class Grant(models.Model):
 		'''
 		account = models.ForeignKey(Account)
 
+		description = models.CharField(max_length=30)
 		creation_date = models.DateTimeField('creation date')
 		category = models.CharField(max_length=30)
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)

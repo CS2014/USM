@@ -10,12 +10,13 @@
 		- Style sheet
 
 	-->
-
+<b>Transactions:</b>
 <ul>
-  {% for transaction in latest_transaction_list %}
-    <li>
-    	<a href="/transactions/{{ transaction.id }}/"> {{ transaction.description }}:<a>
-			{{ transaction.ammount }}
+  {% for transaction in transaction_list %}
+    <li><a href="/transactions/{{ transaction.id }}/">{{ transaction.description }}:<a> 
+    	{{ transaction.ammount }}
     </li>
   {% endfor %}
 </ul>
+
+<a href="new/"> Create new transaction:<a>
