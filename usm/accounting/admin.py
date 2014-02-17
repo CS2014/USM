@@ -20,6 +20,7 @@ class LogAdmin(admin.ModelAdmin):
 
 class AccountAdmin(admin.ModelAdmin):
 	fields = ['society']
+	list_display = ['society', 'tabulate_transactions']
 
 class TransactionCategoryAdmin(admin.ModelAdmin):
 		fields = [ 'account', 'name' ]

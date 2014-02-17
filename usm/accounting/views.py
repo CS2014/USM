@@ -149,7 +149,7 @@ def account_detail(request, id):
         form = AccountForm
         account = get_object_or_404(Account, pk=id)
         object = AccountForm(data=model_to_dict(account))
-        return render(request, 'accounts/detail.html', {'object' : object})
+        return render(request, 'accounts/detail.html', {'object' : object, 'account' : account})
 
 
 def transaction_category_detail(request, id):
@@ -194,6 +194,12 @@ Edit views:
 - Takes a ModelForm, validates and saves it.
 - Redirects to relevant index if successful.
 - Redirects to detail page if not successful.
+
+BUGS:
+- If you edit the society which an account represents,
+  It keeps the transactions.
+  However, changing the society it belongs to is not logical
+  so the real bug is that you can change the society.
 '''
 def account_edit(request,id):
     instance = get_object_or_404(Account, id=id)
