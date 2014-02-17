@@ -13,7 +13,7 @@
 <b>Transactions:</b>
 <ul>
   {% for transaction in transaction_list %}
-    <li><a href="/transactions/{{ transaction.id }}/">{{ transaction.description }}:<a> 
+    <li><a href="{{ transaction.id }}/">{{ transaction.description }}:<a> 
     	{{ transaction.ammount }}
     </li>
   {% endfor %}
