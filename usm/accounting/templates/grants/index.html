@@ -1,0 +1,22 @@
+<!--
+		author: Ross Kinsella	
+		date:   2014/feb/15
+
+		Displays a list of all the grants and links to more detail view.
+
+		TODO: 
+		- Create more detail view
+		- Sort by category | method button
+		- Style sheet
+
+	-->
+
+<ul>
+  {% for grant in grant_list %}
+    <li><a href="/grants/{{ grant.id }}/">{{ grant.description }}:<a>
+			{{ grant.ammount }}
+    </li>
+  {% endfor %}
+</ul>
+
+<a href="new/"> Create new grant:<a>
