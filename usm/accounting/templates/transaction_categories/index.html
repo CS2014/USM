@@ -10,11 +10,11 @@
 		- Style sheet
 
 	-->
-
+Existing categories:
 <ul>
   {% for transaction_category in transaction_category_list %}
-    <li><a href="/transaction_categories/{{ transaction_category.id }}/">{{ transaction_category.name }}:<a></li>
+    <li><a href="{{ transaction_category.id }}/">{{ transaction_category.name }}:<a></li>
   {% endfor %}
 </ul>
-
+<br>
 <a href="new/"> Create new category:<a>

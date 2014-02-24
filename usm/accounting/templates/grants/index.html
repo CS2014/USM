@@ -13,7 +13,7 @@
 
 <ul>
   {% for grant in grant_list %}
-    <li><a href="/grants/{{ grant.id }}/">{{ grant.description }}:<a>
+    <li><a href="{{ grant.id }}/">{{ grant.description }}:<a>
 			{{ grant.ammount }}
     </li>
   {% endfor %}
