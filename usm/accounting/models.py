@@ -26,6 +26,7 @@ import datetime
 from django.utils import timezone
 from main.models import Society
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 
 
@@ -39,8 +40,13 @@ class Account(models.Model):
 	'''
 	society = models.OneToOneField(Society)
 
+  #Get all transaction childrens' ammounts
+	def tabulate_transactions(self):
+		return self.transaction_set.all().aggregate(total=Sum('ammount'))
+
 	def __unicode__(self):
 		return self.society.name
+
 
 class AccountForm(ModelForm):
 	class Meta:

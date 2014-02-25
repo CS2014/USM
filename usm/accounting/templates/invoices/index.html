@@ -13,7 +13,7 @@
 
 <ul>
   {% for invoice in invoice_list %}
-    <li><a href="/invoices/{{ invoice.id }}/">{{ invoice.description }}:<a> {{ invoice.ammount }}</li>
+    <li><a href="{{ invoice.id }}/">{{ invoice.description }}:<a> {{ invoice.ammount }}</li>
   {% endfor %}
 </ul>
 

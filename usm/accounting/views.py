@@ -1,21 +1,21 @@
 '''
 		author: Ross Kinsella
-		date:   2014/feb/8
+		date:   2014/feb/17
 
 
 		TODO:
 		- Implement redirects when a post request is made 
 		   |- To prevent double posting.
 
-		- Implement the detail views.
+		- Have objects specific to a certain account appear.
 '''
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 
 from accounting.models import TransactionCategory, TransactionMethod, Transaction
 from accounting.models import Bill, Invoice, Grant, Account
 from django.db.models import get_app, get_models
-
+from django.forms.models import model_to_dict
 from accounting.models import TransactionCategoryForm, TransactionMethodForm, TransactionForm
 from accounting.models import BillForm, InvoiceForm, GrantForm, AccountForm
 
@@ -24,6 +24,12 @@ from accounting.models import BillForm, InvoiceForm, GrantForm, AccountForm
 '''
 Index Views:
 -Displays a list of existing objects for all socieities with links to more detail and new.
+
+TODO:
+Have the returned objects specific to an account which is in the URL.
+For example. /DUCSS/accounting/transactions shows the transactions specific 
+to DUCCS.
+- I played around with this but with no joy.
 '''
 def index(request):
 		app = get_app('accounting')
@@ -40,7 +46,7 @@ def account_index(request):
             form.save()    
     return render(request, 'accounts/index.html', context) 
 
-def transaction_category_index(request):
+def transaction_category_index(request, ):
     transaction_category_list = TransactionCategory.objects.all()
     context = {'transaction_category_list': transaction_category_list}
     if request.method == 'POST':
@@ -96,11 +102,8 @@ def grant_index(request):
 
 
 '''
-Index Views:
+Create Views:
 - Create and display a form to create a new object.
-
-TODO:
-
 '''
 def account_new(request):
         form = AccountForm
@@ -138,4 +141,125 @@ def grant_new(request):
 		return render(request, 'grants/new.html', context)
 
 
+'''
+Detail Views:
+- Display the attributes of an object and allow for editing.
+'''
+def account_detail(request, id):
+        form = AccountForm
+        account = get_object_or_404(Account, pk=id)
+        object = AccountForm(data=model_to_dict(account))
+        return render(request, 'accounts/detail.html', {'object' : object, 'account' : account})
 
+
+def transaction_category_detail(request, id):
+        form = TransactionCategoryForm
+        transaction_category = get_object_or_404(TransactionCategory, pk=id)
+        object = TransactionCategoryForm(data=model_to_dict(transaction_category))
+        return render(request, 'transaction_categories/detail.html', {'object' : object})
+
+def transaction_method_detail(request, id):
+        form = TransactionMethodForm
+        transaction_method = get_object_or_404(TransactionMethod, pk=id)
+        object = TransactionMethodForm(data=model_to_dict(transaction_method))
+        return render(request, 'transaction_methods/detail.html', {'object' : object})
+
+def transaction_detail(request, id):
+        form = TransactionForm
+        transaction = get_object_or_404(Transaction, pk=id)
+        object = TransactionForm(data=model_to_dict(transaction))
+        return render(request, 'transactions/detail.html', {'object' : object})
+
+def bill_detail(request, id):
+        form = BillForm
+        bill = get_object_or_404(Bill, pk=id)
+        object = BillForm(data=model_to_dict(bill))
+        return render(request, 'bill/detail.html', {'object' : object})
+
+def invoice_detail(request, id):
+        form = InvoiceForm
+        invoice = get_object_or_404(Invoice, pk=id)
+        object = InvoiceForm(data=model_to_dict(invoice))
+        return render(request, 'invoices/detail.html', {'object' : object})
+
+def grant_detail(request, id):
+        form = GrantForm
+        grant = get_object_or_404(Grant, pk=id)
+        object = GrantForm(data=model_to_dict(grant))
+        return render(request, 'grants/detail.html', {'object' : object})
+
+
+'''
+Edit views:
+- Takes a ModelForm, validates and saves it.
+- Redirects to relevant index if successful.
+- Redirects to detail page if not successful.
+
+BUGS:
+- If you edit the society which an account represents,
+  It keeps the transactions.
+  However, changing the society it belongs to is not logical
+  so the real bug is that you can change the society.
+'''
+def account_edit(request,id):
+    instance = get_object_or_404(Account, id=id)
+    form = AccountForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/accounts')
+    object = AccountForm(data=model_to_dict(instance))
+    return render(request, 'accounts/detail.html', {'object':object})   
+
+def transaction_category_edit(request, id):
+    instance = get_object_or_404(TransactionCategory, id=id)
+    form = TransactionCategoryForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/transaction_categories')
+    object = TransactionCategoryForm(data=model_to_dict(instance))
+    return render(request, 'transaction_categories/detail.html', {'object':object})  
+
+def transaction_method_edit(request, id):
+    instance = get_object_or_404(TransactionMethod, id=id)
+    form = TransactionMethodForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/transaction_methods')
+    object = TransactionMethodForm(data=model_to_dict(instance))
+    return render(request, 'transaction_methods/detail.html', {'object':object})    
+
+def transaction_edit(request, id):
+    instance = get_object_or_404(Transaction, id=id)
+    form = TransactionForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/transactions')
+    object = TransactionForm(data=model_to_dict(instance))
+    return render(request, 'transactions/detail.html', {'object':object})    
+
+def bill_edit(request, id):
+    instance = get_object_or_404(Bill, id=id)
+    form = BillForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/bills')
+    object = BillForm(data=model_to_dict(instance))
+    return render(request, 'bills/detail.html', {'object':object})    
+
+def invoice_edit(request, id):
+    instance = get_object_or_404(Invoice, id=id)
+    form = InvoiceForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/invoices')
+    object = InvoiceForm(data=model_to_dict(instance))
+    return render(request, 'invoices/detail.html', {'object':object})    
+
+def grant_edit(request, id):
+    instance = get_object_or_404(Grant, id=id)
+    form = GrantForm(request.POST or none, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/accounting/grants')
+    object = GrantForm(data=model_to_dict(instance))
+    return render(request, 'grants/detail.html', {'object':object})      
