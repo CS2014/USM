@@ -1,0 +1,4 @@
+// TODO: ROSS // 
+
+The detail view of accounts is stupid.
+You cannot view the logs of a transaction/invoice/bill in the detail view because they are excluded in the form.

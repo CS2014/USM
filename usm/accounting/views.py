@@ -11,6 +11,7 @@
 '''
 
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
+from utils import build_pretty_data_view
 
 from accounting.models import TransactionCategory, TransactionMethod, Transaction
 from accounting.models import Bill, Invoice, Grant, Account
@@ -143,50 +144,50 @@ def grant_new(request):
 
 '''
 Detail Views:
-- Display the attributes of an object and allow for editing.
+- Display the attributes of an object and a form allow for editing.
 '''
 def account_detail(request, id):
-        form = AccountForm
         account = get_object_or_404(Account, pk=id)
-        object = AccountForm(data=model_to_dict(account))
-        return render(request, 'accounts/detail.html', {'object' : object, 'account' : account})
+        form = AccountForm(data=model_to_dict(account))
+        data=build_pretty_data_view(form_instance=form, model_object=account)
+        return render(request, 'accounts/detail.html', {'data' : data, 'form' : form})
 
 
 def transaction_category_detail(request, id):
-        form = TransactionCategoryForm
         transaction_category = get_object_or_404(TransactionCategory, pk=id)
-        object = TransactionCategoryForm(data=model_to_dict(transaction_category))
-        return render(request, 'transaction_categories/detail.html', {'object' : object})
+        form = TransactionCategoryForm(data=model_to_dict(transaction_category))
+        data=build_pretty_data_view(form_instance=form, model_object=transaction_category)
+        return render(request, 'transaction_categories/detail.html', {'data' : data, 'form' : form})
 
 def transaction_method_detail(request, id):
-        form = TransactionMethodForm
         transaction_method = get_object_or_404(TransactionMethod, pk=id)
-        object = TransactionMethodForm(data=model_to_dict(transaction_method))
-        return render(request, 'transaction_methods/detail.html', {'object' : object})
+        form = TransactionMethodForm(data=model_to_dict(transaction_method))
+        data=build_pretty_data_view(form_instance=form, model_object=transaction_method)
+        return render(request, 'transaction_methods/detail.html', {'data' : data, 'form' : form})
 
 def transaction_detail(request, id):
-        form = TransactionForm
         transaction = get_object_or_404(Transaction, pk=id)
-        object = TransactionForm(data=model_to_dict(transaction))
-        return render(request, 'transactions/detail.html', {'object' : object})
+        form = TransactionForm(data=model_to_dict(transaction))
+        data=build_pretty_data_view(form_instance=form, model_object=transaction)
+        return render(request, 'transactions/detail.html', {'data' : data, 'form' : form})
 
 def bill_detail(request, id):
-        form = BillForm
         bill = get_object_or_404(Bill, pk=id)
-        object = BillForm(data=model_to_dict(bill))
-        return render(request, 'bill/detail.html', {'object' : object})
+        form = BillForm(data=model_to_dict(bill))
+        data=build_pretty_data_view(form_instance=form, model_object=bill)
+        return render(request, 'bills/detail.html', {'data' : data, 'form' : form})
 
 def invoice_detail(request, id):
-        form = InvoiceForm
         invoice = get_object_or_404(Invoice, pk=id)
-        object = InvoiceForm(data=model_to_dict(invoice))
-        return render(request, 'invoices/detail.html', {'object' : object})
+        form = InvoiceForm(data=model_to_dict(invoice))
+        data=build_pretty_data_view(form_instance=form, model_object=invoice)
+        return render(request, 'invoices/detail.html', {'data' : data, 'form' : form})
 
 def grant_detail(request, id):
-        form = GrantForm
         grant = get_object_or_404(Grant, pk=id)
-        object = GrantForm(data=model_to_dict(grant))
-        return render(request, 'grants/detail.html', {'object' : object})
+        form = GrantForm(data=model_to_dict(grant))
+        data=build_pretty_data_view(form_instance=form, model_object=grant)
+        return render(request, 'grants/detail.html', {'data' : data, 'form' : form})
 
 
 '''
