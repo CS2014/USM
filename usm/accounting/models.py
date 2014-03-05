@@ -135,7 +135,6 @@ class Transaction(models.Model):
 		transaction_method = models.ForeignKey(TransactionMethod)
 
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		is_cheque = models.BooleanField(default = True)
 		submit_date = models.DateTimeField(default=timezone.now, editable=False)
 		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
 		description = models.CharField(max_length=300)
