@@ -8,8 +8,6 @@ env:
   - DJAN­GO_VER­SION=1.6.2
 # Tell it the things it will need to in­stall when it boots
 in­stall: 
-   # This is a de­pend­ency of our Django test script
- - pip in­stall ar­g­parse --use-mir­rors
    # In­stall the de­pend­en­cies the app it­self has
    # which in this case I choose to keep in a re­quire­ments file
  - pip in­stall -r re­quire­ments.txt --use-mir­rors
