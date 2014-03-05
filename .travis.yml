@@ -1,15 +1,9 @@
-# Tell Trav­is you want a Py­thon en­vir­on­ment to test in
-lan­guage: py­thon
-# List the ver­sions of Py­thon you'd like to test against
-py­thon:
+language: python
+python:
+  - "2.6"
   - "2.7"
-# List the ver­sions of Django you'd like to test against
-env:
-  - DJAN­GO_VER­SION=1.6.2
-# Tell it the things it will need to in­stall when it boots
-in­stall: 
-   # In­stall the de­pend­en­cies the app it­self has
-   # which in this case I choose to keep in a re­quire­ments file
- - pip in­stall -r re­quire­ments.txt --use-mir­rors
-# Tell Trav­is how to run the test script it­self
+  - "3.2"
+  - "3.3"
+# command to install dependencies
+install: "pip install -r requirements.txt"
 script: py­thon usm/manage.py
