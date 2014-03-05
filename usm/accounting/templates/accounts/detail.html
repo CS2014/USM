@@ -1,8 +1,7 @@
 <i> Current data: </i>
 <br>
-{% for field in object %}
-    <b>{{ field.label }}:</b> {{ field.data }}
-    <br>
+{% for field,value in data.items %}
+    <b>{{value.label}}</b>: {{value.fieldvalue}}<br>
 {% endfor %}
 <b>Total transactions:</b> {{account.tabulate_transactions.total}}
 
@@ -10,7 +9,7 @@
 <i> Edit data: </i>
 <form method="post" action="edit">
 	{% csrf_token %}
-	{% for field in object %}
+	{% for field in form %}
 		<b>{{ field.label_tag }}</b>
 		{{ field }}
 		<br>

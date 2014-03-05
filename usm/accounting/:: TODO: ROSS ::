@@ -1,0 +1,6 @@
+// TODO: ROSS // 
+
+1: The detail view of accounts is stupid.
+2: You cannot view the logs of a transaction/invoice/bill in the detail view because they are excluded in the form.
+3: In transaction_method creation, have the requires bank_recnocilliation set by jscript.
+4: Create an error for when the transaction form is incorrectly filled

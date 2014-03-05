@@ -103,7 +103,7 @@ class TransactionMethod(models.Model):
 		'''
 
 		PAYMENT_CHOICES = ( 
-			('Cash', 'cash') ,
+			('Cash', 'cash'),
 			('Cheque', 'cheque'),
 		)
 		account = models.ForeignKey(Account)
@@ -118,7 +118,7 @@ class TransactionMethod(models.Model):
 class TransactionMethodForm(ModelForm):
 	class Meta:
 		model = TransactionMethod
-		fields = '__all__'
+		exclude = '__all__'
 
 
 class Transaction(models.Model):
@@ -154,7 +154,7 @@ class Transaction(models.Model):
 class TransactionForm(ModelForm):
 	class Meta:
 		model = Transaction
-		fields = '__all__' 
+		exclude = ['logs']
 
 
 class Bill(models.Model):
@@ -195,7 +195,7 @@ class Bill(models.Model):
 class BillForm(ModelForm):
 	class Meta:
 		model = Bill
-		fields = '__all__' 
+		exclude = ['logs']
 
 
 class Invoice(models.Model):
@@ -228,7 +228,7 @@ class Invoice(models.Model):
 class InvoiceForm(ModelForm):
 	class Meta:
 		model = Invoice
-		fields = '__all__' 
+		exclude = ['logs']
 
 
 class Grant(models.Model):
