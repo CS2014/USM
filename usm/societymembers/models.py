@@ -30,7 +30,7 @@ class Tag(models.Model):
 class TagForm(ModelForm):
 	class Meta:
 		model = Tag
-		fields = '_all_'
+		fields = '__all__'
 
 class SocietyMember(models.Model):
 	'''
