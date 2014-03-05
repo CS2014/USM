@@ -1,9 +1,11 @@
-# Taken from http://stackoverflow.com/questions/2170228/django-iterate-over-model-instance-field-names-and-values-in-template#comment4280740_3431104
-# @author: Alan Viars
 from django.utils.datastructures import SortedDict
 
 
 def build_pretty_data_view(form_instance, model_object, exclude=(), append=()):
+    '''
+    Taken from: http://stackoverflow.com/questions/2170228/django-iterate-over-model-instance-field-names-and-values-in-template#comment4280740_3431104
+    @author: Alan Viars
+    '''
     i=0
     sd=SortedDict()
 
