@@ -47,7 +47,7 @@ def account_index(request):
             form.save()    
     return render(request, 'accounts/index.html', context) 
 
-def transaction_category_index(request, ):
+def transaction_category_index(request):
     transaction_category_list = TransactionCategory.objects.all()
     context = {'transaction_category_list': transaction_category_list}
     if request.method == 'POST':

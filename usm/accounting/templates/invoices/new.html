@@ -1,5 +1,9 @@
 <form method="post" action="/accounting/invoices/">
 	{% csrf_token %}
-  {{ form }}
+	{% for field in form %}
+		<b>{{ field.label_tag }}</b>
+		{{ field }}
+		<br>
+  {% endfor %}
   <p><input type="submit" value="Create"/></p>
 </form>

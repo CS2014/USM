@@ -103,7 +103,7 @@ class TransactionMethod(models.Model):
 		'''
 
 		PAYMENT_CHOICES = ( 
-			('Cash', 'cash') ,
+			('Cash', 'cash'),
 			('Cheque', 'cheque'),
 		)
 		account = models.ForeignKey(Account)
@@ -118,7 +118,7 @@ class TransactionMethod(models.Model):
 class TransactionMethodForm(ModelForm):
 	class Meta:
 		model = TransactionMethod
-		fields = '__all__'
+		exclude = '__all__'
 
 
 class Transaction(models.Model):
