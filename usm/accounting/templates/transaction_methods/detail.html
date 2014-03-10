@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <i> Current data: </i>
 <br>
 {% for field,value in data.items %}
@@ -6,7 +8,10 @@
 
 <br><br>
 <i> Edit data: </i>
-<form method="post" action="edit">
+<form name = "info" 
+			method="post" 
+			action="edit" 
+			onsubmit="setRequiresBankreconciliation()">
 	{% csrf_token %}
 	{% for field in form %}
 		<b>{{ field.label_tag }}</b>
@@ -15,3 +20,31 @@
   {% endfor %}
   <p><input type="submit" value="Edit"/></p>
 </form>
+
+<!--	
+			Function to set requires_bank_reconciliation based on the
+    	input for name, ie. Cash|Cheque											
+   	-->
+<script>
+$(document).ready(function(){
+  $("#id_name").change(function(){
+    setRequiresBankreconciliation();
+  });
+});
+
+function setRequiresBankreconciliation()
+{
+	var e = document.getElementById("id_name");
+	var strUser = e.options[e.selectedIndex].value;
+	if(strUser=="Cheque")
+	{
+		document.getElementById("id_requires_bank_reconciliation").checked=true;
+	}
+	else
+	{
+		document.getElementById("id_requires_bank_reconciliation").checked=false;	
+	}
+	return false;
+}
+</script>
+{% endblock %}

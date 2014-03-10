@@ -118,7 +118,7 @@ class TransactionMethod(models.Model):
 class TransactionMethodForm(ModelForm):
 	class Meta:
 		model = TransactionMethod
-		exclude = '__all__'
+		fields = '__all__'
 
 
 class Transaction(models.Model):
