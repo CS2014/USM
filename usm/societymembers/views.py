@@ -15,3 +15,10 @@ from societymembers.models import Tag, SocietyMember, MembershipFee
 from django.db.models import get_app, get_models
 from django.forms.models import model_to_dict
 from societymembers.models import TagForm, SocietyMemberForm, MembershipFeeForm
+
+def index(request): 
+		app = get_app('accounting')
+		app_models = get_models(app) 
+		context = {'app_models' : app_models}
+		return render(request, 'societymember/index.html', context)
+
