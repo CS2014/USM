@@ -45,7 +45,7 @@ class Account(models.Model):
 		return self.transaction_set.all().aggregate(total=Sum('ammount'))
 
 	def __unicode__(self):
-		return self.society.name
+		return self.society.slug
 
 
 class AccountForm(ModelForm):
@@ -147,6 +147,9 @@ class Transaction(models.Model):
 		def get_logs(self):
 			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
 		get_logs.short_description = 'Logs'
+
+		def get_stubbed_time(self):
+			return self.submit_date.strftime("%d / %m / %y")
 
 		def __unicode__(self):
 			return self.description

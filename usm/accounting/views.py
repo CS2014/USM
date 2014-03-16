@@ -62,7 +62,7 @@ def transaction_method_index(request):
 	if request.method == 'POST':
 		form = TransactionMethodForm(request.POST, request.FILES)
 		if form.is_valid():
-			form.save()        
+			form.save()     
 	return render(request, 'transaction_methods/index.html', context)
 
 def transaction_index(request):
@@ -72,6 +72,8 @@ def transaction_index(request):
 		form = TransactionForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()    
+		return HttpResponseRedirect('/test-2/book-keeping')
+
 	return render(request, 'transactions/index.html', context)
 
 def bill_index(request):

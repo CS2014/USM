@@ -7,6 +7,7 @@ from django.db import models
 from django.forms import ModelForm
 from django.utils import timezone
 from django.contrib.auth.models import User
+from autoslug import AutoSlugField
 
 
 class Society(models.Model):
@@ -17,6 +18,7 @@ class Society(models.Model):
 	name = models.CharField(max_length=50)
 	members = models.ManyToManyField(User)
 	creation_date = models.DateTimeField(default=timezone.now, editable=False)
+	slug = AutoSlugField(populate_from='name', unique=True)
 
 	
 	def get_members(self):
@@ -30,4 +32,4 @@ class Society(models.Model):
 class SocietyForm(ModelForm):
 	class Meta:
 		model = Society
-		fields = [ 'name' ,'members' ]
+		fields = [ 'name' ,'members']

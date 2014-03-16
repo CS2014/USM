@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table id="table" >
+    <tr>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Method</th>
+      <th>Bank reconciliation date</th>
+      <th>Ammount</th>
+      <th>Note</th>
+    </tr>
+    {% for transaction in account.transaction_set.all %}
+    	{% if forloop.counter0|divisibleby:2 %}
+    		<tr>
+    	{% else %}
+    		<tr class="alt">
+    	{% endif %}
+      <td>{{ transaction.get_stubbed_time }}</td>
+      <td>{{ transaction.transaction_category }}</td>
+      <td>{{ transaction.transaction_method }}</td>
+      {% if transaction.bank_reconlliation_date %}
+      	<td>{{ transaction.bank_reconlliation_date }}</td>
+      {% else %}
+      	<td align="center">  -----  </td>
+      {% endif %}
+      <td>{{ transaction.ammount }}</td>
+      <td>{{ transaction.description }}</td>
+    </tr> 	
+    {% endfor %}
+
+<form 
+			name="newTransaction"
+			id="submissionForm"
+			method="post" 
+			action="/accounting/transactions/" 
+			onsubmit="mainFunction">
+	{% csrf_token %}
+	<tr>
+			<td> {% now "d / m / y" %} </td>
+			<td> {{form.transaction_category}} </td>
+			<td> {{form.transaction_method}} </td>
+			<td> {{form.bank_reconlliation_date}} </td>
+			<td> {{form.ammount}} </td>
+			<td> {{form.description}} </td>
+			<td style="display: none"> {{ form.account }} </td>
+  <td><input type="submit" value="Create"/></td>
+  </tr>
+</form>
+</table>
+
+{% endblock %}
