@@ -1,0 +1,17 @@
+<i> Current data: </i>
+<br>
+{% for field,value in data.items %}
+    <b>{{value.label}}</b>: {{value.fieldvalue}}<br>
+{% endfor %}
+
+<br><br>
+<i> Edit data: </i>
+<form action="{% url 'societymembers:member_edit' member_id %}" method="post">
+	{% csrf_token %}
+	{% for field in form %}
+		<b>{{ field.label_tag }}</b>
+		{{ field }}
+		<br>
+  {% endfor %}
+  <p><input type="submit" value="Edit"/></p>
+</form>

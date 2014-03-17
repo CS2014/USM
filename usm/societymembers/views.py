@@ -27,14 +27,10 @@ def member_index(request):
 		return render(request, 'societymembers/index.html', context)
 
 def member_delete(request):
-		print(11111111111)
 		member_toDelete = get_object_or_404(SocietyMember, pk=request.POST['member_id'])
-		print(0)
 		if request.method == 'POST':
-			print(1)
 			form = DeleteSocietyMemberForm(request.POST, instance=member_toDelete)
 			if form.is_valid():
-				print(2)
 				member_toDelete.delete()
 				return HttpResponseRedirect(reverse('societymembers:member_index'))
 		else:
@@ -42,3 +38,18 @@ def member_delete(request):
 
 		context = {'form': form}
 		return HttpResponseRedirect(reverse('societymembers:member_index'))
+
+def member_edit(request, member_id):
+		instance = get_object_or_404(SocietyMember, id=member_id)
+		form = SocietyMemberForm(request.POST or none, instance=instance)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('societymembers:member_index'))
+		object = SocietyMemberForm(data=model_to_dict(instance))
+		return render(request, 'societymembers/detail.html', {'object':object, 'member_id' : member_id})  
+
+def member_detail(request, member_id):
+		member = get_object_or_404(SocietyMember, pk=member_id)
+		form = SocietyMemberForm(data=model_to_dict(member))
+		data=build_pretty_data_view(form_instance=form, model_object=member)
+		return render(request, 'societymembers/detail.html', {'data' : data, 'form' : form, 'member_id' : member_id})

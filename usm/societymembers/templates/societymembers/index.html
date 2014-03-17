@@ -5,7 +5,7 @@
 	{% for member in member_list %}
 		<li style="list-style-type: none;">
 			<input type="radio" name="member_id" value="{{member.id}}"/> 
-			{{member.name}} - {{member.society}}
+			<a href="{% url 'societymembers:member_detail' member.id %}">{{member.name}} - {{member.society}}</a>
 		</li>
 	{% endfor %}
 </ul>
