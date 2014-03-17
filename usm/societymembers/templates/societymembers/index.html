@@ -1,0 +1,13 @@
+<form action="{% url 'societymembers:member_delete' %}" method="post">
+{% csrf_token %}
+<b>Society Members:</b>
+<ul>
+	{% for member in member_list %}
+		<li style="list-style-type: none;">
+			<input type="radio" name="member_id" value="{{member.id}}"/> 
+			{{member.name}} - {{member.society}}
+		</li>
+	{% endfor %}
+</ul>
+<p><input type="submit" value="Delete Selected"/></p>
+</form>
