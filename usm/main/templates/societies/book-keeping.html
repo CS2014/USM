@@ -10,6 +10,20 @@ border-collapse:collapse;
 }
 </style>
 
+<style>
+.ui-widget {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: .6em;
+}
+.ui-widget .ui-widget {
+	font-size: .4em;
+}
+.ui-widget button {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: .4em;
+}
+</style>
+
 <table id="table" >
     <tr>
       <th>Date</th>
@@ -35,7 +49,7 @@ border-collapse:collapse;
       {% endif %}
       <td>{{ transaction.ammount }}</td>
       <td>{{ transaction.description }}</td>
-    </tr> 	
+    </tr> 	 
     {% endfor %}
 
 <form 
@@ -43,19 +57,101 @@ border-collapse:collapse;
 			id="submissionForm"
 			method="post" 
 			action="/accounting/transactions/" 
-			onsubmit="mainFunction">
+			onsubmit="mainFunction()">
 	{% csrf_token %}
 	<tr>
 			<td> {% now "d / m / y" %} </td>
-			<td> {{form.transaction_category}} </td>
-			<td> {{form.transaction_method}} </td>
+			<td> <input id="input_transaction_category"> </td>
+			<td> <input id="input_transaction_method"> </td>
 			<td> {{form.bank_reconlliation_date}} </td>
 			<td> {{form.ammount}} </td>
 			<td> {{form.description}} </td>
 			<td style="display: none"> {{ form.account }} </td>
+			<td style="display: none"> {{ form.transaction_category }} </td>
+			<td style="display: none"> {{ form.transaction_method }} </td>
   <td><input type="submit" value="Create"/></td>
   </tr>
 </form>
 </table>
+
+<!--	
+			Function to take the transaction category/method text input and find the 
+			matching value and assign it to the form.
+
+			This is needed as the validator looks for an index value, not text.										
+   	-->
+<script>
+function mainFunction()
+{
+	assignCategoryValue();
+	assignMethodValue();
+}
+
+function assignCategoryValue()
+{
+	var userInput = document.getElementById("input_transaction_category").value;
+	var formOptions = document.getElementById("id_transaction_category").options;
+	var formValue = formOptions[formOptions.selectedIndex].value;
+
+	for(var i=1;i<formOptions.length;i++)
+	{
+		if(formOptions[i].text == userInput)
+		{
+			document.getElementById('id_transaction_category').value=formOptions[i].value
+			return false;
+		}
+	}
+	return false;
+}
+
+function assignMethodValue()
+{
+	var userInput = document.getElementById("input_transaction_method").value;
+	var formOptions = document.getElementById("id_transaction_method").options;
+	var formValue = formOptions[formOptions.selectedIndex].value;
+
+	for(var i=1;i<formOptions.length;i++)
+	{
+		if(formOptions[i].text == userInput)
+		{
+			document.getElementById('id_transaction_method').value=formOptions[i].value
+			return false;
+		}
+	}
+	return false;
+}
+</script>
+
+<!--	
+			Function for autocomplete of the transaction category and method fields.										
+   	-->
+<script>
+  $(function() 
+  {
+    var availableCategories = $.map($('#id_transaction_category option'), function(ele) 
+    {
+  		return ele.text; 
+		});
+
+    $( "#input_transaction_category" ).autocomplete
+    ({
+      source: availableCategories
+    }) 
+  });
+
+  $(function() 
+  {
+    var availableMethods = $.map($('#id_transaction_method option'), function(ele) 
+    {
+  		return ele.text; 
+		});
+
+    $( "#input_transaction_method" ).autocomplete
+    ({
+      source: availableMethods
+    }) 
+  });
+
+</script>
 
 {% endblock %}

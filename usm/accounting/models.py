@@ -21,13 +21,13 @@
 """
 
 from django.db import models
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 import datetime
 from django.utils import timezone
 from main.models import Society
 from django.contrib.auth.models import User
 from django.db.models import Sum
-
+from django import forms
 
 
 
@@ -80,7 +80,7 @@ class TransactionCategory(models.Model):
 		'''
 		account = models.ForeignKey(Account)	
 
-		name = models.CharField(max_length=20)
+		name = models.CharField(max_length=20,unique=True)
 		
 		def __unicode__(self):
 			return self.name
