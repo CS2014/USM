@@ -30,7 +30,6 @@ def society_page(request, slug):
 		return render(request, 'societies/home.html', {'society' : society})
 
 def society_book_keeping(request, slug):
-		print "Looking for: " + slug
 		society = get_object_or_404(Society, slug=slug)
 		account = society.account
 		transaction_form = TransactionForm(initial={'account': account})

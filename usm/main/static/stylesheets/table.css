@@ -14,7 +14,7 @@ padding:3px 7px 2px 7px;
 #table th 
 {
 font-size:1.1em;
-text-align:left;
+text-align:center;
 padding-top:5px;
 padding-bottom:4px;
 background-color:#A7C942;
@@ -23,11 +23,6 @@ color:#ffffff;
 #table tr.alt td 
 {
 color:#000000;
-background-color:#EAF2D3;
-}
-#table td.alt td 
-{
-color:#000088;
 background-color:#EAF2D3;
 }
 </style>

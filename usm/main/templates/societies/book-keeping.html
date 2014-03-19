@@ -24,34 +24,42 @@ border-collapse:collapse;
 }
 </style>
 
-<table id="table" >
-    <tr>
-      <th>Date</th>
-      <th>Category</th>
-      <th>Method</th>
-      <th>Bank reconciliation date</th>
-      <th>Ammount</th>
-      <th>Note</th>
-    </tr>
-    {% for transaction in account.transaction_set.all %}
-    	{% if forloop.counter0|divisibleby:2 %}
-    		<tr>
-    	{% else %}
-    		<tr class="alt">
-    	{% endif %}
-      <td>{{ transaction.get_stubbed_time }}</td>
-      <td>{{ transaction.transaction_category }}</td>
-      <td>{{ transaction.transaction_method }}</td>
-      {% if transaction.bank_reconlliation_date %}
-      	<td>{{ transaction.bank_reconlliation_date }}</td>
-      {% else %}
-      	<td align="center">  -----  </td>
-      {% endif %}
-      <td>{{ transaction.ammount }}</td>
-      <td>{{ transaction.description }}</td>
-    </tr> 	 
-    {% endfor %}
+<div class="wrap">
+	<table id="table" class="tablesorter">
+		<thead>
+	    <tr>
+	    	<th>Date</th>
+	      <th>Category</th>
+	      <th>Method</th>
+	      <th>Bank reconciliation date</th>
+	      <th>Ammount</th>
+	      <th>Note</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {% for transaction in account.transaction_set.all %}
+	    	{% if forloop.counter0|divisibleby:2 %}
+	    		<tr>
+	    	{% else %}
+	    		<tr class="alt">
+	    	{% endif %}
+	    	
+	      <td>{{ transaction.get_stubbed_time }}</td>
+	      <td>{{ transaction.transaction_category }}</td>
+	      <td>{{ transaction.transaction_method }}</td>
+	      {% if transaction.bank_reconlliation_date %}
+	      	<td>{{ transaction.bank_reconlliation_date }}</td>
+	      {% else %}
+	      	<td align="center">  -----  </td>
+	      {% endif %}
+	      <td>{{ transaction.ammount }}</td>
+	      <td>{{ transaction.description }}</td>
+	    </tr> 	 
+	    {% endfor %}
+	  </tbody>
+</div>
 
+<table id="table">
 <form 
 			name="newTransaction"
 			id="submissionForm"
@@ -73,6 +81,32 @@ border-collapse:collapse;
   </tr>
 </form>
 </table>
+
+
+<form style= "display:none" 
+			id="createCategory"
+			action="/accounting/transactions/" 
+			method="post"> 
+		{% csrf_token %}
+    <input id="id_account">
+    <input id="id_name">
+</form>
+
+<!--
+	Enable tablesorter on the transactions table, initally sorting by the most recent date.
+	-->
+<script>
+	$(document).ready(function() 
+    { 
+    $("table").tablesorter({ 
+        sortList: [[0,1]] 
+
+    });
+    } 
+);
+</script>
+
+
 
 <!--	
 			Function to take the transaction category/method text input and find the 
@@ -101,6 +135,9 @@ function assignCategoryValue()
 			return false;
 		}
 	}
+	alert("Doesn't exist, creating.")
+	createCategory(userInput);
+	document.getElementById('id_transaction_category').value=formOptions.length;
 	return false;
 }
 
@@ -120,6 +157,34 @@ function assignMethodValue()
 	}
 	return false;
 }
+
+function createCategory(userInput)
+{
+  var form = document.createElement("form");
+  var element1 = document.createElement("input"); 
+  var element2 = document.createElement("input");  
+
+  form.method = "POST";
+  form.action = "/accounting/transaction_categories/";   
+
+  element1.value= document.getElementById("id_account").value;
+  element1.name=	"account";
+  form.appendChild(element1);  
+
+  element2.value=userInput;
+  element2.name="name";
+  form.appendChild(element2);
+
+  document.body.appendChild(form);
+
+
+  $('#form').ajaxForm(function() { 
+          alert("Thank you for your comment!"); 
+      }); 
+  return false;
+}
+
+
 </script>
 
 <!--	
@@ -151,7 +216,6 @@ function assignMethodValue()
       source: availableMethods
     }) 
   });
-
 </script>
 
 {% endblock %}
