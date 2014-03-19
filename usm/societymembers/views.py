@@ -59,5 +59,3 @@ def member_detail(request, member_id):
 		form = SocietyMemberForm(data=model_to_dict(member))
 		data=build_pretty_data_view(form_instance=form, model_object=member)
 		return render(request, 'societymembers/detail.html', {'data' : data, 'form' : form, 'member_id' : member_id})
-
-
