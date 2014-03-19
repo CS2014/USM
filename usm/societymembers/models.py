@@ -63,6 +63,11 @@ class SocietyMemberForm(ModelForm):
 		model = SocietyMember
 		fields = '__all__'
 
+class DeleteSocietyMemberForm(ModelForm):
+	class Meta:
+		model = SocietyMember
+		fields = []
+
 class MembershipFee(models.Model):
 	'''
 	A fee which must be paid by members to be a part of the society.

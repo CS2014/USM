@@ -1,0 +1,15 @@
+<a href="new/"> Create new member:<a>
+
+<form action="{% url 'societymembers:member_delete' %}" method="post">
+{% csrf_token %}
+<b>Society Members:</b>
+<ul>
+	{% for member in member_list %}
+		<li style="list-style-type: none;">
+			<input type="radio" name="member_id" value="{{member.id}}"/> 
+			<a href="{% url 'societymembers:member_detail' member.id %}">{{member.name}} - {{member.society}}</a>
+		</li>
+	{% endfor %}
+</ul>
+<p><input type="submit" value="Delete Selected"/></p>
+</form>
