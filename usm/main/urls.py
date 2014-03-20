@@ -4,5 +4,6 @@ from main import views
 
 urlpatterns = patterns('main.views',
 	url(r'^main/create_society/', views.create_society),
+	url(r'^signup/$', views.signup),
 	url(r'^$', views.index),
 )

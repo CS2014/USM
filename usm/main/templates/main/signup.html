@@ -1,0 +1,36 @@
+<!--
+		author: Ross Kinsella	
+		date:   2014/feb/13
+
+		Displays a list of all the societies and links to more detail view.
+		Displays a form to create a new society.
+
+		TODO: 
+		- Create the detail views
+		- Style sheet
+		- Revise users in form|model.
+		- Show an error when you dont select users.
+		  |- maybe rename members to committe_members?
+
+		BUG:
+		- When you submit the form the URL goes to /main/main/create_society
+		 	|
+		  - I have done a hack job on the urls.pys of settings | main as a temporary fix
+	-->
+<img src="{{ STATIC_URL }}/images/hs.jpg" width="300" /> <br />
+
+<b>Select a society<b/>
+<ul>
+  {% for society in society_list %}
+    <li><a href="{{ society.name }}/">{{ society.name }}:<a></li>
+  {% endfor %}
+</ul>
+
+
+<br><b>Create new Society:</b><br/>
+<form method="post" action="main/create_society/">
+	{% csrf_token %}
+  {{ form }}
+  <p><input type="submit" value="Create society" /></p>
+</form>
+

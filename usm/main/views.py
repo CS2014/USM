@@ -11,14 +11,16 @@ from main.models import Society
 from main.models import SocietyForm
 
 def index(request):
-		print 'INDEX RECEIVED REQUEST: ' + request.method
+		context = {}
+		return render(request, 'main/index.html', context)
+
+def signup(request):
 		society_list = Society.objects.all()
 		form = SocietyForm
 		context = {'society_list': society_list, 'form': form}
-		return render(request, 'main/index.html', context)
+		return render(request, 'main/signup.html', context)
 
 def create_society(request):
-		print 'CREATE_SOCIETY RECEIVED REQUEST: ' + request.method
 		form = SocietyForm
 		if request.method == 'POST':
 			form = SocietyForm(request.POST, request.FILES)
