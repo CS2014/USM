@@ -26,7 +26,7 @@ class TransactionCategoryAdmin(admin.ModelAdmin):
 		fields = [ 'account', 'name' ]
 
 class TransactionMethodAdmin(admin.ModelAdmin):
-		fields = [ 'account', 'name', 'description' ]
+		fields = [ 'account', 'name', 'description', 'requires_bank_reconciliation' ]
 
 class TransactionAdmin(admin.ModelAdmin):
 		'''

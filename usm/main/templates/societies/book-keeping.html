@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+#table
+{
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+display: block;
+border-collapse:collapse;
+}
+</style>
+
+<style>
+.ui-widget {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: .6em;
+}
+.ui-widget .ui-widget {
+	font-size: .4em;
+}
+.ui-widget button {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: .4em;
+}
+</style>
+
+<div class="wrap">
+	<table id="table" class="tablesorter">
+		<thead>
+	    <tr>
+	    	<th>Date</th>
+	      <th>Category</th>
+	      <th>Method</th>
+	      <th>Bank reconciliation date</th>
+	      <th>Ammount</th>
+	      <th>Note</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {% for transaction in account.transaction_set.all %}
+	    	{% if forloop.counter0|divisibleby:2 %}
+	    		<tr>
+	    	{% else %}
+	    		<tr class="alt">
+	    	{% endif %}
+	    	
+	      <td>{{ transaction.get_stubbed_time }}</td>
+	      <td>{{ transaction.transaction_category }}</td>
+	      <td>{{ transaction.transaction_method }}</td>
+	      {% if transaction.bank_reconlliation_date %}
+	      	<td>{{ transaction.bank_reconlliation_date }}</td>
+	      {% else %}
+	      	<td align="center">  -----  </td>
+	      {% endif %}
+	      <td>{{ transaction.ammount }}</td>
+	      <td>{{ transaction.description }}</td>
+	    </tr> 	 
+	    {% endfor %}
+	  </tbody>
+</div>
+
+<table id="table">
+<form 
+			name="newTransaction"
+			id="submissionForm"
+			method="post" 
+			action="/accounting/transactions/" 
+			onsubmit="mainFunction()">
+	{% csrf_token %}
+	<tr>
+			<td> {% now "d / m / y" %} </td>
+			<td> <input id="input_transaction_category"> </td>
+			<td> <input id="input_transaction_method"> </td>
+			<td> {{form.bank_reconlliation_date}} </td>
+			<td> {{form.ammount}} </td>
+			<td> {{form.description}} </td>
+			<td style="display: none"> {{ form.account }} </td>
+			<td style="display: none"> {{ form.transaction_category }} </td>
+			<td style="display: none"> {{ form.transaction_method }} </td>
+  <td><input type="submit" value="Create"/></td>
+  </tr>
+</form>
+</table>
+
+
+<form style= "display:none" 
+			id="createCategory"
+			action="/accounting/transactions/" 
+			method="post"> 
+		{% csrf_token %}
+    <input id="id_account">
+    <input id="id_name">
+</form>
+
+<!--
+	Enable tablesorter on the transactions table, initally sorting by the most recent date.
+	-->
+<script>
+	$(document).ready(function() 
+    { 
+    $("table").tablesorter({ 
+        sortList: [[0,1]] 
+
+    });
+    } 
+);
+</script>
+
+
+
+<!--	
+			Function to take the transaction category/method text input and find the 
+			matching value and assign it to the form.
+
+			This is needed as the validator looks for an index value, not text.										
+   	-->
+<script>
+function mainFunction()
+{
+	assignCategoryValue();
+	assignMethodValue();
+}
+
+function assignCategoryValue()
+{
+	var userInput = document.getElementById("input_transaction_category").value;
+	var formOptions = document.getElementById("id_transaction_category").options;
+	var formValue = formOptions[formOptions.selectedIndex].value;
+
+	for(var i=1;i<formOptions.length;i++)
+	{
+		if(formOptions[i].text == userInput)
+		{
+			document.getElementById('id_transaction_category').value=formOptions[i].value
+			return false;
+		}
+	}
+	alert("Doesn't exist, creating.")
+	createCategory(userInput);
+	document.getElementById('id_transaction_category').value=formOptions.length;
+	return false;
+}
+
+function assignMethodValue()
+{
+	var userInput = document.getElementById("input_transaction_method").value;
+	var formOptions = document.getElementById("id_transaction_method").options;
+	var formValue = formOptions[formOptions.selectedIndex].value;
+
+	for(var i=1;i<formOptions.length;i++)
+	{
+		if(formOptions[i].text == userInput)
+		{
+			document.getElementById('id_transaction_method').value=formOptions[i].value
+			return false;
+		}
+	}
+	return false;
+}
+
+function createCategory(userInput)
+{
+  var form = document.createElement("form");
+  var element1 = document.createElement("input"); 
+  var element2 = document.createElement("input");  
+
+  form.method = "POST";
+  form.action = "/accounting/transaction_categories/";   
+
+  element1.value= document.getElementById("id_account").value;
+  element1.name=	"account";
+  form.appendChild(element1);  
+
+  element2.value=userInput;
+  element2.name="name";
+  form.appendChild(element2);
+
+  document.body.appendChild(form);
+
+
+  $('#form').ajaxForm(function() { 
+          alert("Thank you for your comment!"); 
+      }); 
+  return false;
+}
+
+
+</script>
+
+<!--	
+			Function for autocomplete of the transaction category and method fields.										
+   	-->
+<script>
+  $(function() 
+  {
+    var availableCategories = $.map($('#id_transaction_category option'), function(ele) 
+    {
+  		return ele.text; 
+		});
+
+    $( "#input_transaction_category" ).autocomplete
+    ({
+      source: availableCategories
+    }) 
+  });
+
+  $(function() 
+  {
+    var availableMethods = $.map($('#id_transaction_method option'), function(ele) 
+    {
+  		return ele.text; 
+		});
+
+    $( "#input_transaction_method" ).autocomplete
+    ({
+      source: availableMethods
+    }) 
+  });
+</script>
+
+{% endblock %}
