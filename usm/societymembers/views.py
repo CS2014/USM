@@ -34,11 +34,20 @@ def member_add(request):
 
 def member_delete(request):
 		member_toDelete = get_object_or_404(SocietyMember, pk=request.POST['member_id'])
+		user = request.user
+		allowed = 0
+		for x in member_toDelete.society.members.all():
+			if x == user:
+				allowed = 1
 		if request.method == 'POST':
-			form = DeleteSocietyMemberForm(request.POST, instance=member_toDelete)
-			if form.is_valid():
-				member_toDelete.delete()
-				return HttpResponseRedirect(reverse('societymembers:member_index'))
+			if (allowed == 1 or user.is_superuser):
+				form = DeleteSocietyMemberForm(request.POST, instance=member_toDelete)
+				if form.is_valid():
+					member_toDelete.delete()
+					return HttpResponseRedirect(reverse('societymembers:member_index'))
+			else:
+				form = SocietyMemberForm(instance=member_toDelete)
+				return HttpResponseRedirect(reverse('societymembers:member_denied'))
 		else:
 			form = SocietyMemberForm(instance=member_toDelete)
 
@@ -47,10 +56,18 @@ def member_delete(request):
 
 def member_edit(request, member_id):
 		instance = get_object_or_404(SocietyMember, id=member_id)
-		form = SocietyMemberForm(request.POST or none, instance=instance)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect(reverse('societymembers:member_index'))
+		user = request.user
+		allowed = 0
+		for x in instance.society.members.all():
+			if x == user:
+				allowed = 1
+		if (allowed == 1 or user.is_superuser):
+			form = SocietyMemberForm(request.POST or none, instance=instance)
+			if form.is_valid():
+				form.save()
+				return HttpResponseRedirect(reverse('societymembers:member_index'))
+		else:
+			return HttpResponseRedirect(reverse('societymembers:member_denied'))
 		object = SocietyMemberForm(data=model_to_dict(instance))
 		return render(request, 'societymembers/detail.html', {'object':object, 'member_id' : member_id})  
 
@@ -59,3 +76,6 @@ def member_detail(request, member_id):
 		form = SocietyMemberForm(data=model_to_dict(member))
 		data=build_pretty_data_view(form_instance=form, model_object=member)
 		return render(request, 'societymembers/detail.html', {'data' : data, 'form' : form, 'member_id' : member_id})
+
+def member_denied(request):
+		return render(request, 'societymembers/denied.html')
