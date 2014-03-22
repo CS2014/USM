@@ -401,6 +401,13 @@
 		        	{% csrf_token %}
 		            <span class="title">Username</span> <input name="username" type="text" /><br>
 		            <span class="title">Password</span> <input name="password" type="password" /><br>
+		            {% if messages %}
+								    <ul style="color: red">
+								        {% for message in messages %}
+								            {{ message }}*
+								        {% endfor %}
+								    </ul>
+								{% endif %}
 		            <input style="width:155px" type="submit" value="Log In">
 		        </form>
 			</div> <!-- /login-popup -->		

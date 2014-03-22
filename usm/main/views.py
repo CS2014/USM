@@ -17,6 +17,7 @@ from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 def index(request):
     context = RequestContext(request)
@@ -33,7 +34,8 @@ def index(request):
           else:
               return redirect("/banned_user")
       else:
-          return redirect("/toDO_invalid_details")
+          messages.add_message(request, messages.INFO, "Your user name and password do not match")
+          return redirect("/#log-in")
     else:
         return render(request, 'main/index.html', {'context': context})
 
