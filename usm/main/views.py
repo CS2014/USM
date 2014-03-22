@@ -7,12 +7,14 @@
 '''
 
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
+from django.template import RequestContext
 from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
 
 def index(request):
-		return render(request, 'main/index.html', {})
+		context = RequestContext(request)
+		return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
 		society_list = Society.objects.all()
