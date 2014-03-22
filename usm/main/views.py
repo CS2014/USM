@@ -6,8 +6,12 @@
 		Currently the user selects | creates a society at this point.
 '''
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
+
 from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
@@ -17,10 +21,14 @@ def index(request):
 		return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
-		society_list = Society.objects.all()
-		form = SocietyForm
-		context = {'society_list': society_list, 'form': form}
-		return render(request, 'main/signup.html', context)
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            return HttpResponseRedirect("/")
+    else:
+        form = UserCreationForm()
+    return render(request, 'main/signup.html', {'form': form,})
 
 def create_society(request):
 		form = SocietyForm

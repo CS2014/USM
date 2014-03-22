@@ -172,3 +172,24 @@ a.menu-toggle-btn i { line-height: 60px; }
   .progess-bars { margin-top: 40px; } }
 @media (max-width: 767px) { .slider-caption a, .slider-caption p { display: none; top: 50px !important; } }
 @media (max-width: 581px) { .slider-caption { display: none; } }
+
+input.registration-page {
+    top: 0px;
+    border: 1px solid #ccc;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 12px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+    //float: left;
+    display: inline-block;
+    //clear: left;
+    width: 190px;
+    text-align: left;
+}
+
