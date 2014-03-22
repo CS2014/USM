@@ -6,19 +6,62 @@
 		Currently the user selects | creates a society at this point.
 '''
 
+from django import forms
+from main.forms import UserCreateForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
+from django.template import RequestContext
+
 from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
 
+from django.contrib.auth import authenticate, login
+
 def index(request):
-		return render(request, 'main/index.html', {})
+    context = RequestContext(request)
+    if request.user.is_authenticated():
+    	return redirect("/accounting")
+    if request.method == 'POST':
+      username = request.POST['username']
+      password = request.POST['password']
+      user = authenticate(username=username, password=password)
+      if user is not None:
+          if user.is_active:
+              login(request, user)
+              return redirect("/accounting")
+          else:
+              return redirect("/banned_user")
+      else:
+          return redirect("/toDO_invalid_details")
+    else:
+        return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
-		society_list = Society.objects.all()
-		form = SocietyForm
-		context = {'society_list': society_list, 'form': form}
-		return render(request, 'main/signup.html', context)
+		if request.method == 'POST':
+			user_form = UserCreateForm(request.POST)
+			if user_form.is_valid():
+					print("tet")
+					username = user_form.clean_username()
+					password = user_form.clean_password2()
+					user_form.save()
+					return redirect("/")
+			else:
+				return render(request,
+									'main/signup.html',
+									{ 'form' : user_form })
+		return render(request,
+							'main/signup.html')						
+
+def signup_old(request):
+    if request.method == 'POST':
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            return HttpResponseRedirect("/")
+    else:
+        form = UserCreateForm()
+    return render(request, 'main/signup.html', {'form': form,})
 
 def create_society(request):
 		form = SocietyForm
