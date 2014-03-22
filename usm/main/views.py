@@ -16,9 +16,26 @@ from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
 
+from django.contrib.auth import authenticate, login
+
 def index(request):
-		context = RequestContext(request)
-		return render(request, 'main/index.html', {'context': context})
+    context = RequestContext(request)
+    if request.user.is_authenticated():
+    	return redirect("/accounting")
+    if request.method == 'POST':
+      username = request.POST['username']
+      password = request.POST['password']
+      user = authenticate(username=username, password=password)
+      if user is not None:
+          if user.is_active:
+              login(request, user)
+              return redirect("/accounting")
+          else:
+              return redirect("/banned_user")
+      else:
+          return redirect("/toDO_invalid_details")
+    else:
+        return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
 		if request.method == 'POST':
