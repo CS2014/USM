@@ -16,7 +16,7 @@ from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     context = RequestContext(request)
@@ -51,7 +51,11 @@ def signup(request):
 									'main/signup.html',
 									{ 'form' : user_form })
 		return render(request,
-							'main/signup.html')						
+							'main/signup.html')		
+
+def logout_view(request):
+		logout(request)
+		return redirect('/')
 
 def signup_old(request):
     if request.method == 'POST':
