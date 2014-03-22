@@ -21,16 +21,20 @@ def index(request):
 		return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
-    user_form = UserCreateForm(request.POST)
-    if user_form.is_valid():
-        print("tet")
-        username = user_form.clean_username()
-        password = user_form.clean_password2()
-        user_form.save()
-        return redirect("/")
-    return render(request,
-                  'main/signup.html',
-                  { 'form' : user_form })		
+		if request.method == 'POST':
+			user_form = UserCreateForm(request.POST)
+			if user_form.is_valid():
+					print("tet")
+					username = user_form.clean_username()
+					password = user_form.clean_password2()
+					user_form.save()
+					return redirect("/")
+			else:
+				return render(request,
+									'main/signup.html',
+									{ 'form' : user_form })
+		return render(request,
+							'main/signup.html')						
 
 def signup_old(request):
     if request.method == 'POST':

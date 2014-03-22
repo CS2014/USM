@@ -1,16 +1,8 @@
-<!--u
+<!--
 		author: Ross Kinsella	
-		date:   2014/feb/13
+		date:   2014/march/22
 
-		Displays a list of all the societies and links to more detail view.
-		Displays a form to create a new society.
-
-		TODO: 
-		- Style sheet
-		- Revise users in form|model.
-		- Show an error when you dont select users.
-		  |- maybe rename members to committe_members?
-
+		Registartion page with validation errors.
 	-->
 <html>
 <head>
@@ -34,11 +26,10 @@
         </a>
         <div class="navigation responsive-menu">
             <ul>
-              <li class="home"><a href="#templatemo">Home</a></li>
-	            <li class="about"><a href="#about">About Us</a></li>
-	            <li class="services"><a href="#services">Services</a></li>
-	            <li class="portfolio"><a href="#portfolio">Portfolio</a></li>
-	           	<li class="contact"><a href="/signup/">Sign up</a></li>	
+              <li class="home"><a href="/">Home</a></li>
+	            <li class="about"><a href="/#about">About Us</a></li>
+	            <li class="services"><a href="/#services">Services</a></li>
+	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
 	           	<li class="contact"><a href="/login/">Sign in</a></li>	
             </ul> <!-- /.main_menu -->
         </div> <!-- /.responsive_menu -->
@@ -52,10 +43,10 @@
 
 				<div class="navigation">
 	        <ul class="main-menu">
-	            <li class="home"><a href="#templatemo">Home</a></li>
-	            <li class="about"><a href="#about">About Us</a></li>
-	            <li class="services"><a href="#services">Services</a></li>
-	            <li class="portfolio"><a href="#portfolio">Portfolio</a></li>
+	            <li class="home"><a href="/">Home</a></li>
+	            <li class="about"><a href="/#about">About Us</a></li>
+	            <li class="services"><a href="/#services">Services</a></li>
+	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
 	        </ul>
 		</div> <!-- /.navigation -->
 	</div>
@@ -65,29 +56,37 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="welcome-text" style="text-align:left">
-							<h3><b> Sign up </b> :  Its free</h3>
+							<h3><b> Sign up:</b>  Its free</h3>
 								<div id="boxalign2" class="boxalign2" style="text-align: right; display: block; width: 370px">
-									<form action= "" method = "post">
+									<form action= "" method = "post" id="registrationForm">
 									{% csrf_token %} 
 								    <label>Username:
 								        <input class="registration-page" 
-								        				required title="" id="id_username"  name="username" type="text" />
+								        				required id="id_username"  name="username" type="text" />
+								        {% if form.username.errors %}
+								        	<br>{{ form.username.errors.as_text }} <br><br>
+								        {% endif %}
 								    </label>
 								    <label>Password:
 								        <input class="registration-page" 
-								        				required title="" id="id_password1" name="password1" type="password" />
+								        				required id="id_password1" name="password1" type="password" />
+								        {% if form.password1.errors %}
+								        	<br>{{ form.password1.errors.as_text }} <br><br>
+								        {% endif %}
 								    </label>
 								    <label>Password Confirmation:
 								        <input class="registration-page" 
-								        				required title="" id="id_password2" name="password2" type="password" />
+								        				required id="id_password2" name="password2" type="password" />
+								        {% if form.password2.errors %}
+								        	<br>{{ form.password2.errors.as_text }} <br><br>
+								        {% endif %}
 								    </label>
 								    <label>Email:
 								        <input class="registration-page" 
-								        				required title="" id= "id_email" name="email" type="email" />
-								    </label>
-								    <label>Email Confirmation:
-								        <input class="registration-page" 
-								        				required title="" name="id_email2" type="text" />
+								        				required id= "id_email" name="email" type="email" />
+								        {% if form.email.errors %}
+								        	<br>{{ form.email.errors.as_text }} <br><br>
+								        {% endif %}
 								    </label>
 								    <input style="width:188px" type="submit" value="Register">
 								   </form>

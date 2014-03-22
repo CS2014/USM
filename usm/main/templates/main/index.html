@@ -24,8 +24,8 @@
 	            <li class="about"><a href="#about">About Us</a></li>
 	            <li class="services"><a href="#services">Services</a></li>
 	            <li class="portfolio"><a href="#portfolio">Portfolio</a></li>
-	           	<li class="contact"><a href="/signup/">Sign up</a></li>	
-	           	<li class="contact"><a href="/login/">Sign in</a></li>	
+	           	<li class="contact"><a href="/signup/">Sign Up</a></li>	
+	           	<li class="home"><a href="/login/">Sign In</a></li>	
             </ul> <!-- /.main_menu -->
         </div> <!-- /.responsive_menu -->
     </div> <!-- /responsive_navigation -->
@@ -42,11 +42,8 @@
 	            <li class="about"><a href="#about">About Us</a></li>
 	            <li class="services"><a href="#services">Services</a></li>
 	            <li class="portfolio"><a href="#portfolio">Portfolio</a></li>
-	            {% if context.user.is_authenticated %}
-	           		<li class="contact"><a href="/login/">Sign out</a></li>
-	           	{% else %}
-	           		<li class="contact"><a href="/signup/">Sign up</a></li>	
-	           	{% endif %}
+	           	<li class="contact"><a href="/signup/">Sign Up</a></li>	
+	           	<li class="home"><a href="/login/">Log In</a></li>	
 	        </ul>
 		</div> <!-- /.navigation -->
 
