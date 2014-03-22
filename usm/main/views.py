@@ -7,7 +7,7 @@
 '''
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from main.forms import UserCreateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
@@ -21,13 +21,25 @@ def index(request):
 		return render(request, 'main/index.html', {'context': context})
 
 def signup(request):
+    user_form = UserCreateForm(request.POST)
+    if user_form.is_valid():
+        print("tet")
+        username = user_form.clean_username()
+        password = user_form.clean_password2()
+        user_form.save()
+        return redirect("/")
+    return render(request,
+                  'main/signup.html',
+                  { 'form' : user_form })		
+
+def signup_old(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreateForm(request.POST)
         if form.is_valid():
             new_user = form.save()
             return HttpResponseRedirect("/")
     else:
-        form = UserCreationForm()
+        form = UserCreateForm()
     return render(request, 'main/signup.html', {'form': form,})
 
 def create_society(request):
