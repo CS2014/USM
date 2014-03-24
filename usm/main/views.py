@@ -123,5 +123,10 @@ def society_page(request, slug):
 def society_book_keeping(request, slug):
 		society = get_object_or_404(Society, slug=slug)
 		account = society.account
+		if request.method == 'POST':
+				form = TransactionForm(request.POST, request.FILES)
+				if form.is_valid():
+					form.save()
+					return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
 		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form})
