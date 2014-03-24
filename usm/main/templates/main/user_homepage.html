@@ -1,0 +1,106 @@
+<!--
+		author: Ross Kinsella	
+		date:   2014/march/22
+
+		Registartion page with validation errors.
+	-->
+<html>
+<head>
+  <title>USM</title>
+	<meta name="keywords" content="sonic, responsive, free template, fluid layout, bootstrap, templatemo" />
+	<meta name="description" content="Sonic is one-page responsive free template using Bootstrap. This layout is suitable for creative portfolio showcase." />
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_misc.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_style.css">
+</head>
+<body>
+
+	<!-- This one in here is responsive menu for tablet and mobiles -->
+    <div class="responsive-navigation visible-sm visible-xs">
+        <a href="#" class="menu-toggle-btn">
+            <i class="fa fa-bars fa-2x"></i>
+        </a>
+        <div class="navigation responsive-menu">
+            <ul>
+              <li class="home"><a href="/">Home</a></li>
+	            <li class="about"><a href="/#about">About Us</a></li>
+	            <li class="services"><a href="/#services">Services</a></li>
+	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
+	           	<li class="contact"><a href="/login/">Sign in</a></li>	
+            </ul> <!-- /.main_menu -->
+        </div> <!-- /.responsive_menu -->
+    </div> <!-- /responsive_navigation -->
+
+	<div id="main-sidebar" class="hidden-xs hidden-sm">
+		<div class="logo">
+			<a href="/" rel="nofollow"><h1>USM</h1></a>
+			<span>A Management Tool</span>
+		</div> <!-- /.logo -->
+
+				<div class="navigation">
+	        <ul class="main-menu">
+	            <li class="home"><a href="/">Home</a></li>
+	            <li class="about"><a href="/#about">About Us</a></li>
+	            <li class="services"><a href="/#services">Services</a></li>
+	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
+	        </ul>
+		</div> <!-- /.navigation -->
+	</div>
+
+	<div id="main-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="welcome-text" style="text-align:left">
+							<h3><b> Select your society:</b></h3>
+							<div id="boxalign2" class="boxalign2" style="text-align: right; display: block; width: 370px">
+								{% for society in user.society_set.all %}
+									<a style="font-size: 20" href="{{society.slug}}/"> {{ society.name }} </a><br>
+								{% endfor %}
+							</div>
+							<h3 style="margin-top: 30px"><b> Join a society:</b></h3>
+							<div id="boxalign2" class="boxalign2" style="text-align: right; display: block; width: 370px">
+								<form action= "request_membership/" method = "post">
+									{% csrf_token %} 
+							    <label>Identification tag:
+							        <input class="registration-page" required id="id_slug"  name="slug" type="text" />
+							        <input style="width: 188px; margin-top:2px" type="submit" value="Send request">
+							        <div style="text-align: left; margin-top:10px">
+							        This tag is a unique identifier which can be given by a user
+							        of the society you want to join. 
+					            {% if messages %}
+											    <par style="color: red; display:block">
+											        {% for message in messages %}
+											            {{ message }}
+											        {% endfor %}
+											    </par>
+											{% endif %}
+							      	</div>
+							    </label>
+								</form>
+							</div>		
+							<h3 style="margin-top: 30px"><b> Create a society:</b></h3>
+							<div id="boxalign2" class="boxalign2" style="text-align: right; display: block; width: 370px">
+								<form action= "create_society/" method = "post" id="createSocietyForm" onsubmit="assignMembers()">
+									{% csrf_token %}
+								    <label>Name:
+							        <input class="registration-page" id="id_name"  name="name" type="text"/>
+							        <input style="width: 188px; margin-top:2px" type="submit" value="Create">
+							        <div style="text-align: left; margin-top:10px">
+							        Its that simple.	
+							      	</div>
+								    </label>
+								  </form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</body>
+</html>
+
