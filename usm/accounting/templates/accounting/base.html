@@ -4,7 +4,7 @@
 	
 	<!-- start: Meta -->
 	<meta charset="utf-8">
-	<title>SimpliQ - Flat & Responsive Bootstrap Admin Template</title>
+	<title>mySociety</title>
 	<meta name="description" content="SimpliQ - Flat & Responsive Bootstrap Admin Template.">
 	<meta name="author" content="Łukasz Holeczek">
 	<meta name="keyword" content="SimpliQ, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
@@ -18,6 +18,10 @@
 	<link href="{{ STATIC_URL }}assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{{ STATIC_URL }}assets/css/style.min.css" rel="stylesheet">
 	<link href="{{ STATIC_URL }}assets/css/retina.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{ STATIC_URL }}/stylesheets/table.css" type ="text/css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">	
+	
+	
 	<!-- end: CSS -->
 	
 
@@ -349,7 +353,7 @@
 							</a>
 							<ul>
 								<li>
-									<a class="submenu" href="/accounting/transactions/">
+									<a class="submenu" href="/{{ society.slug }}/transactions/">
 										<i class="fa fa-hdd-o"></i>
 										<span class="hidden-sm"> Transactions</span>
 									</a>
@@ -549,6 +553,11 @@
 	<script src="{{ STATIC_URL }}assets/js/jquery.hotkeys.min.js"></script>
 	<script src="{{ STATIC_URL }}assets/js/bootstrap-wysiwyg.min.js"></script>
 	<script src="{{ STATIC_URL }}assets/js/bootstrap-colorpicker.min.js"></script>
+
+	<!-- scripts added by ross -->
+	<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.tablesorter.min.js"></script> 
+	<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.validate.min.js"></script> 
+	<script src="http://malsup.github.com/jquery.form.js"></script> 
 	
 	<!-- theme scripts -->
 	<script src="{{ STATIC_URL }}assets/js/custom.min.js"></script>

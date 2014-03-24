@@ -72,7 +72,7 @@ def transaction_index(request):
 		form = TransactionForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()    
-		return HttpResponseRedirect('/test-2/book-keeping')
+		return HttpResponseRedirect('/')
 
 	return render(request, 'transactions/index.html', context)
 

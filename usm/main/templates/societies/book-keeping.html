@@ -1,5 +1,13 @@
-{% extends "base.html" %}
+{% extends "accounting/base.html" %}
 {% block content %}
+
+<link rel="stylesheet" href="{{ STATIC_URL }}/stylesheets/table.css" type ="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.tablesorter.min.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.validate.min.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script> 
 
 <style>
 #table
@@ -64,7 +72,7 @@ border-collapse:collapse;
 			name="newTransaction"
 			id="submissionForm"
 			method="post" 
-			action="/accounting/transactions/" 
+			action="create/" 
 			onsubmit="mainFunction()">
 	{% csrf_token %}
 	<tr>
@@ -84,7 +92,7 @@ border-collapse:collapse;
 
 <script>
 	$("#submissionForm").validate();
-</script>>
+</script>
 
 
 <form style= "display:none" 

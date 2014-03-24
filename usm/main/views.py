@@ -106,7 +106,6 @@ def reject_join_request(request,slug,user_index):
 		else:
 			return redirect('no_permission')
 
-
 def create_society(request):
 		form = SocietyForm
 		if request.method == 'POST':
@@ -114,6 +113,9 @@ def create_society(request):
 			if form.is_valid():
 				new_society = form.save()
 				new_society.members.add(request.user)
+				account = Account(society = new_society)
+				new_society.account = account
+				account.save()
 			return redirect('/')
 
 def society_page(request, slug):
@@ -123,5 +125,10 @@ def society_page(request, slug):
 def society_book_keeping(request, slug):
 		society = get_object_or_404(Society, slug=slug)
 		account = society.account
+		if request.method == 'POST':
+				form = TransactionForm(request.POST, request.FILES)
+				if form.is_valid():
+					form.save()
+					return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
-		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form})
+		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form, 'society' : society})
