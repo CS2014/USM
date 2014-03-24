@@ -149,7 +149,7 @@ class Transaction(models.Model):
 		get_logs.short_description = 'Logs'
 
 		def get_stubbed_time(self):
-			return self.submit_date.strftime("%d / %m / %y")
+			return self.submit_date.strftime("%d/%m/%y")
 
 		def __unicode__(self):
 			return self.description

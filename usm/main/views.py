@@ -15,10 +15,12 @@ from django.db.models import get_app, get_models
 
 from main.models import Society
 from main.models import SocietyForm
-from accounting.models import Account, TransactionForm
+from accounting.models import Account, TransactionForm, Transaction
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def homepage(request):
     context = RequestContext(request)
@@ -122,13 +124,30 @@ def society_page(request, slug):
 		society = get_object_or_404(Society, slug=slug)
 		return render(request, 'societies/home.html', {'society' : society})
 
+def get_transactions(request,account):
+		transaction_list = account.transaction_set.all()
+		paginator = Paginator(transaction_list, 5) # Show 25 contacts per page
+		page = request.GET.get('page')
+		try:
+				transactions = paginator.page(page)
+		except PageNotAnInteger:
+		    # If page is not an integer, deliver first page.
+				transactions = paginator.page(1)
+		except EmptyPage:
+		    # If page is out of range (e.g. 9999), deliver last page of results.
+				transactions = paginator.page(paginator.num_pages)
+		return transactions		
+
 def society_book_keeping(request, slug):
 		society = get_object_or_404(Society, slug=slug)
+		society.members.get(pk=request.user.id)
 		account = society.account
+		transactions = get_transactions(request,account)
+
 		if request.method == 'POST':
 				form = TransactionForm(request.POST, request.FILES)
 				if form.is_valid():
 					form.save()
 					return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
-		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form, 'society' : society})
+		return render(request, 'societies/book-keeping.html', {'account' : account, 'transactions':transactions,'form' : transaction_form})

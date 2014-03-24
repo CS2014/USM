@@ -32,63 +32,89 @@ border-collapse:collapse;
 }
 </style>
 
-<div class="wrap">
-	<table id="table" class="tablesorter">
-		<thead>
-	    <tr>
-	    	<th>Date</th>
-	      <th>Category</th>
-	      <th>Method</th>
-	      <th>Bank reconciliation date</th>
-	      <th>Ammount</th>
-	      <th>Note</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    {% for transaction in account.transaction_set.all %}
-	    	{% if forloop.counter0|divisibleby:2 %} 
-	    		<tr>
-	    	{% else %}
-	    		<tr class="alt">
-	    	{% endif %}
-	    	
-	      <td>{{ transaction.get_stubbed_time }}</td>
-	      <td>{{ transaction.transaction_category }}</td>
-	      <td>{{ transaction.transaction_method }}</td>
-	      {% if transaction.bank_reconlliation_date %}
-	      	<td>{{ transaction.bank_reconlliation_date }}</td>
-	      {% else %}
-	      	<td align="center">  -----  </td>
-	      {% endif %}
-	      <td>{{ transaction.ammount }}</td>
-	      <td>{{ transaction.description }}</td>
-	    </tr> 	 
-	    {% endfor %}
-	  </tbody>
-</div>
+			<div class="row">		
+				<div class="col-lg-12">
+					<div class="box">
+						<div class="box-header" data-original-title>
+							<h2><i class="fa fa-user"></i><span class="break"></span>Transactions</h2>
+							<div class="box-icon">
+								<a href="table.html#" class="btn-setting"><i class="fa fa-wrench"></i></a>
+								<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+								<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
+							</div>
+						</div>
+						<div class="box-content">
+							<table class="table table-striped table-bordered bootstrap-datatable datatable">
+							  <thead>
+								  <tr>
+									  <th>Date</th>
+									  <th>Category</th>
+									  <th>Method</th>
+									  <th>Ammount</th>
+									  <th>Description</th>
+								  </tr>
+							  </thead>   
+							  <tbody>
+							  {% for transaction in transactions %}
+								<tr>
+									<td>{{transaction.get_stubbed_time}}</td>
+									<td class="center"> {{transaction.transaction_category}}</td>
+									<td class="center"> {{transaction.transaction_method}}</td>
+									<td class="center"> {{transaction.ammount}} </td>
+									<td class="center"> {{transaction.description}} </td>
+									<td class="center">
+										<a class="btn btn-success" href="table.html#">
+											<i class="fa fa-search-plus "></i>  
+										</a>
+										<a class="btn btn-info" href="table.html#">
+											<i class="fa fa-edit "></i>  
+										</a>
+										<a class="btn btn-danger" href="table.html#">
+											<i class="fa fa-trash-o "></i> 
+										</a>
+									</td>
+								</tr>
+								{% endfor%}
+								<tr>
+									<form 
+										name="newTransaction"
+										id="submissionForm"
+										method="post" 
+										action="create/" 
+										onsubmit="mainFunction()">
+										{% csrf_token %}
+										<td id="input_datee"> {% now "d/m/y" %} </td>
+										<td id="quick_test"> <input id="input_transaction_category"> </td>
+										<td> <input id="input_transaction_method" class="required"> </td>
+										<td> {{form.ammount}} </td>
+										<td> {{form.description}} </td>
+										<td style="display: none"> {{ form.account }} </td>
+										<td style="display: none"> {{ form.transaction_category }} </td>
+										<td style="display: none"> {{ form.transaction_method }} </td>
+										<td><input type="submit" value="Create"/></td>
+									</form>
+								</tr>
+							</tbody>
+						</table>  
+							<div class="pagination">
+						    <span class="step-links">
+					        {% if transactions.has_previous %}
+					          <a href="?page={{ transactions.previous_page_number }}">previous</a>
+					        {% endif %}
+					        <span class="current">
+					          Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}.
+					        </span>
+					        {% if transactions.has_next %}
+					          <a href="?page={{ transactions.next_page_number }}">next</a>
+					        {% endif %}
+						    </span>
+							</div>
+						</div>
+					</div>
+				</div><!--/col-->
+			
+			</div><!--/row-->
 
-<table id="table">
-<form 
-			name="newTransaction"
-			id="submissionForm"
-			method="post" 
-			action="create/" 
-			onsubmit="mainFunction()">
-	{% csrf_token %}
-	<tr>
-			<td> {% now "d / m / y" %} </td>
-			<td> <input id="input_transaction_category"> </td>
-			<td> <input id="input_transaction_method" class="required"> </td>
-			<td> {{form.bank_reconlliation_date}} </td>
-			<td> {{form.ammount}} </td>
-			<td> {{form.description}} </td>
-			<td style="display: none"> {{ form.account }} </td>
-			<td style="display: none"> {{ form.transaction_category }} </td>
-			<td style="display: none"> {{ form.transaction_method }} </td>
-  <td><input type="submit" value="Create"/></td>
-  </tr>
-</form>
-</table>
 
 <script>
 	$("#submissionForm").validate();
@@ -117,6 +143,9 @@ border-collapse:collapse;
     } 
 );
 </script>
+
+
+
 
 
 
