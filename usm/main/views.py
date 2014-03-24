@@ -129,4 +129,4 @@ def society_book_keeping(request, slug):
 					form.save()
 					return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
-		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form})
+		return render(request, 'societies/book-keeping.html', {'account' : account, 'form' : transaction_form, 'society' : society})
