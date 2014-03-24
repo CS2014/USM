@@ -106,7 +106,6 @@ def reject_join_request(request,slug,user_index):
 		else:
 			return redirect('no_permission')
 
-
 def create_society(request):
 		form = SocietyForm
 		if request.method == 'POST':
@@ -114,6 +113,9 @@ def create_society(request):
 			if form.is_valid():
 				new_society = form.save()
 				new_society.members.add(request.user)
+				account = Account(society = new_society)
+				new_society.account = account
+				account.save()
 			return redirect('/')
 
 def society_page(request, slug):
