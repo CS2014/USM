@@ -1,17 +1,12 @@
 '''
 		author: Ross Kinsella
 		date:   2014/feb/13
-
-		The first nesting of the URL paths.
-		Currently the user selects | creates a society at this point.
 '''
 
-from django import forms
 from main.forms import UserCreateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
-from django.db.models import get_app, get_models
 
 from main.models import Society
 from main.models import SocietyForm
@@ -22,6 +17,9 @@ from django.contrib import messages
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+'''
+Homepage views
+'''
 def homepage(request):
     context = RequestContext(request)
     if request.user.is_authenticated():
@@ -31,11 +29,36 @@ def homepage(request):
     else:
       return render(request, 'main/index.html', {'context': context})
 
+# When the user has not selected the society they want to use.
 def user_homepage(request):
     context = RequestContext(request)
     form = SocietyForm
     return render(request, 'main/user_homepage.html', {'context': context, 'form':form})
 
+def request_membership(request):
+		if request.method == 'POST':
+			slug = request.POST['slug']
+			society = get_object_or_404(Society, slug=slug)
+			society.member_requests.add(request.user)
+			messages.add_message(request, messages.INFO, 
+				"Your request has been sent. You will be notified when it is accepted.")
+		return redirect('/')   
+
+def create_society(request):
+		form = SocietyForm
+		if request.method == 'POST':
+			form = SocietyForm(request.POST)
+			if form.is_valid():
+				new_society = form.save()
+				new_society.members.add(request.user)
+				account = Account(society = new_society)
+				new_society.account = account
+				account.save()
+			return redirect('/') 
+
+'''
+Authentication views
+'''
 def log_in(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -69,6 +92,9 @@ def logout_view(request):
 		logout(request)
 		return redirect('/')
 
+'''
+Logged in user views
+'''		
 def dash_board(request, slug): 
 		society = get_object_or_404(Society, slug=slug)
 		if society.members.get(pk=request.user.id):
@@ -76,14 +102,10 @@ def dash_board(request, slug):
 		else:
 			return redirect('no_permission')
 
-def request_membership(request):
-		if request.method == 'POST':
-			slug = request.POST['slug']
-			society = get_object_or_404(Society, slug=slug)
-			society.member_requests.add(request.user)
-			messages.add_message(request, messages.INFO, "Your request has been sent. You will be notified when it is accepted.")
-		return redirect('/')
 
+'''
+Add users to account
+'''
 def member_requests(request,slug):
 		society = get_object_or_404(Society, slug=slug)
 		user = get_object_or_404(society.members, pk=request.user.id)
@@ -107,47 +129,3 @@ def reject_join_request(request,slug,user_index):
 			return redirect('/'+slug+'/member_requests')
 		else:
 			return redirect('no_permission')
-
-def create_society(request):
-		form = SocietyForm
-		if request.method == 'POST':
-			form = SocietyForm(request.POST)
-			if form.is_valid():
-				new_society = form.save()
-				new_society.members.add(request.user)
-				account = Account(society = new_society)
-				new_society.account = account
-				account.save()
-			return redirect('/')
-
-def society_page(request, slug):
-		society = get_object_or_404(Society, slug=slug)
-		return render(request, 'societies/home.html', {'society' : society})
-
-def get_transactions(request,account):
-		transaction_list = account.transaction_set.all()
-		paginator = Paginator(transaction_list, 5) # Show 25 contacts per page
-		page = request.GET.get('page')
-		try:
-				transactions = paginator.page(page)
-		except PageNotAnInteger:
-		    # If page is not an integer, deliver first page.
-				transactions = paginator.page(1)
-		except EmptyPage:
-		    # If page is out of range (e.g. 9999), deliver last page of results.
-				transactions = paginator.page(paginator.num_pages)
-		return transactions		
-
-def society_book_keeping(request, slug):
-		society = get_object_or_404(Society, slug=slug)
-		society.members.get(pk=request.user.id)
-		account = society.account
-		transactions = get_transactions(request,account)
-
-		if request.method == 'POST':
-				form = TransactionForm(request.POST, request.FILES)
-				if form.is_valid():
-					form.save()
-					return redirect('/'+slug+'/transactions')
-		transaction_form = TransactionForm(initial={'account': account})
-		return render(request, 'societies/book-keeping.html', {'account' : account, 'transactions':transactions,'form' : transaction_form})

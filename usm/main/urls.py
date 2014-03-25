@@ -1,18 +1,19 @@
 from django.conf.urls import patterns, include ,url
 
-from main import views
+from main import views as main_views
+from accounting import views as accounting_views
 
 urlpatterns = patterns('main.views',
-	url(r'^main/create_society/', views.create_society),
-	url(r'^signup/$', views.signup),
-	url(r'^logout/$', views.logout_view),
-	url(r'^request_membership/$', views.request_membership),
-	url(r'^create_society/$', views.create_society),
-	url(r'^$', views.homepage),
-	url(r'^(?P<slug>[\w-]+)/$', views.dash_board),
-	url(r'^(?P<slug>[\w-]+)/transactions/$', views.society_book_keeping),	
-	url(r'^(?P<slug>[\w-]+)/transactions/create/$', views.society_book_keeping),	
-	url(r'^(?P<slug>[\w-]+)/member_requests/$', views.member_requests),
-	url(r'^(?P<slug>[\w-]+)/member_requests/accept/(?P<user_index>[\w-]+)/$', views.accept_join_request),
-	url(r'^(?P<slug>[\w-]+)/member_requests/reject/(?P<user_index>[\w-]+)/$', views.reject_join_request),
+	url(r'^main/create_society/', main_views.create_society),
+	url(r'^signup/$', main_views.signup),
+	url(r'^logout/$', main_views.logout_view),
+	url(r'^request_membership/$', main_views.request_membership),
+	url(r'^create_society/$', main_views.create_society),
+	url(r'^$', main_views.homepage),
+	url(r'^(?P<slug>[\w-]+)/$', main_views.dash_board),
+	url(r'^(?P<slug>[\w-]+)/transactions/$', accounting_views.society_book_keeping),	
+	url(r'^(?P<slug>[\w-]+)/transactions/create/$', accounting_views.society_book_keeping),	
+	url(r'^(?P<slug>[\w-]+)/member_requests/$', main_views.member_requests),
+	url(r'^(?P<slug>[\w-]+)/member_requests/accept/(?P<user_index>[\w-]+)/$', main_views.accept_join_request),
+	url(r'^(?P<slug>[\w-]+)/member_requests/reject/(?P<user_index>[\w-]+)/$', main_views.reject_join_request),
 )
