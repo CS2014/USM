@@ -1,5 +1,13 @@
-{% extends "base.html" %}
+{% extends "accounting/base.html" %}
 {% block content %}
+
+<link rel="stylesheet" href="{{ STATIC_URL }}/stylesheets/table.css" type ="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.tablesorter.min.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.validate.min.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script> 
 
 <style>
 #table
@@ -38,7 +46,7 @@ border-collapse:collapse;
 	  </thead>
 	  <tbody>
 	    {% for transaction in account.transaction_set.all %}
-	    	{% if forloop.counter0|divisibleby:2 %}
+	    	{% if forloop.counter0|divisibleby:2 %} 
 	    		<tr>
 	    	{% else %}
 	    		<tr class="alt">
@@ -64,13 +72,13 @@ border-collapse:collapse;
 			name="newTransaction"
 			id="submissionForm"
 			method="post" 
-			action="/accounting/transactions/" 
+			action="create/" 
 			onsubmit="mainFunction()">
 	{% csrf_token %}
 	<tr>
 			<td> {% now "d / m / y" %} </td>
 			<td> <input id="input_transaction_category"> </td>
-			<td> <input id="input_transaction_method"> </td>
+			<td> <input id="input_transaction_method" class="required"> </td>
 			<td> {{form.bank_reconlliation_date}} </td>
 			<td> {{form.ammount}} </td>
 			<td> {{form.description}} </td>
@@ -81,6 +89,10 @@ border-collapse:collapse;
   </tr>
 </form>
 </table>
+
+<script>
+	$("#submissionForm").validate();
+</script>
 
 
 <form style= "display:none" 

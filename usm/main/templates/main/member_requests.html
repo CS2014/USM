@@ -1,0 +1,19 @@
+{% extends "accounting/base.html" %}
+{% block content %}
+	{% if society.member_requests.count != 0 %}
+		<h2> The following users have requested to join {{society.name}} </h2>
+		{% for user in society.member_requests.all %}
+		<div style="padding: 40px">
+			<label style="display: block"> Username: {{user.username}} <br> Email: {{user.email}}</label>
+			<a style="padding-right: 20px"href="accept/{{user.id}}/"> 
+				<button>Accept</button>
+			</a>
+			<a href="reject/{{user.id}}/"> 
+				<button>Reject</button>
+			</a>
+		</div>
+		{% endfor %}
+	{% else %}
+		<h2> There are no outstanding requests at present. </h2>
+	{% endif %}
+{% endblock %}

@@ -27,6 +27,9 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Open Sans', Arial, Helvetice Neue, sans-s
 #contact .section-title { border-color: #cb1d62; }
 #contact h2 { background-color: #e3387c; }
 
+#log-in .section-title { border-color: #38a9e3; }
+#log-in h2 { background-color: #5090ca; }
+
 a.largeButton { color: white; text-transform: uppercase; font-weight: 700; font-size: 14px; display: inline-block; padding: 10px 20px; border-bottom: 3px solid; }
 
 .homeBgColor { background: #38a9e3; }
@@ -172,3 +175,24 @@ a.menu-toggle-btn i { line-height: 60px; }
   .progess-bars { margin-top: 40px; } }
 @media (max-width: 767px) { .slider-caption a, .slider-caption p { display: none; top: 50px !important; } }
 @media (max-width: 581px) { .slider-caption { display: none; } }
+
+input.registration-page {
+    top: 0px;
+    border: 1px solid #ccc;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 12px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+    //float: left;
+    display: inline-block;
+    //clear: left;
+    width: 190px;
+    text-align: left;
+}
+
