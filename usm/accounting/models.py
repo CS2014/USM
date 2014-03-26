@@ -44,6 +44,12 @@ class Account(models.Model):
 		today = datetime.date.today()
 		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
 
+	def tabulate_transactions_year(self,month):
+		today = datetome.date.today()
+		start_month = month
+
+
+
 	def tabulate_transactions_jan(self):
 		today = datetime.date.today()
 		return self.transaction_set.all().filter(submit_date__month='1').aggregate(total=Sum('ammount'))
@@ -201,7 +207,7 @@ class Transaction(models.Model):
 		get_logs.short_description = 'Logs'
 
 		def get_stubbed_time(self):
-			return self.submit_date.strftime("%d/%m/%y")
+			return self.submit_date.strftime("%d/%m/%Y")
 
 		def __unicode__(self):
 			return self.description
