@@ -1,11 +1,128 @@
+{% extends "accounting/base.html" %}
+{% block content %}
+<script src="{{ STATIC_URL }}assets/js/xcharts.min.js"></script>
+<script src="{{ STATIC_URL }}assets/js/d3.min.js"></script>
+<script src="{{ STATIC_URL }}assets/js/jquery-2.1.0.min.js"></script>
+<script src="{{ STATIC_URL }}assets/js/jquery.flot.pie.min.js"></script>
+
+<div class="row">
+    <div class="col-sm-6">
+      <div class="box">
+        <div class="box-header" data-original-title>
+          <h2><i class="fa fa-list-alt"></i><span class="break"></span>Spending by category</h2>
+          <div class="box-icon">
+            <a href="charts-flot.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+          </div>
+        </div>
+        <div class="box-content">
+           <div id="donutchart" style="height: 300px;">
+             Insert pie chart here.
+           </div>
+        </div>
+      </div>
+    </div><!--/col-->    
+  <div class="col-sm-6">
+    <div class="box">
+      <div class="box-header">
+        <h2><i class="fa fa-bar-chart-o"></i>Spending by month</h2>
+          <div class="box-icon">      
+            <a href="charts-flot.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>    
+          </div>
+      </div>
+      <div class="box-content">
+        <figure id="example1" style="height: 300px"></figure>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+      
+(function () {
+   
+
+      var data = {
+  "xScale": "time",
+  "yScale": "linear",
+  
+  "main": [
+    {
+      "className": ".monthly_transactions",
+      "data": [
+        {
+          "x": "01",
+          "y": "{{society.account.tabulate_transactions_jan.total}}"
+        },
+        {
+          "x": "02",
+          "y": "{{society.account.tabulate_transactions_feb.total}}"
+        },      
+        {
+          "x": "03",
+          "y": "{{society.account.tabulate_transactions_mar.total}}"
+        },
+        {
+          "x": "04",
+          "y": "{{society.account.tabulate_transactions_apr.total}}"
+        },      
+        {
+          "x": "05",
+          "y": "{{society.account.tabulate_transactions_may.total}}"
+        },
+        {
+          "x": "06",
+          "y": "{{society.account.tabulate_transactions_jun.total}}"
+        },      
+        {
+          "x": "07",
+          "y": "{{society.account.tabulate_transactions_jul.total}}"
+        },
+        {
+          "x": "08",
+          "y": "{{society.account.tabulate_transactions_aug.total}}"
+        },      
+        {
+          "x": "09",
+          "y": "{{society.account.tabulate_transactions_sep.total}}"
+        },
+        {
+          "x": "10",
+          "y": "{{society.account.tabulate_transactions_oct.total}}"
+        },      
+        {
+          "x": "11",
+          "y": "{{society.account.tabulate_transactions_nov.total}}"
+        },
+        {
+          "x": "12",
+          "y": "{{society.account.tabulate_transactions_dec.total}}"
+        }
+      ]
+    }
+  ]
+};
+      var opts = {
+  "dataFormatX": function (x) { return d3.time.format('%m').parse(x); },
+  "tickFormatX": function (x) { return d3.time.format('%b')(x); }
+};
+      
+      var myChart = new xChart('line', data, '#example1', opts);
+      
+    }());
+</script>      
+{% endblock %}
 <!--
+  1: get last 12 months of spending in 12 month vars
+
+
 		author: Ross Kinsella	
 		date:   2014/feb/13
-
+}());
 		Displays a list of all the models in the accounting app.
 
 -->
-
+<!--
 <ul>  
 	<li><a href="/accounting/accounts/">Accounts:<a></li>
   <li><a href="/accounting/transaction_categories/">Transaction categories:<a></li>
@@ -14,4 +131,4 @@
   <li><a href="/accounting/bills/">Bills:<a></li>
   <li><a href="/accounting/invoices/">Invoices:<a></li>
   <li><a href="/accounting/grants/">Grants:<a></li>
-</ul>
+</ul>-->

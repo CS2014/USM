@@ -21,13 +21,13 @@
 """
 
 from django.db import models
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 import datetime
 from django.utils import timezone
 from main.models import Society
 from django.contrib.auth.models import User
 from django.db.models import Sum
-
+from django import forms
 
 
 
@@ -40,12 +40,62 @@ class Account(models.Model):
 	'''
 	society = models.OneToOneField(Society)
 
+	def tabulate_transactions_jan(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='1').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_feb(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='2').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_mar(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='3').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_apr(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='4').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_may(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='5').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_jun(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='6').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_jul(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='7').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_aug(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='8').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_sep(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='9').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_oct(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='10').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_nov(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='11').aggregate(total=Sum('ammount'))
+
+	def tabulate_transactions_dec(self):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month='12').aggregate(total=Sum('ammount'))				
+
+
+
   #Get all transaction childrens' ammounts
 	def tabulate_transactions(self):
 		return self.transaction_set.all().aggregate(total=Sum('ammount'))
 
 	def __unicode__(self):
-		return self.society.name
+		return self.society.slug
 
 
 class AccountForm(ModelForm):
@@ -80,7 +130,7 @@ class TransactionCategory(models.Model):
 		'''
 		account = models.ForeignKey(Account)	
 
-		name = models.CharField(max_length=20)
+		name = models.CharField(max_length=20,unique=True)
 		
 		def __unicode__(self):
 			return self.name
@@ -118,7 +168,7 @@ class TransactionMethod(models.Model):
 class TransactionMethodForm(ModelForm):
 	class Meta:
 		model = TransactionMethod
-		exclude = '__all__'
+		fields = '__all__'
 
 
 class Transaction(models.Model):
@@ -135,7 +185,7 @@ class Transaction(models.Model):
 		transaction_method = models.ForeignKey(TransactionMethod)
 
 		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		submit_date = models.DateTimeField(default=timezone.now, editable=False)
+		submit_date = models.DateTimeField(default=timezone.now, editable=True)
 		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
 		description = models.CharField(max_length=300)
 
@@ -147,6 +197,9 @@ class Transaction(models.Model):
 		def get_logs(self):
 			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
 		get_logs.short_description = 'Logs'
+
+		def get_stubbed_time(self):
+			return self.submit_date.strftime("%d/%m/%y")
 
 		def __unicode__(self):
 			return self.description
