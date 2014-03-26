@@ -86,7 +86,7 @@ border-collapse:collapse;
 										onsubmit="mainFunction()">
 										{% csrf_token %}
 										<td>
-											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="yyyy-mm-dd"/>
+											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
 										<td id="quick_test"> <input id="input_transaction_category"> </td>
 										<td> <input id="input_transaction_method" class="required"> </td>
@@ -118,6 +118,8 @@ border-collapse:collapse;
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
+
+
 <script>
 	$("#submissionForm").validate();
 </script>
@@ -207,11 +209,13 @@ function assignSubmitDateTime(userInput)
 	var timeStamp = new Date();
 	var time = getTime(timeStamp);
 	var date = document.getElementById('id_user_input_date').value;
-	var inputTimeStamp = date + " " + time;
-	
+	var day = date[0] + date[1];
+	var month = date[3] + date[4];
+	var year = date[6] + date[7] + date[8] + date[9];
+	var inputTimeStamp = year + "-" + month + "-" + day + " " + time;
+
 	document.getElementById('id_submit_date').value = inputTimeStamp;
 	var test = document.getElementById('id_submit_date').value;
-	alert(test);
 }
 
 function getTime(dateString) {
