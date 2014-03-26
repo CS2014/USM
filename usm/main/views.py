@@ -80,6 +80,8 @@ def signup(request):
 					username = user_form.clean_username()
 					password = user_form.clean_password2()
 					user_form.save()
+					user = authenticate(username=username, password=password)					
+					login(request, user)
 					return redirect("/")
 			else:
 				return render(request,
@@ -98,7 +100,7 @@ Logged in user views
 def dash_board(request, slug): 
 		society = get_object_or_404(Society, slug=slug)
 		if society.members.get(pk=request.user.id):
-			return render(request, 'accounting/index.html', {'society': society})
+			return render(request, 'accounting/index.html', {'society': society })
 		else:
 			return redirect('no_permission')
 

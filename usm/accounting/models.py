@@ -40,6 +40,10 @@ class Account(models.Model):
 	'''
 	society = models.OneToOneField(Society)
 
+	def tabulate_transactions_month(self, month):
+		today = datetime.date.today()
+		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
+
 	def tabulate_transactions_jan(self):
 		today = datetime.date.today()
 		return self.transaction_set.all().filter(submit_date__month='1').aggregate(total=Sum('ammount'))
@@ -87,8 +91,6 @@ class Account(models.Model):
 	def tabulate_transactions_dec(self):
 		today = datetime.date.today()
 		return self.transaction_set.all().filter(submit_date__month='12').aggregate(total=Sum('ammount'))				
-
-
 
   #Get all transaction childrens' ammounts
 	def tabulate_transactions(self):
