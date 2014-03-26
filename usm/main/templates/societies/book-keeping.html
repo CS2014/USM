@@ -86,7 +86,7 @@ border-collapse:collapse;
 										onsubmit="mainFunction()">
 										{% csrf_token %}
 										<td>
-											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yy"/>
+											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="yyyy-mm-dd"/>
 										</td>
 										<td id="quick_test"> <input id="input_transaction_category"> </td>
 										<td> <input id="input_transaction_method" class="required"> </td>
@@ -118,7 +118,6 @@ border-collapse:collapse;
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
-
 <script>
 	$("#submissionForm").validate();
 </script>
