@@ -35,7 +35,7 @@ class TransactionAdmin(admin.ModelAdmin):
 		TODO:
 		- Have bank_reconlliation_date only appear when cheque payment method is selceted.
 		'''
-		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date']
+		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date', 'submit_date']
 		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method', 'get_logs' )	
 
 class BillAdmin(admin.ModelAdmin):
