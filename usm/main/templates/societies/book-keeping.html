@@ -31,7 +31,6 @@ border-collapse:collapse;
 	font-size: .4em;
 }
 </style>
-
 			<div class="row">		
 				<div class="col-lg-12">
 					<div class="box">
@@ -66,15 +65,18 @@ border-collapse:collapse;
 										<a class="btn btn-success" href="table.html#">
 											<i class="fa fa-search-plus "></i>  
 										</a>
+										<!-- edit transaction -->
 										<a class="btn btn-info" href="table.html#">
 											<i class="fa fa-edit "></i>  
 										</a>
-										<a class="btn btn-danger" href="table.html#">
+										<!-- delete transaction -->
+										<a class="btn btn-danger" href="/{{society.slug}}/transactions/delete/{{transaction.id}}">
 											<i class="fa fa-trash-o "></i> 
 										</a>
 									</td>
 								</tr>
 								{% endfor%}
+								
 								<tr>
 									<form 
 										name="newTransaction"
@@ -83,12 +85,15 @@ border-collapse:collapse;
 										action="create/" 
 										onsubmit="mainFunction()">
 										{% csrf_token %}
-										<td id="input_datee"> {% now "d/m/y" %} </td>
+										<td>
+											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yy"/>
+										</td>
 										<td id="quick_test"> <input id="input_transaction_category"> </td>
 										<td> <input id="input_transaction_method" class="required"> </td>
 										<td> {{form.ammount}} </td>
 										<td> {{form.description}} </td>
 										<td style="display: none"> {{ form.account }} </td>
+										<td style="display: none"> {{ form.submit_date }} </td>
 										<td style="display: none"> {{ form.transaction_category }} </td>
 										<td style="display: none"> {{ form.transaction_method }} </td>
 										<td><input type="submit" value="Create" style="width: 118px"/></td>
@@ -112,9 +117,7 @@ border-collapse:collapse;
 						</div>
 					</div>
 				</div><!--/col-->
-			
 			</div><!--/row-->
-
 
 <script>
 	$("#submissionForm").validate();
@@ -160,6 +163,7 @@ function mainFunction()
 {
 	assignCategoryValue();
 	assignMethodValue();
+	assignSubmitDateTime();
 }
 
 function assignCategoryValue()
@@ -199,6 +203,26 @@ function assignMethodValue()
 	return false;
 }
 
+function assignSubmitDateTime(userInput)
+{
+	var timeStamp = new Date();
+	var time = getTime(timeStamp);
+	var date = document.getElementById('id_user_input_date').value;
+	var inputTimeStamp = date + " " + time;
+	
+	document.getElementById('id_submit_date').value = inputTimeStamp;
+	var test = document.getElementById('id_submit_date').value;
+	alert(test);
+}
+
+function getTime(dateString) {
+    var date = new Date(dateString),
+        hours = ("0" + (date.getHours()+1)).slice(-2),
+        minutes  = ("0" + date.getMinutes()).slice(-2),
+        seconds = ("0" + (date.getSeconds()+1)).slice(-2);
+    return [ hours, minutes, seconds ].join(":");
+}
+
 function createCategory(userInput)
 {
   var form = document.createElement("form");
@@ -224,8 +248,6 @@ function createCategory(userInput)
       }); 
   return false;
 }
-
-
 </script>
 
 <!--	
