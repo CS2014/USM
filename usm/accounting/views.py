@@ -311,3 +311,55 @@ def grant_edit(request, id):
 		return HttpResponseRedirect('/accounting/grants')
 	object = GrantForm(data=model_to_dict(instance))
 	return render(request, 'grants/detail.html', {'object':object})      
+
+'''
+Delete views:
+'''  
+def transaction_category_delete(request, id):
+	instance = get_object_or_404(TransactionCategory, id=id)
+	form = TransactionCategoryForm(request.POST or none, instance=instance)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect('/accounting/transaction_categories')
+	object = TransactionCategoryForm(data=model_to_dict(instance))
+	return render(request, 'transaction_categories/detail.html', {'object':object})  
+
+def transaction_method_delete(request, id):
+	instance = get_object_or_404(TransactionMethod, id=id)
+	form = TransactionMethodForm(request.POST or none, instance=instance)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect('/accounting/transaction_methods')
+	object = TransactionMethodForm(data=model_to_dict(instance))
+	return render(request, 'transaction_methods/detail.html', {'object':object})    
+
+def transaction_delete(request, slug, id):
+	Transaction.objects.filter(id=id).delete()
+	return redirect('/' +slug+'/transactions/')   
+
+def bill_delete(request, id):
+	instance = get_object_or_404(Bill, id=id)
+	form = BillForm(request.POST or none, instance=instance)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect('/accounting/bills')
+	object = BillForm(data=model_to_dict(instance))
+	return render(request, 'bills/detail.html', {'object':object})    
+
+def invoice_delete(request, id):
+	instance = get_object_or_404(Invoice, id=id)
+	form = InvoiceForm(request.POST or none, instance=instance)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect('/accounting/invoices')
+	object = InvoiceForm(data=model_to_dict(instance))
+	return render(request, 'invoices/detail.html', {'object':object})    
+
+def grant_delete(request, id):
+	instance = get_object_or_404(Grant, id=id)
+	form = GrantForm(request.POST or none, instance=instance)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect('/accounting/grants')
+	object = GrantForm(data=model_to_dict(instance))
+	return render(request, 'grants/detail.html', {'object':object})
