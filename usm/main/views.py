@@ -15,9 +15,11 @@ def index(request):
 		return render(request, 'main/index.html', {})
 
 def signup(request):
+		context = RequestContext(request)
 		society_list = Society.objects.all()
 		form = SocietyForm
-		context = {'society_list': society_list, 'form': form}
+		context['society_list'] = society_list
+		context['form'] = form
 		return render(request, 'main/signup.html', context)
 
 def create_society(request):
