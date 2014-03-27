@@ -9,10 +9,12 @@
 
 		- Have objects specific to a certain account appear.
 '''
-
+import json
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 from utils import build_pretty_data_view
 
+
+from django.http import HttpResponse
 from accounting.models import TransactionCategory, TransactionMethod, Transaction
 from accounting.models import Bill, Invoice, Grant, Account
 from django.db.models import get_app, get_models
@@ -293,13 +295,10 @@ def transaction_edit(request, id):
 	return render(request, 'transactions/detail.html', {'object':object})    
 
 def bill_edit(request, id):
-	instance = get_object_or_404(Bill, id=id)
-	form = BillForm(request.POST or none, instance=instance)
-	if form.is_valid():
-		form.save()
-		return HttpResponseRedirect('/accounting/bills')
-	object = BillForm(data=model_to_dict(instance))
-	return render(request, 'bills/detail.html', {'object':object})    
+	data = {}
+	data["username"] = request.user.username
+	data["email"] = request.user.email
+	return HttpResponse(json.dumps(data), content_type="application/json")
 
 def invoice_edit(request, id):
 	instance = get_object_or_404(Invoice, id=id)

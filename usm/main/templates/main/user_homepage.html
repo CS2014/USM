@@ -1,6 +1,7 @@
 {% extends "main/login_base.html" %}
 
 {% block login_content %}
+	{% if user.society_set.all %}
 	<h2 style="margin-top:10px;">Select your society:</h2>
 	<div class="clearfix"></div>
 	<div>
@@ -11,27 +12,8 @@
 			<div class="clearfix"></div>
 		{% endfor %}
 	</div>
-	<div class="clearfix"></div>
-	<h2 style="margin-top: 30px">Join a society:</h2>
-	<form action= "request_membership/" method="post" class="form-horizontal">
-		<fieldset>
-			{% csrf_token %} 
-			{% if messages %}
-				<div style="color: red; display:block">
-					{% for message in messages %}
-						{{ message }}
-					{% endfor %}
-				</div>
-			{% endif %}
-			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" id="username" type="text" placeholder="Society Code" name="slug" required/>
-				<div class="clearfix"></div>
-				<button type="submit" class="btn btn-primary col-xs-12 request ladda-button" data-style="zoom-out">Request Access</button>
-		</fieldset>
-	</form>    
-	<div style="width:100%;text-align:center;">
-		<strong>or</strong>
-	</div>
-	<h2 style="margin-top: 15px">New Society</h2>
+	<div class="clearfix"></div>{% endif %}
+	<h2 style="margin-top: {% if user.society_set.all %}30px{% else%}10px{%endif%}">Create a New Society:</h2>
 	<form action= "create_society/" method="post" class="form-horizontal">
 		<fieldset>
 			{% csrf_token %} 
@@ -48,6 +30,26 @@
 		
 		</fieldset>
 	</form> 
+	<div style="width:100%;text-align:center;">
+		<strong>or</strong>
+	</div>
+	<h2 style="margin-top: 15px">Join a Society</h2>
+		<form action= "request_membership/" method="post" class="form-horizontal">
+		<fieldset>
+			{% csrf_token %} 
+			{% if messages %}
+				<div style="color: red; display:block">
+					{% for message in messages %}
+						{{ message }}
+					{% endfor %}
+				</div>
+			{% endif %}
+			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" id="username" type="text" placeholder="Society Code" name="slug" required/>
+				<div class="clearfix"></div>
+				<button type="submit" class="btn btn-primary col-xs-12 request ladda-button" data-style="zoom-out">Request Access</button>
+		</fieldset>
+	</form>  
+
 {% endblock %}
 
 {% block scripts %}
