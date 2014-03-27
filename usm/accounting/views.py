@@ -42,7 +42,11 @@ def get_transactions(request,account):
 
 def society_book_keeping(request, slug):
 		society = get_object_or_404(Society, slug=slug)
-		society.members.get(pk=request.user.id)
+		try:
+			society.members.get(pk=request.user.id)
+		except society.DoesNotExist:
+			return HttpResponseRedirect('/')
+
 		account = society.account
 		transactions = get_transactions(request,account)
 		categories = TransactionCategory.objects.filter(account=account)
@@ -51,7 +55,9 @@ def society_book_keeping(request, slug):
 				form = TransactionForm(request.POST, request.FILES)
 				if form.is_valid():
 					form.save()
-					return redirect('/'+slug+'/transactions')
+				else:
+					print form.errors
+				return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
 		return render(request, 'societies/book-keeping.html', {'account' : account, 
 			'transactions':transactions,'form' : transaction_form, 'categories': categories, 'society': society})

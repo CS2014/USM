@@ -7,12 +7,14 @@ from main.forms import UserCreateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
+from django.http import Http404
 
 from main.models import Society
 from main.models import SocietyForm
 from accounting.models import Account, TransactionForm, Transaction
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User 
 from django.contrib import messages
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -80,6 +82,8 @@ def signup(request):
 					username = user_form.clean_username()
 					password = user_form.clean_password2()
 					user_form.save()
+					user = authenticate(username=username, password=password)					
+					login(request, user)
 					return redirect("/")
 			else:
 				return render(request,
@@ -96,36 +100,53 @@ def logout_view(request):
 Logged in user views
 '''		
 def dash_board(request, slug): 
-		society = get_object_or_404(Society, slug=slug)
-		if society.members.get(pk=request.user.id):
-			return render(request, 'accounting/index.html', {'society': society})
-		else:
-			return redirect('no_permission')
-
+		try:
+				society = get_object_or_404(Society, slug=slug)
+				society.members.get(pk=request.user.id)
+				return render(request, 'accounting/index.html', {'society': society })
+		except (Http404, User.DoesNotExist):
+				messages.add_message(request, messages.INFO, 
+				"You do not have permission to access that account.",
+				extra_tags="permission")
+				return redirect('/')
 
 '''
 Add users to account
 '''
 def member_requests(request,slug):
-		society = get_object_or_404(Society, slug=slug)
-		user = get_object_or_404(society.members, pk=request.user.id)
-		return render(request, 'main/member_requests.html', {'society': society})
+		try:
+				society = get_object_or_404(Society, slug=slug)
+				society.members.get(pk=request.user.id)
+				return render(request, 'main/member_requests.html', {'society': society})
+		except (Http404, User.DoesNotExist):
+				messages.add_message(request, messages.INFO, 
+				"You do not have permission to access that account.",
+				extra_tags="permission")
+				return redirect('/')
 
 def accept_join_request(request,slug,user_index):
-		society = get_object_or_404(Society, slug=slug)
-		if society.members.get(pk=request.user.id):
-			user = society.member_requests.get(pk=user_index)
-			society.member_requests.remove(user)
-			society.members.add(user)
-			return redirect('/'+slug+'/member_requests')
-		else:
-			return request('no_permission')
+		try:
+				society = get_object_or_404(Society, slug=slug)
+				if society.members.get(pk=request.user.id):
+					user = society.member_requests.get(pk=user_index)
+					society.member_requests.remove(user)
+					society.members.add(user)
+					return redirect('/'+slug+'/member_requests')
+		except (Http404, User.DoesNotExist):
+				messages.add_message(request, messages.INFO, 
+				"You do not have permission to access that account.",
+				extra_tags="permission")
+				return redirect('/')
 
 def reject_join_request(request,slug,user_index):
-		society = get_object_or_404(Society, slug=slug)
-		if society.members.get(pk=request.user.id):
-			user = society.member_requests.get(pk=user_index)
-			society.member_requests.remove(user)
-			return redirect('/'+slug+'/member_requests')
-		else:
-			return redirect('no_permission')
+		try:
+				society = get_object_or_404(Society, slug=slug)
+				if society.members.get(pk=request.user.id):
+					user = society.member_requests.get(pk=user_index)
+					society.member_requests.remove(user)
+					return redirect('/'+slug+'/member_requests')
+		except (Http404, User.DoesNotExist):
+				messages.add_message(request, messages.INFO, 
+				"You do not have permission to access that account.",
+				extra_tags="permission")
+				return redirect('/')

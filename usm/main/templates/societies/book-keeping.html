@@ -12,29 +12,14 @@
 	<style>
 	#table
 	{
-	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-family: Helvetica, "Trebuchet MS", Arial, sans-serif;
 	display: block;
 	border-collapse:collapse;
-	}
-	</style>
-
-	<style>
-	.ui-widget {
-		font-family: Verdana,Arial,sans-serif;
-		font-size: .6em;
-	}
-	.ui-widget .ui-widget {
-		font-size: .4em;
-	}
-	.ui-widget button {
-		font-family: Verdana,Arial,sans-serif;
-		font-saize: .4em;
 	}
 	</style>
 {% endblock %}
 
 {% block content %}
-
 			<div class="row">		
 				<div class="col-lg-12">
 					<div class="box">
@@ -69,15 +54,18 @@
 										<a class="btn btn-success" href="table.html#">
 											<i class="fa fa-search-plus "></i>  
 										</a>
+										<!-- edit transaction -->
 										<a class="btn btn-info" href="table.html#">
 											<i class="fa fa-edit "></i>  
 										</a>
-										<a class="btn btn-danger" href="table.html#">
+										<!-- delete transaction -->
+										<a class="btn btn-danger" href="/{{society.slug}}/transactions/delete/{{transaction.id}}">
 											<i class="fa fa-trash-o "></i> 
 										</a>
 									</td>
 								</tr>
 								{% endfor%}
+								
 								<tr>
 									<form 
 										name="newTransaction"
@@ -96,6 +84,7 @@
 										<td> {{form.ammount}} </td>
 										<td> {{form.description}} </td>
 										<td style="display: none"> {{ form.account }} </td>
+										<td style="display: none"> {{ form.submit_date }} </td>
 										<td style="display: none"> {{ form.transaction_category }} </td>
 										<td style="display: none"> {{ form.transaction_method }} </td>
 										<td><input type="submit" value="Create" style="width: 118px"/></td>
@@ -119,7 +108,6 @@
 						</div>
 					</div>
 				</div><!--/col-->
-			
 			</div><!--/row-->
 {% endblock %}
 
@@ -168,6 +156,7 @@ function mainFunction()
 {
 	assignCategoryValue();
 	assignMethodValue();
+	assignSubmitDateTime();
 }
 
 function assignCategoryValue()
@@ -205,6 +194,28 @@ function assignMethodValue()
 		}
 	}
 	return false;
+}
+
+function assignSubmitDateTime(userInput)
+{
+	var timeStamp = new Date();
+	var time = getTime(timeStamp);
+	var date = document.getElementById('id_user_input_date').value;
+	var day = date[0] + date[1];
+	var month = date[3] + date[4];
+	var year = date[6] + date[7] + date[8] + date[9];
+	var inputTimeStamp = year + "-" + month + "-" + day + " " + time;
+
+	document.getElementById('id_submit_date').value = inputTimeStamp;
+	var test = document.getElementById('id_submit_date').value;
+}
+
+function getTime(dateString) {
+    var date = new Date(dateString),
+        hours = ("0" + (date.getHours()+1)).slice(-2),
+        minutes  = ("0" + date.getMinutes()).slice(-2),
+        seconds = ("0" + (date.getSeconds()+1)).slice(-2);
+    return [ hours, minutes, seconds ].join(":");
 }
 
 function createCategory(userInput)
