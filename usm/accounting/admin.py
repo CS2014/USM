@@ -12,8 +12,7 @@
 '''
 
 from django.contrib import admin
-from accounting.models import Account, Transaction, TransactionMethod, TransactionCategory
-from accounting.models import Log, Bill, Invoice
+from accounting.models import Account, Transaction, TransactionCategory, Log
 
 class LogAdmin(admin.ModelAdmin):
 		fields = [ 'user', 'description']
@@ -25,9 +24,6 @@ class AccountAdmin(admin.ModelAdmin):
 class TransactionCategoryAdmin(admin.ModelAdmin):
 		fields = [ 'account', 'name' ]
 
-class TransactionMethodAdmin(admin.ModelAdmin):
-		fields = [ 'account', 'name', 'description', 'requires_bank_reconciliation' ]
-
 class TransactionAdmin(admin.ModelAdmin):
 		'''
 		Creates a transaction :: bank_reconlliation_date is optional.
@@ -38,19 +34,8 @@ class TransactionAdmin(admin.ModelAdmin):
 		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date', 'submit_date']
 		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method', 'get_logs' )	
 
-class BillAdmin(admin.ModelAdmin):
-	fields = [ 'account', 'ammount', 'description', 'biller', 'creation_date' ,'due_date' ]
-	list_display = [ 'account', 'ammount', 'description', 'biller', 'creation_date' ,'due_date', 'get_logs' ]
-
-class InvoiceAdmin(admin.ModelAdmin):
-	fields = [ 'account', 'ammount' ,'description', 'invoicee', 'creation_date', 'due_date' ]
-	list_display = [ 'account', 'ammount' ,'description', 'invoicee', 'creation_date', 'due_date' , 'get_logs']
-
 
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(TransactionCategory, TransactionCategoryAdmin)
-admin.site.register(TransactionMethod, TransactionMethodAdmin)
 admin.site.register(Log,LogAdmin)
 admin.site.register(Account,AccountAdmin)
-admin.site.register(Bill, BillAdmin)
-admin.site.register(Invoice, InvoiceAdmin)
