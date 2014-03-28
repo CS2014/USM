@@ -1,6 +1,8 @@
 """
-	author: Ross Kinsella
-	date:		2014/2/10
+	author: Ross Kinsella 
+		Kevin O'Flanagan
+	date:	2014/2/10
+		2014/3/5	
 
 	Models representing and supporting members of a society.
 
@@ -9,6 +11,7 @@
 """
 
 from django.db import models
+from django.forms import ModelForm
 import datetime
 from django.utils import timezone
 from main.models import Society
@@ -24,6 +27,10 @@ class Tag(models.Model):
 	def __unicode__(self):
 		return self.name	
 
+class TagForm(ModelForm):
+	class Meta:
+		model = Tag
+		fields = '__all__'
 
 class SocietyMember(models.Model):
 	'''
@@ -51,6 +58,15 @@ class SocietyMember(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class SocietyMemberForm(ModelForm):
+	class Meta:
+		model = SocietyMember
+		fields = '__all__'
+
+class DeleteSocietyMemberForm(ModelForm):
+	class Meta:
+		model = SocietyMember
+		fields = []
 
 class MembershipFee(models.Model):
 	'''
@@ -68,4 +84,8 @@ class MembershipFee(models.Model):
 	def __unicode__(self):
 		return unicode(self.society_member.name)
 
+class MembershipFeeForm(ModelForm):
+	class Meta:
+		model = MembershipFee
+		fields = '__all__'
 

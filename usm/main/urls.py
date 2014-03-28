@@ -5,7 +5,8 @@ from accounting import views as accounting_views
 
 urlpatterns = patterns('main.views',
 	url(r'^main/create_society/', main_views.create_society),
-	url(r'^signup/$', main_views.signup),
+	url(r'^register/$', main_views.signup),
+	url(r'^login/$', main_views.user_login),
 	url(r'^logout/$', main_views.logout_view),
 	url(r'^request_membership/$', main_views.request_membership),
 	url(r'^create_society/$', main_views.create_society),

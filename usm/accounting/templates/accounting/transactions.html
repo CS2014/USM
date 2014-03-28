@@ -1,36 +1,25 @@
 {% extends "accounting/base.html" %}
+
+{% block header_extra %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}/stylesheets/table.css" type ="text/css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.tablesorter.min.js"></script> 
+	<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.validate.min.js"></script> 
+	<script src="http://malsup.github.com/jquery.form.js"></script> 
+
+	<style>
+	#table
+	{
+	font-family: Helvetica, "Trebuchet MS", Arial, sans-serif;
+	display: block;
+	border-collapse:collapse;
+	}
+	</style>
+{% endblock %}
+
 {% block content %}
-
-<link rel="stylesheet" href="{{ STATIC_URL }}/stylesheets/table.css" type ="text/css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.tablesorter.min.js"></script> 
-<script type="text/javascript" src="{{ STATIC_URL }}/jquery/jquery.validate.min.js"></script> 
-<script src="http://malsup.github.com/jquery.form.js"></script> 
-
-<style>
-#table
-{
-font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-display: block;
-border-collapse:collapse;
-}
-</style>
-
-<style>
-.ui-widget {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: .6em;
-}
-.ui-widget .ui-widget {
-	font-size: .4em;
-}
-.ui-widget button {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: .4em;
-}
-</style>
 			<div class="row">		
 				<div class="col-lg-12">
 					<div class="box">
@@ -106,7 +95,14 @@ border-collapse:collapse;
 											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
 										<td/>
-										<td id="quick_test"> <input id="input_transaction_category"> </td>
+										<td> 
+											<select class="form-control" data-placeholder="Transaction Category" 
+															id="input_transaction_category" data-rel="chosen">
+											  {% for category in categories %}
+											  	<option value="{{ category.id }}">{{ category.name }}</option>
+											  {% endfor %}
+									  	</select> 
+									  </td>
 										<td> <input id="input_transaction_method" class="required"> </td>
 										<td> {{form.ammount}} </td>
 										<td> {{form.description}} </td>
@@ -137,11 +133,12 @@ border-collapse:collapse;
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
-		 	
+{% endblock %}
 
-<script>
+{% block javascript_extra %}
+	<script>
 	$("#submissionForm").validate();
-</script>
+	</script>
 
 <form style= "display:none" 
 			id="createCategory"
@@ -167,14 +164,10 @@ border-collapse:collapse;
 
 
 <script>
-	
-
   $.ajaxSetup({data: {
     csrfmiddlewaretoken: '{{ csrf_token }}'
   }});
-
 </script>
-
 
 
 <!--	
@@ -193,7 +186,7 @@ function mainFunction()
 
 function assignCategoryValue()
 {
-	var userInput = document.getElementById("input_transaction_category").value;
+	var userInput = $("#input_transaction_category").val();
 	var formOptions = document.getElementById("id_transaction_category").options;
 	var formValue = formOptions[formOptions.selectedIndex].value;
 
@@ -201,7 +194,11 @@ function assignCategoryValue()
 	{
 		if(formOptions[i].text == userInput)
 		{
-			document.getElementById('id_transaction_category').value=formOptions[i].value
+		  {% for category in categories %}
+		  	<option value="{{ category.id }}">{{ category.name }}</option>
+		  {% endfor %}
+
+			$("#id_transaction_category").val(formOptions[i].value);
 			return false;
 		}
 	}
@@ -266,12 +263,12 @@ function createCategory(userInput)
   form.method = "POST";
   form.action = "/accounting/transaction_categories/";   
 
-  element1.value= document.getElementById("id_account").value;
-  element1.name=	"account";
+  element1.value = document.getElementById("id_account").value;
+  element1.name =	"account";
   form.appendChild(element1);  
 
-  element2.value=userInput;
-  element2.name="name";
+  element2.value = userInput;
+  element2.name = "name";
   form.appendChild(element2);
 
   document.body.appendChild(form);
@@ -282,6 +279,8 @@ function createCategory(userInput)
       }); 
   return false;
 }
+
+$('[data-rel="chosen"],[rel="chosen"]').chosen({no_results_text: "No category found - <a href='#'>Create Category</a>",});
 </script>
 
 <!--	
@@ -321,25 +320,4 @@ function createCategory(userInput)
     }) 
   });
 </script>
-
-<script>
-
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-</script>
-
 {% endblock %}

@@ -9,12 +9,13 @@
 
 		- Have objects specific to a certain account appear.
 '''
-
+import json
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 from utils import build_pretty_data_view
 
 from accounting.models import TransactionCategory, Transaction
 from accounting.models import Grant, Account
+
 from django.db.models import get_app, get_models
 from django.forms.models import model_to_dict
 from accounting.models import TransactionCategoryForm, TransactionForm
@@ -66,6 +67,7 @@ def transactions(request, slug):
 
 		account = society.account
 		transactions = get_transactions(request,account)
+		categories = TransactionCategory.objects.filter(account=account)
 
 		if request.method == 'POST':
 				form = TransactionForm(request.POST, request.FILES)
@@ -77,6 +79,7 @@ def transactions(request, slug):
 		transaction_form = TransactionForm(initial={'account': account})
 		return render(request, 'accounting/transactions.html', {'account' : account, 
 			'transactions':transactions,'form' : transaction_form, 'society': society})
+
 
 def grants(request, slug):
 		society = get_object_or_404(Society, slug=slug)
