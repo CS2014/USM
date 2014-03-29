@@ -12,6 +12,8 @@
 import json
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 from utils import build_pretty_data_view
+from django.http import HttpResponse
+
 
 from accounting.models import TransactionCategory, Transaction
 from accounting.models import Grant, Account
@@ -78,7 +80,7 @@ def transactions(request, slug):
 				return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
 		return render(request, 'accounting/transactions.html', {'account' : account, 
-			'transactions':transactions,'form' : transaction_form, 'society': society})
+			'transactions':transactions,'transaction_form' : transaction_form,'society': society})
 
 
 def grants(request, slug):
@@ -122,6 +124,21 @@ def reconcile_transaction(request, slug, id):
 			transaction.save()
 		return redirect('/'+slug+'/transactions')
 
+
+def category_create(request, slug, name):
+		society = get_object_or_404(Society, slug=slug)
+		try:
+			society.members.get(pk=request.user.id)
+		except society.DoesNotExist:
+			return HttpResponseRedirect('/')
+
+		account = society.account
+		category = TransactionCategory(account = account, name=name)		
+		category.save()
+	
+		category_id = category.id
+		data = json.dumps({"category_id" : category_id})
+		return HttpResponse(data, content_type='application/json')
 
 
 

@@ -95,22 +95,15 @@
 											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
 										<td/>
-										<td> 
-											<select class="form-control" data-placeholder="Transaction Category" 
-															id="input_transaction_category" data-rel="chosen">
-											  {% for category in categories %}
-											  	<option value="{{ category.id }}">{{ category.name }}</option>
-											  {% endfor %}
-									  	</select> 
-									  </td>
+										<td id="quick_test"> <input id="input_transaction_category"> </td>
 										<td> <input id="input_transaction_method" class="required"> </td>
-										<td> {{form.ammount}} </td>
-										<td> {{form.description}} </td>
-										<td style="display: none"> {{ form.account }} </td>
-										<td style="display: none"> {{ form.bank_reconlliation_date }} </td>
-										<td style="display: none"> {{ form.date }} </td>
-										<td style="display: none"> {{ form.transaction_category }} </td>
-										<td style="display: none"> {{ form.transaction_method }} </td>
+										<td> {{transaction_form.ammount}} </td>
+										<td> {{transaction_form.description}} </td>
+										<td style="display: none"> {{ transaction_form.account }} </td>
+										<td style="display: none"> {{ transaction_form.bank_reconlliation_date }} </td>
+										<td style="display: none"> {{ transaction_form.date }} </td>
+										<td style="display: none"> {{ transaction_form.transaction_category }} </td>
+										<td style="display: none"> {{ transaction_form.transaction_method }} </td>
 										<td><input type="submit" value="Create" style="width: 118px"/></td>
 									</form>
 								</tr>
@@ -148,6 +141,8 @@
     <input id="id_account">
     <input id="id_name">
 </form>
+
+<input style= "display:none" id="categoryIdStore"/>
 
 <!--
 	Enable tablesorter on the transactions table, initally sorting by the most recent date.
@@ -194,17 +189,13 @@ function assignCategoryValue()
 	{
 		if(formOptions[i].text == userInput)
 		{
-		  {% for category in categories %}
-		  	<option value="{{ category.id }}">{{ category.name }}</option>
-		  {% endfor %}
-
 			$("#id_transaction_category").val(formOptions[i].value);
 			return false;
 		}
 	}
 	alert("Doesn't exist, creating.")
-	createCategory(userInput);
-	document.getElementById('id_transaction_category').value=formOptions.length;
+	var result = createCategory(userInput);
+	alert(result);
 	return false;
 }
 
@@ -256,28 +247,16 @@ function formatDate(inputDate)
 
 function createCategory(userInput)
 {
-  var form = document.createElement("form");
-  var element1 = document.createElement("input"); 
-  var element2 = document.createElement("input");  
-
-  form.method = "POST";
-  form.action = "/accounting/transaction_categories/";   
-
-  element1.value = document.getElementById("id_account").value;
-  element1.name =	"account";
-  form.appendChild(element1);  
-
-  element2.value = userInput;
-  element2.name = "name";
-  form.appendChild(element2);
-
-  document.body.appendChild(form);
-
-
-  $('#form').ajaxForm(function() { 
-          alert("Thank you for your comment!"); 
-      }); 
-  return false;
+  var postdata = { 'csrfmiddlewaretoken': '{{ csrf_token }}' }
+  $.post("create_category/"+userInput+'/', postdata, function( data ){
+  	var cat_id = JSON.stringify(data.category_id);
+  	// the below line alerts the desired result.
+  	alert("Result:" + cat_id);
+  	
+  	// I want to populate the form with this value
+  	// However, it is not populating.
+  	$("#id_transaction_category").val(cat_id);
+  });
 }
 
 $('[data-rel="chosen"],[rel="chosen"]').chosen({no_results_text: "No category found - <a href='#'>Create Category</a>",});
