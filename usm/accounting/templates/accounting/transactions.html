@@ -26,9 +26,7 @@
 						<div class="box-header" data-original-title>
 							<h2><i class="fa fa-user"></i><span class="break"></span>Transactions</h2>
 							<div class="box-icon">
-								<a href="table.html#" class="btn-setting"><i class="fa fa-wrench"></i></a>
 								<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
-								<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
 							</div>
 						</div>
 						<div class="box-content">
@@ -41,7 +39,7 @@
 									  <th>Method</th>
 									  <th>Amount</th>
 									  <th>Description</th>
-									  <th>options</th>
+									  <th>Delete</th>
 								  </tr>
 							  </thead>   
 							  <tbody>
@@ -68,13 +66,6 @@
 									<td class="center"> {{transaction.ammount}} </td>
 									<td class="center"> {{transaction.description}} </td>
 									<td class="center">
-										<a class="btn btn-success" href="table.html#">
-											<i class="fa fa-search-plus "></i>  
-										</a>
-										<!-- edit transaction -->
-										<a class="btn btn-info" href="table.html#">
-											<i class="fa fa-edit "></i>  
-										</a>
 										<!-- delete transaction -->
 										<a class="btn btn-danger" href="/{{society.slug}}/transactions/delete/{{transaction.id}}">
 											<i class="fa fa-trash-o "></i> 
@@ -92,19 +83,31 @@
 										onsubmit="mainFunction()">
 										{% csrf_token %}
 										<td>
-											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
+											<input type="text" class="form-control date-picker focused" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
-										<td/>
-										<td id="quick_test"> <input id="input_transaction_category"> </td>
-										<td> <input id="input_transaction_method" class="required"> </td>
-										<td> {{transaction_form.ammount}} </td>
-										<td> {{transaction_form.description}} </td>
-										<td style="display: none"> {{ transaction_form.account }} </td>
-										<td style="display: none"> {{ transaction_form.bank_reconlliation_date }} </td>
-										<td style="display: none"> {{ transaction_form.date }} </td>
-										<td style="display: none"> {{ transaction_form.transaction_category }} </td>
-										<td style="display: none"> {{ transaction_form.transaction_method }} </td>
-										<td><input type="submit" value="Create" style="width: 118px"/></td>
+										<!-- Empty column to allow for reconiliation checkbo -->
+										<td/> 
+										<td>
+											<input id="id_transaction_category" name="transaction_category" class="form-control focused">
+										</td>
+										<td> 
+											<input id="input_transaction_method" class="required form-control focused">
+										</td>
+										<td>
+											<input id="id_ammount" name="ammount" class="form-control focused">
+										</td>
+										<td> 
+											<input id="id_description" name="description" class="form-control focused"> 
+										</td>
+										<td>
+											<input type="submit" value="Create" style="width: 100%"/>
+										</td>
+
+										<!-- Hidden fields to keep the validator happy. Better solution is a custom form -->
+										<td style="display: none"> {{ transaction_form.account }} >
+										<td style="display: none"> {{ transaction_form.bank_reconlliation_date }}>
+										<td style="display: none"> {{ transaction_form.date }}>
+										<td style="display: none"> {{ transaction_form.transaction_method }}>
 									</form>
 								</tr>
 							</tbody>
@@ -126,24 +129,18 @@
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
+
+<!-- lazy, highly illegal solution for autocomplete -->
+<!-- future, legal solution is to map a json response from an endpoint -->
+<select id="transaction_categories_list" style="display: none">
+	<option value="" selected="selected">---------</option>
+{% for category in categories %} 
+	<option value="{{forloop.counter}}"> {{category.name}} </option>
+{% endfor %}
+</select>
 {% endblock %}
 
 {% block javascript_extra %}
-	<script>
-	$("#submissionForm").validate();
-	</script>
-
-<form style= "display:none" 
-			id="createCategory"
-			action="/accounting/transactions/" 
-			method="post"> 
-		{% csrf_token %}
-    <input id="id_account">
-    <input id="id_name">
-</form>
-
-<input style= "display:none" id="categoryIdStore"/>
-
 <!--
 	Enable tablesorter on the transactions table, initally sorting by the most recent date.
 	-->
@@ -166,37 +163,19 @@
 
 
 <!--	
-			Function to take the transaction category/method text input and find the 
+			Functionality to:
+
+			-Take the transaction method text input and find the 
 			matching value and assign it to the form.
 
-			This is needed as the validator looks for an index value, not text.										
+			-Take time format from the simplyq template and format it
+			in such a way that django likes it;								
    	-->
 <script>
 function mainFunction()
 {
-	assignCategoryValue();
 	assignMethodValue();
 	assignSubmitDateTime();
-}
-
-function assignCategoryValue()
-{
-	var userInput = $("#input_transaction_category").val();
-	var formOptions = document.getElementById("id_transaction_category").options;
-	var formValue = formOptions[formOptions.selectedIndex].value;
-
-	for(var i=1;i<formOptions.length;i++)
-	{
-		if(formOptions[i].text == userInput)
-		{
-			$("#id_transaction_category").val(formOptions[i].value);
-			return false;
-		}
-	}
-	alert("Doesn't exist, creating.")
-	var result = createCategory(userInput);
-	alert(result);
-	return false;
 }
 
 function assignMethodValue()
@@ -244,22 +223,6 @@ function formatDate(inputDate)
 	var formattedDate = year + '-' + month + '-' + day;
 	return formattedDate;
 }
-
-function createCategory(userInput)
-{
-  var postdata = { 'csrfmiddlewaretoken': '{{ csrf_token }}' }
-  $.post("create_category/"+userInput+'/', postdata, function( data ){
-  	var cat_id = JSON.stringify(data.category_id);
-  	// the below line alerts the desired result.
-  	alert("Result:" + cat_id);
-  	
-  	// I want to populate the form with this value
-  	// However, it is not populating.
-  	$("#id_transaction_category").val(cat_id);
-  });
-}
-
-$('[data-rel="chosen"],[rel="chosen"]').chosen({no_results_text: "No category found - <a href='#'>Create Category</a>",});
 </script>
 
 <!--	
@@ -276,16 +239,17 @@ $('[data-rel="chosen"],[rel="chosen"]').chosen({no_results_text: "No category fo
 
   $(function() 
   {
-    var availableCategories = $.map($('#id_transaction_category option'), function(ele) 
+    var availableCategories = $.map($('#transaction_categories_list option'), function(ele) 
     {
   		return ele.text; 
 		});
 
-    $( "#input_transaction_category" ).autocomplete
+    $( "#id_transaction_category" ).autocomplete
     ({
       source: availableCategories
     }) 
   });
+
 
   $(function() 
   {

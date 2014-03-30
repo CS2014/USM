@@ -1,13 +1,6 @@
 '''
 		author: Ross Kinsella
 		date:   2014/feb/17
-
-
-		TODO:
-		- Implement redirects when a post request is made 
-		   |- To prevent double posting.
-
-		- Have objects specific to a certain account appear.
 '''
 import json
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
@@ -69,10 +62,10 @@ def transactions(request, slug):
 
 		account = society.account
 		transactions = get_transactions(request,account)
-		categories = TransactionCategory.objects.filter(account=account)
+		categories = account.transactioncategory_set.all()
 
 		if request.method == 'POST':
-				form = TransactionForm(request.POST, request.FILES)
+				form = TransactionForm(request.POST)
 				if form.is_valid():
 					form.save()
 				else:
@@ -80,7 +73,7 @@ def transactions(request, slug):
 				return redirect('/'+slug+'/transactions')
 		transaction_form = TransactionForm(initial={'account': account})
 		return render(request, 'accounting/transactions.html', {'account' : account, 
-			'transactions':transactions,'transaction_form' : transaction_form,'society': society})
+			'transactions':transactions,'transaction_form' : transaction_form,'society': society, "categories":categories})
 
 
 def grants(request, slug):
@@ -138,6 +131,7 @@ def category_create(request, slug, name):
 	
 		category_id = category.id
 		data = json.dumps({"category_id" : category_id})
+		print data
 		return HttpResponse(data, content_type='application/json')
 
 

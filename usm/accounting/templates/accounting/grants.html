@@ -37,9 +37,7 @@ border-collapse:collapse;
 						<div class="box-header" data-original-title>
 							<h2><i class="fa fa-user"></i><span class="break"></span>Grants</h2>
 							<div class="box-icon">
-								<a href="table.html#" class="btn-setting"><i class="fa fa-wrench"></i></a>
 								<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
-								<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
 							</div>
 						</div>
 						<div class="box-content">
@@ -50,6 +48,7 @@ border-collapse:collapse;
 									  <th>Ammount</th>
 									  <th>Purpose</th>
 									  <th>Description</th>
+									  <th>Delete</th>
 								  </tr>
 							  </thead>   
 							  <tbody>
@@ -60,13 +59,6 @@ border-collapse:collapse;
 									<td class="center"> {{grant.purpose}} </td>
 									<td class="center"> {{grant.description}} </td>
 									<td class="center">
-										<a class="btn btn-success" href="table.html#">
-											<i class="fa fa-search-plus "></i>  
-										</a>
-										<!-- edit grant -->
-										<a class="btn btn-info" href="table.html#">
-											<i class="fa fa-edit "></i>  
-										</a>
 										<!-- delete grant -->
 										<a class="btn btn-danger" href="/{{society.slug}}/grants/delete/{{grant.id}}">
 											<i class="fa fa-trash-o "></i> 
@@ -74,7 +66,6 @@ border-collapse:collapse;
 									</td>
 								</tr>
 								{% endfor%}
-								
 								<tr>
 									<form 
 										name="newgrant"
@@ -84,14 +75,14 @@ border-collapse:collapse;
 										onsubmit="mainFunction()">
 										{% csrf_token %}
 										<td>
-											<input type="text" class="form-control date-picker" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
+											<input type="text" class="form-control date-picker focused" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
-										<td> {{form.ammount}} </td>
-										<td> {{form.purpose}} </td>
-										<td> {{form.description}} </td>
+										<td> <input id="id_ammount" name="ammount" class="form-control focused"/> </td>
+										<td> <input id="id_purpose" name="purpose" class="form-control focused"/> </td>
+										<td> <input id="id_description" name="description" class="form-control focused"> </td>
 										<td style="display: none"> {{ form.account }} </td>
 										<td style="display: none"> {{ form.creation_date }} </td>
-										<td><input type="submit" value="Create" style="width: 118px"/></td>
+										<td><input type="submit" value="Create" style="width: 100%"/></td>
 									</form>
 								</tr>
 							</tbody>
@@ -113,27 +104,10 @@ border-collapse:collapse;
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
-
-<script>
-	$("#submissionForm").validate();
-</script>
-
-
-<form style= "display:none" 
-			id="createCategory"
-			action="/accounting/grants/" 
-			method="post"> 
-		{% csrf_token %}
-    <input id="id_account">
-    <input id="id_name">
-</form>
-
-
 <!--	
-			Function to take the grant category/method text input and find the 
-			matching value and assign it to the form.
-
-			This is needed as the validator looks for an index value, not text.										
+			
+			Format the timestamp so django likes it.									
+   	
    	-->
 <script>
 function mainFunction()

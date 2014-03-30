@@ -5,6 +5,7 @@
 	Models representing the accounting system.
 
 	BUGS:
+	- 
 """
 
 from django.db import models
@@ -88,9 +89,6 @@ class Transaction(models.Model):
 		''' 
 		A single transaction made by a society.
 		Can be given a tag to visualise spending by area.
-
-		TODO:
-		- Make bank_reconlliation_date manditory if cheque is the payment method.
 		'''
 		PAYMENT_CHOICES = ( 
 			('Cash', 'cash'),
@@ -124,19 +122,25 @@ class Transaction(models.Model):
 			return self.description
 
 class TransactionForm(ModelForm):
+	transaction_category = forms.CharField(max_length=20)
+
+	def save(self):
+			transaction_name = self.cleaned_data['transaction_category']
+			account = self.cleaned_data['account']
+			transaction_category, created = TransactionCategory.objects.get_or_create(name=transaction_name, account=account)
+			self.instance.transaction_category = transaction_category
+
+			return super(TransactionForm, self).save()
+
 	class Meta:
 		model = Transaction
-		exclude = ['logs','is_reconciled']
+		exclude = ['logs','is_reconciled','transaction_category']
 
 
 class Grant(models.Model):
 		'''
 		Money received by the society.
 		Eg. Trip grant from Trinity.
-
-		TODO:
-		- add a tagging system?
-		- add a log relationsip?
 		'''
 		account = models.ForeignKey(Account)
 
