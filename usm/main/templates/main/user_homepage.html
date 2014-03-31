@@ -34,16 +34,12 @@
 		<strong>or</strong>
 	</div>
 	<h2 style="margin-top: 15px">Join a Society</h2>
-		<form action= "request_membership/" method="post" class="form-horizontal">
+		<form method="post" class="form-horizontal" id="request">
 		<fieldset>
 			{% csrf_token %} 
-			{% if messages %}
-				<div style="color: red; display:block">
-					{% for message in messages %}
-						{{ message }}
-					{% endfor %}
+				<div id="request-error" style="color: red; display:block">
+					
 				</div>
-			{% endif %}
 			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" id="username" type="text" placeholder="Society Code" name="slug" required/>
 				<div class="clearfix"></div>
 				<button type="submit" class="btn btn-primary col-xs-12 request ladda-button" data-style="zoom-out">Request Access</button>
@@ -53,12 +49,20 @@
 {% endblock %}
 
 {% block scripts %}
-		Ladda.bind( '.btn', { timeout: 2000 } );
-		$('form').submit(function (e) {
-		    var form = this;
+		Ladda.bind( '.btn', { timeout: 800 } );
+		$('#request').submit(function (e) {
 		    e.preventDefault();
 		    setTimeout(function () {
-		        form.submit();
+				  $.post("request_membership/",  $( "#request" ).serialize(), function( data ){
+				  	for(var key in data)
+				    if (data.hasOwnProperty(key))
+				    		$("#request-error").text(data[key]);
+								return false;
+				  });
 		    }, 800); // in milliseconds
 		});
+{% endblock %}
+
+{% block ajax %}
+
 {% endblock %}

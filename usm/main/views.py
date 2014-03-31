@@ -2,12 +2,12 @@
         author: Ross Kinsella
         date:   2014/feb/13
 '''
-
+import json
 from main.forms import UserCreateForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 from main.models import Society
 from main.models import SocietyForm
@@ -38,11 +38,19 @@ def user_homepage(request):
 def request_membership(request):
         if request.method == 'POST':
             slug = request.POST['slug']
-            society = get_object_or_404(Society, slug=slug)
-            society.member_requests.add(request.user)
-            messages.add_message(request, messages.INFO, 
-                "Your request has been sent. You will be notified when it is accepted.")
-        return redirect('/')   
+            try:
+                society = get_object_or_404(Society, slug=slug)
+                try:
+                    society.members.get(pk=request.user.id)
+                    data = json.dumps({"message" : "Your already a member of this society."})  
+                except:              
+                    society.member_requests.add(request.user)
+                    data = json.dumps({"message" : "Your request has been sent. You will be notified when it is accepted."})                
+            except (Http404):
+                data = json.dumps({"message" : "No society with that code exists."})                
+        print data
+        return HttpResponse(data, content_type='application/json')
+        
 
 def create_society(request):
         form = SocietyForm
