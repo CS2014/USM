@@ -24,11 +24,9 @@
 				<div class="col-lg-12">
 					<div class="box">
 						<div class="box-header" data-original-title>
-							<h2><i class="fa fa-user"></i><span class="break"></span>Transactions</h2>
+							<h2><i class="fa fa-book"></i><span class="break"></span>Transactions</h2>
 							<div class="box-icon">
-								<a href="table.html#" class="btn-setting"><i class="fa fa-wrench"></i></a>
 								<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
-								<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
 							</div>
 						</div>
 						<div class="box-content">
@@ -36,30 +34,40 @@
 							  <thead>
 								  <tr>
 									  <th>Date</th>
+									  <th></th>
 									  <th>Category</th>
 									  <th>Method</th>
 									  <th>Amount</th>
 									  <th>Description</th>
+									  <th>Option</th>
 								  </tr>
 							  </thead>   
 							  <tbody>
 							  {% for transaction in transactions %}
 								<tr>
 									<td>{{transaction.get_stubbed_time}}</td>
+									{% ifequal transaction.transaction_method|stringformat:"s" "Cheque" %}
+											{% if transaction.is_reconciled %}
+													<td class="center" alt="DATE" title="Reconciled: {{transaction.bank_reconlliation_date}}"> 
+														<input class="reconcileTick" type="checkbox" data-id="{{transaction.id}}" checked>
+													</td>
+											{% else %}
+													<td class="center reconcileTick" alt="DATE" title="Not Reconciled.">
+													 <input class="reconcileTick" type="checkbox" data-id="{{transaction.id}}">
+													</td>
+											{% endif %}
+									{% else %}	
+											<td class="center" alt="DATE"> 
+												<input type="checkbox" data-id="{{transaction.id}}" disabled>
+											</td>
+									{% endifequal %}
 									<td class="center"> {{transaction.transaction_category}}</td>
 									<td class="center"> {{transaction.transaction_method}}</td>
-									<td class="center"> {{transaction.ammount}} </td>
+									<td class="center"> {{transaction.amount}} </td>
 									<td class="center"> {{transaction.description}} </td>
 									<td class="center">
-										<a class="btn btn-success" href="table.html#">
-											<i class="fa fa-search-plus "></i>  
-										</a>
-										<!-- edit transaction -->
-										<a class="btn btn-info" href="table.html#">
-											<i class="fa fa-edit "></i>  
-										</a>
 										<!-- delete transaction -->
-										<a class="btn btn-danger" href="/{{society.slug}}/transactions/delete/{{transaction.id}}">
+										<a style="margin-left: 19%" class="btn btn-danger" href="/{{society.slug}}/transactions/delete/{{transaction.id}}">
 											<i class="fa fa-trash-o "></i> 
 										</a>
 									</td>
@@ -74,20 +82,32 @@
 										action="create/" 
 										onsubmit="mainFunction()">
 										{% csrf_token %}
-										<td id="input_datee"> {% now "d/m/y" %} </td>
-										<td id="quick_test"> <select class="form-control" data-placeholder="Transaction Category" id="input_transaction_category" data-rel="chosen">
-											  {% for category in categories %}
-											  		<option value="{{ category.id }}">{{ category.name }}</option>
-											  {% endfor %}
-									  </select> </td>
-										<td> <input id="input_transaction_method" class="required"> </td>
-										<td> {{form.ammount}} </td>
-										<td> {{form.description}} </td>
-										<td style="display: none"> {{ form.account }} </td>
-										<td style="display: none"> {{ form.submit_date }} </td>
-										<td style="display: none"> {{ form.transaction_category }} </td>
-										<td style="display: none"> {{ form.transaction_method }} </td>
-										<td><input type="submit" value="Create" style="width: 118px"/></td>
+										<td>
+											<input class="form-control date-picker focused" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
+										</td>
+										<!-- Empty column to allow for reconiliation checkbo -->
+										<td/> 
+										<td>
+											<input id="id_transaction_category" name="transaction_category" class="form-control focused">
+										</td>
+										<td> 
+											<input id="input_transaction_method" class="required form-control focused">
+										</td>
+										<td>
+											<input id="id_amount" name="amount" class="form-control focused">
+										</td>
+										<td> 
+											<input id="id_description" name="description" class="form-control focused"> 
+										</td>
+										<td>
+											<input type="submit" value="Create" style="width: 100%; margin-top: 8%"/>
+										</td>
+
+										<!-- Hidden fields to keep the validator happy. Better solution is a custom form -->
+										<td style="display: none"> {{ transaction_form.account }} >
+										<td style="display: none"> {{ transaction_form.bank_reconlliation_date }}>
+										<td style="display: none"> {{ transaction_form.date }}>
+										<td style="display: none"> {{ transaction_form.transaction_method }}>
 									</form>
 								</tr>
 							</tbody>
@@ -109,23 +129,18 @@
 					</div>
 				</div><!--/col-->
 			</div><!--/row-->
+
+<!-- lazy, highly illegal solution for autocomplete -->
+<!-- future, legal solution is to map a json response from an endpoint -->
+<select id="transaction_categories_list" style="display: none">
+	<option value="" selected="selected">---------</option>
+{% for category in categories %} 
+	<option value="{{forloop.counter}}"> {{category.name}} </option>
+{% endfor %}
+</select>
 {% endblock %}
 
 {% block javascript_extra %}
-	<script>
-	$("#submissionForm").validate();
-</script>
-
-
-<form style= "display:none" 
-			id="createCategory"
-			action="/accounting/transactions/" 
-			method="post"> 
-		{% csrf_token %}
-    <input id="id_account">
-    <input id="id_name">
-</form>
-
 <!--
 	Enable tablesorter on the transactions table, initally sorting by the most recent date.
 	-->
@@ -134,56 +149,49 @@
     { 
     $("table").tablesorter({ 
         sortList: [[0,1]] 
-
     });
     } 
 );
 </script>
 
 
-
-
+<script>
+  $.ajaxSetup({data: {
+    csrfmiddlewaretoken: '{{ csrf_token }}'
+  }});
+</script>
 
 
 <!--	
-			Function to take the transaction category/method text input and find the 
+			Functionality to:
+
+			-Take the transaction method text input and find the 
 			matching value and assign it to the form.
 
-			This is needed as the validator looks for an index value, not text.										
+			-Take time format from the simplyq template and format it
+			in such a way that django likes it;								
    	-->
 <script>
 function mainFunction()
 {
-	assignCategoryValue();
 	assignMethodValue();
 	assignSubmitDateTime();
-}
-
-function assignCategoryValue()
-{
-	var userInput = $("#input_transaction_category").val();
-	var formOptions = document.getElementById("id_transaction_category").options;
-	var formValue = formOptions[formOptions.selectedIndex].value;
-
-	for(var i=1;i<formOptions.length;i++)
-	{
-		if(formOptions[i].text == userInput)
-		{
-			$("#id_transaction_category").val(formOptions[i].value);
-			return false;
-		}
-	}
-	alert("Doesn't exist, creating.")
-	createCategory(userInput);
-	document.getElementById('id_transaction_category').value=formOptions.length;
-	return false;
 }
 
 function assignMethodValue()
 {
 	var userInput = document.getElementById("input_transaction_method").value;
 	var formOptions = document.getElementById("id_transaction_method").options;
-	var formValue = formOptions[formOptions.selectedIndex].value;
+
+
+	if(userInput == "Cash")
+	{
+		userInput = "cash"
+	}
+	if(userInput == "Cheque")
+	{
+		userInput = "cheque"
+	}
 
 	for(var i=1;i<formOptions.length;i++)
 	{
@@ -200,76 +208,63 @@ function assignSubmitDateTime(userInput)
 {
 	var timeStamp = new Date();
 	var time = getTime(timeStamp);
-	var date = document.getElementById('id_user_input_date').value;
-	var day = date[0] + date[1];
-	var month = date[3] + date[4];
-	var year = date[6] + date[7] + date[8] + date[9];
-	var inputTimeStamp = year + "-" + month + "-" + day + " " + time;
-
-	document.getElementById('id_submit_date').value = inputTimeStamp;
-	var test = document.getElementById('id_submit_date').value;
+	var inputDate = document.getElementById('id_user_input_date').value;
+	
+	var formattedDate = formatDate(inputDate);
+	var inputTimeStamp = formattedDate + " " + time;
+	
+	document.getElementById('id_date').value = inputTimeStamp;
 }
 
 function getTime(dateString) {
     var date = new Date(dateString),
-        hours = ("0" + (date.getHours()+1)).slice(-2),
+        hours = ("0" + (date.getHours())).slice(-2),
         minutes  = ("0" + date.getMinutes()).slice(-2),
-        seconds = ("0" + (date.getSeconds()+1)).slice(-2);
+        seconds = ("0" + (date.getSeconds())).slice(-2);
     return [ hours, minutes, seconds ].join(":");
 }
 
-function createCategory(userInput)
+function formatDate(inputDate)
 {
-  var form = document.createElement("form");
-  var element1 = document.createElement("input"); 
-  var element2 = document.createElement("input");  
-
-  form.method = "POST";
-  form.action = "/accounting/transaction_categories/";   
-
-  element1.value = document.getElementById("id_account").value;
-  element1.name =	"account";
-  form.appendChild(element1);  
-
-  element2.value = userInput;
-  element2.name = "name";
-  form.appendChild(element2);
-
-  document.body.appendChild(form);
-
-
-  $('#form').ajaxForm(function() { 
-          alert("Thank you for your comment!"); 
-      }); 
-  return false;
+	var day = inputDate[0] + inputDate[1];
+	var month = inputDate[3] + inputDate[4];
+	var year = inputDate[6] + inputDate[7] + inputDate[8] + inputDate[9];
+	var formattedDate = year + '-' + month + '-' + day;
+	return formattedDate;
 }
-
-$('[data-rel="chosen"],[rel="chosen"]').chosen({no_results_text: "No category found - <a href='#'>Create Category</a>",});
 </script>
 
 <!--	
 			Function for autocomplete of the transaction category and method fields.										
    	-->
 <script>
+	$(".reconcileTick").click(function(){
+		var transaction_id = ($(this).data("id"));
+		// I dont know why, but the below line takes away "undefined" from transaction_id
+		var foo = transaction_id[0];
+		var postdata = { 'csrfmiddlewaretoken': '{{ csrf_token }}' }
+		$.post("reconcile/" + transaction_id, postdata);
+	});
+
   $(function() 
   {
-    var availableCategories = $.map($('#id_transaction_category option'), function(ele) 
+    var availableCategories = $.map($('#transaction_categories_list option'), function(ele) 
     {
   		return ele.text; 
 		});
 
-    $( "#input_transaction_category" ).autocomplete
+    $( "#id_transaction_category" ).autocomplete
     ({
       source: availableCategories
     }) 
   });
 
+
   $(function() 
   {
-    var availableMethods = $.map($('#id_transaction_method option'), function(ele) 
-    {
-  		return ele.text; 
-		});
+    var availableMethods = new Array();
+    availableMethods[0] = "cash";
+    availableMethods[1] = "cheque";
 
     $( "#input_transaction_method" ).autocomplete
     ({
