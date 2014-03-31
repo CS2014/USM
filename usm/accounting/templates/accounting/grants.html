@@ -45,7 +45,7 @@ border-collapse:collapse;
 							  <thead>
 								  <tr>
 									  <th>Date</th>
-									  <th>Ammount</th>
+									  <th>Amount</th>
 									  <th>Purpose</th>
 									  <th>Description</th>
 									  <th>Option</th>
@@ -55,7 +55,7 @@ border-collapse:collapse;
 							  {% for grant in grants %}
 								<tr>
 									<td>{{grant.get_stubbed_time}}</td>
-									<td class="center"> {{grant.ammount}} </td>
+									<td class="center"> {{grant.amount}} </td>
 									<td class="center"> {{grant.purpose}} </td>
 									<td class="center"> {{grant.description}} </td>
 									<td class="center">
@@ -77,7 +77,7 @@ border-collapse:collapse;
 										<td>
 											<input class="form-control date-picker focused" id="id_user_input_date" data-date-format="dd/mm/yyyy"/>
 										</td>
-										<td> <input id="id_ammount" name="ammount" class="form-control focused"/> </td>
+										<td> <input id="id_amount" name="amount" class="form-control focused"/> </td>
 										<td> <input id="id_purpose" name="purpose" class="form-control focused"/> </td>
 										<td> <input id="id_description" name="description" class="form-control focused"> </td>
 										<td style="display: none"> {{ form.account }} </td>

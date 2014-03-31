@@ -38,7 +38,7 @@ class Migration(SchemaMigration):
             ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.Account'])),
             ('transaction_category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.TransactionCategory'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('ammount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('transaction_method', self.gf('django.db.models.fields.CharField')(max_length=10)),
             ('bank_reconlliation_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('is_reconciled', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -62,7 +62,7 @@ class Migration(SchemaMigration):
             ('description', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('creation_date', self.gf('django.db.models.fields.DateTimeField')()),
             ('purpose', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('ammount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
         ))
         db.send_create_signal(u'accounting', ['Grant'])
 
@@ -96,7 +96,7 @@ class Migration(SchemaMigration):
         u'accounting.grant': {
             'Meta': {'object_name': 'Grant'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'creation_date': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -112,7 +112,7 @@ class Migration(SchemaMigration):
         u'accounting.transaction': {
             'Meta': {'object_name': 'Transaction'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'bank_reconlliation_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '300'}),

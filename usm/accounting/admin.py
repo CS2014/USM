@@ -2,7 +2,7 @@
 	author: Ross Kinsella
 	date:   2014/feb/6
 
-	Creates a list view of all transactions detailing their ammount, category tag
+	Creates a list view of all transactions detailing their amount, category tag
 	and payment method 
 
 	TODO:
@@ -31,8 +31,8 @@ class TransactionAdmin(admin.ModelAdmin):
 		TODO:
 		- Have bank_reconlliation_date only appear when cheque payment method is selceted.
 		'''
-		fields = [ 'ammount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date', 'submit_date']
-		list_display = ('description', 'ammount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method', 'get_logs' )	
+		fields = [ 'amount', 'account' ,'description', 'transaction_category', 'transaction_method' ,'bank_reconlliation_date', 'submit_date']
+		list_display = ('description', 'amount' ,'bank_reconlliation_date', 'transaction_category', 'transaction_method', 'get_logs' )	
 
 
 admin.site.register(Transaction, TransactionAdmin)

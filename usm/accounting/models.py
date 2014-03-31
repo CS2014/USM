@@ -28,15 +28,15 @@ class Account(models.Model):
 
 	def tabulate_transactions_month(self, month):
 		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
+		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('amount'))
 
 	def tabulate_transactions_year(self,month):
 		today = datetome.date.today()
 		start_month = month
 
-  #Get all transaction childrens' ammounts
+  #Get all transaction childrens' amounts
 	def tabulate_transactions(self):
-		return self.transaction_set.all().aggregate(total=Sum('ammount'))
+		return self.transaction_set.all().aggregate(total=Sum('amount'))
 
 	def __unicode__(self):
 		return self.society.slug
@@ -52,7 +52,7 @@ class Log(models.Model):
 		Meta data for reviewing changes to enteries over timezone
 
 		TODO:
-		- Have some sort of array of ammounts|dates|users to see changes
+		- Have some sort of array of amounts|dates|users to see changes
 			over time to an entry
 		'''
 
@@ -100,7 +100,7 @@ class Transaction(models.Model):
 		transaction_category = models.ForeignKey(TransactionCategory)
 
 		date = models.DateTimeField(default=timezone.now, editable=True)
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
+		amount = models.DecimalField(max_digits=8, decimal_places=2)
 		transaction_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
 		is_reconciled = models.BooleanField(default=False)
@@ -147,7 +147,7 @@ class Grant(models.Model):
 		description = models.CharField(max_length=30)
 		creation_date = models.DateTimeField('creation date')
 		purpose = models.CharField(max_length=30)
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
+		amount = models.DecimalField(max_digits=8, decimal_places=2)
 
 		def get_stubbed_time(self):
 			return self.creation_date.strftime("%d/%m/%Y")		
