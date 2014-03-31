@@ -17,13 +17,6 @@
 	<form action= "create_society/" method="post" class="form-horizontal">
 		<fieldset>
 			{% csrf_token %} 
-			{% if messages %}
-				<div style="color: red; display:block">
-					{% for message in messages %}
-						{{ message }}
-					{% endfor %}
-				</div>
-			{% endif %}
 			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" name="name" id="username" type="text" placeholder="Society Name" required/>
 				<div class="clearfix"></div>
 				<button type="submit" class="btn btn-primary col-xs-12 ladda-button" data-style="zoom-out">Connect New Society</button>
@@ -38,7 +31,7 @@
 		<fieldset>
 			{% csrf_token %} 
 				<div id="request-error" style="color: red; display:block">
-					
+					<!-- Error messages returned by JSON are shown here -->
 				</div>
 			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" id="username" type="text" placeholder="Society Code" name="slug" required/>
 				<div class="clearfix"></div>
@@ -61,8 +54,4 @@
 				  });
 		    }, 800); // in milliseconds
 		});
-{% endblock %}
-
-{% block ajax %}
-
 {% endblock %}
