@@ -157,22 +157,49 @@
       </div><!--/row--> 
 
 <div class="row">
-    <div class="col-sm-6">
-      <div class="box">
-        <div class="box-header" data-original-title>
-          <h2><i class="fa fa-list-alt"></i><span class="break"></span>Spending by category</h2>
-          <div class="box-icon">
-            <a href="charts-flot.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+        <div class="col-sm-4">
+
+          <div class="smallchart green box mobileHalf">
+
+            <div class="title">Total grant funding</div>
+
+
+            <div class="value">€{{society.account.tabulate_grants.total}}</div>
+
           </div>
-        </div>
-        <div class="box-content">
-           <div id="donutchart" style="height: 300px;">
-             Insert pie chart here.
-           </div>
-        </div>
-      </div>
-    </div><!--/col-->    
-  <div class="col-sm-6">
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart red box mobileHalf">
+
+            <div class="title">Total transactions</div>
+
+
+            <div class="value">€{{society.account.tabulate_transactions.total}}</div>
+
+          </div>
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart blue box mobileHalf">
+
+            <div class="title">Account balance</div>
+
+
+            <div class="value">€{{society.account.tabulate_balance}}</div>
+
+          </div>
+
+        </div><!--/col-->
+</div>
+
+
+<div class="row">
+  
     <div class="box">
       <div class="box-header">
         <h2><i class="fa fa-bar-chart-o"></i>Spending by month</h2>
@@ -184,15 +211,12 @@
         <figure id="example1" style="height: 300px"></figure>
       </div>
     </div>
-  </div>
+  
 </div>
-
 
 <script>
       
 (function () {
-   
-
       var data = {
   "xScale": "time",
   "yScale": "linear",
@@ -203,6 +227,7 @@
       "data": [
         {
           "x": "01",
+<<<<<<< HEAD
           "y": "{{society.account.tabulate_transactions_jan}}"
         },
         {
@@ -248,6 +273,53 @@
         {
           "x": "12",
           "y": "{{society.account.tabulate_transactions_dec}}"
+=======
+          "y": {{monthlyTotals.0.1.total}}
+        },
+        {
+          "x": "02",
+          "y": {{monthlyTotals.1.1.total}}
+        },      
+        {
+          "x": "03",
+          "y": {{monthlyTotals.2.1.total}}
+        },
+        {
+          "x": "04",
+          "y": {{monthlyTotals.3.1.total}}
+        },      
+        {
+          "x": "05",
+          "y": {{monthlyTotals.4.1.total}}
+        },
+        {
+          "x": "06",
+          "y": {{monthlyTotals.5.1.total}}
+        },      
+        {
+          "x": "07",
+          "y": {{monthlyTotals.6.1.total}}
+        },
+        {
+          "x": "08",
+          "y": {{monthlyTotals.7.1.total}}
+        },      
+        {
+          "x": "09",
+          "y": {{monthlyTotals.8.1.total}}
+        },
+        {
+          "x": "10",
+          "y": {{monthlyTotals.9.1.total}}
+        },      
+        {
+          "x": "11",
+          "y": {{monthlyTotals.10.1.total}}
+        },
+        {
+          "x": "12",
+          "y": {{monthlyTotals.11.1.total}}
+>>>>>>> edd70cfcbc5698232e5f7a0e0163cb7bc77f5c61
         }
       ]
     }
@@ -261,6 +333,7 @@
       //var myChart = new xChart('line', data, '#example1', opts);
       
     }());
+<<<<<<< HEAD
 
     /* ---------- Main Chart ---------- */
     if($('.main-chart')) {
@@ -299,3 +372,50 @@
   <li><a href="/accounting/invoices/">Invoices:<a></li>
   <li><a href="/accounting/grants/">Grants:<a></li>
 </ul>-->
+=======
+</script>  
+
+<script>
+(function () {
+  /* ---------- Pie chart ---------- */
+  var data = [
+  { label: "Internet Explorer",  data: 12},
+  { label: "Mobile",  data: 27},
+  { label: "Safari",  data: 85},
+  { label: "Opera",  data: 64},
+  { label: "Firefox",  data: 90},
+  { label: "Chrome",  data: 112}
+  ];
+  
+  if($("#piechart").length)
+  {
+    $.plot($("#piechart"), data,
+    {
+      series: {
+          pie: {
+              show: true
+          }
+      },
+      grid: {
+          hoverable: true,
+          clickable: true
+      },
+      legend: {
+        show: false
+      },
+      colors: ["#FA5833", "#2FABE9", "#FABB3D", "#78CD51"]
+    });
+    
+    function pieHover(event, pos, obj)
+    {
+      if (!obj)
+          return;
+      percent = parseFloat(obj.series.percent).toFixed(2);
+      $("#hover").html('<span style="font-weight: bold; color: '+obj.series.color+'">'+obj.series.label+' ('+percent+'%)</span>');
+    }
+    $("#piechart").bind("plothover", pieHover);
+  }
+});
+</script>
+{% endblock %}
+>>>>>>> edd70cfcbc5698232e5f7a0e0163cb7bc77f5c61

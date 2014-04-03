@@ -8,15 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'TransactionMethod.requires_bank_reconciliation'
-        db.add_column(u'accounting_transactionmethod', 'requires_bank_reconciliation',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
+        # Removing unique constraint on 'TransactionCategory', fields ['name']
+        db.delete_unique(u'accounting_transactioncategory', ['name'])
 
 
     def backwards(self, orm):
-        # Deleting field 'TransactionMethod.requires_bank_reconciliation'
-        db.delete_column(u'accounting_transactionmethod', 'requires_bank_reconciliation')
+        # Adding unique constraint on 'TransactionCategory', fields ['name']
+        db.create_unique(u'accounting_transactioncategory', ['name'])
 
 
     models = {
@@ -25,35 +23,14 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'society': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['main.Society']", 'unique': 'True'})
         },
-        u'accounting.bill': {
-            'Meta': {'object_name': 'Bill'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'biller': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'due_date': ('django.db.models.fields.DateTimeField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'logs': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounting.Log']", 'symmetrical': 'False'})
-        },
         u'accounting.grant': {
             'Meta': {'object_name': 'Grant'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'category': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'creation_date': ('django.db.models.fields.DateTimeField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'accounting.invoice': {
-            'Meta': {'object_name': 'Invoice'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'due_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'invoicee': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'logs': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounting.Log']", 'symmetrical': 'False'})
+            'purpose': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         u'accounting.log': {
             'Meta': {'object_name': 'Log'},
@@ -65,26 +42,21 @@ class Migration(SchemaMigration):
         u'accounting.transaction': {
             'Meta': {'object_name': 'Transaction'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
-            'ammount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'bank_reconlliation_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_reconciled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'logs': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounting.Log']", 'symmetrical': 'False'}),
-            'submit_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'transaction_category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.TransactionCategory']"}),
-            'transaction_method': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.TransactionMethod']"})
+            'transaction_method': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
         u'accounting.transactioncategory': {
             'Meta': {'object_name': 'TransactionCategory'},
+            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        },
-        u'accounting.transactionmethod': {
-            'Meta': {'object_name': 'TransactionMethod'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'requires_bank_reconciliation': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -126,8 +98,10 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Society'},
             'creation_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'member_requests': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'join_requests'", 'symmetrical': 'False', 'to': u"orm['auth.User']"}),
             'members': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.User']", 'symmetrical': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': "'name'", 'unique_with': '()'})
         }
     }
 
