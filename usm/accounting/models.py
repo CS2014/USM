@@ -25,56 +25,7 @@ class Account(models.Model):
 	- Balance field.
 	'''
 	society = models.OneToOneField(Society)
-
-<<<<<<< HEAD
-	def tabulate_transactions_month(self, month):
-		today = datetime.date.today()
-		x = self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
-		if x["total"] != None:
-			return x["total"]
-		else:
-			return 0
-
-	def tabulate_transactions_year(self,month):
-		today = datetome.date.today()
-		start_month = month
-
-	def tabulate_transactions_jan(self):
-		return self.tabulate_transactions_month(1)
-
-	def tabulate_transactions_feb(self):
-		return self.tabulate_transactions_month(2)
-
-	def tabulate_transactions_mar(self):
-		return self.tabulate_transactions_month(3)
-
-	def tabulate_transactions_apr(self):
-		return self.tabulate_transactions_month(4)
-
-	def tabulate_transactions_may(self):
-		return self.tabulate_transactions_month(5)
-
-	def tabulate_transactions_jun(self):
-		return self.tabulate_transactions_month(6)
-
-	def tabulate_transactions_jul(self):
-		return self.tabulate_transactions_month(7)
-
-	def tabulate_transactions_aug(self):
-		return self.tabulate_transactions_month(8)
-
-	def tabulate_transactions_sep(self):
-		return self.tabulate_transactions_month(9)
-
-	def tabulate_transactions_oct(self):
-		return self.tabulate_transactions_month(10)
-
-	def tabulate_transactions_nov(self):
-		return self.tabulate_transactions_month(11)
-
-	def tabulate_transactions_dec(self):
-		return self.tabulate_transactions_month(12)
-=======
+	
 	def tabulate_transactions_month(self, start_date, end_date, month):
 		return self.transaction_set.all().filter(date__range=[start_date, end_date],
 			 		date__month= month).aggregate(total=Sum('amount'))
@@ -105,7 +56,6 @@ class Account(models.Model):
 
 	def tabulate_grants(self):
 		return self.grant_set.all().aggregate(total=Sum('amount'))
->>>>>>> edd70cfcbc5698232e5f7a0e0163cb7bc77f5c61
 
 	def tabulate_balance(self):
 		transactions =  self.transaction_set.all().aggregate(total=Sum('amount'))

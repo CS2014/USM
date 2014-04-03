@@ -164,7 +164,7 @@
             <div class="title">Total grant funding</div>
 
 
-            <div class="value">€{{society.account.tabulate_grants.total}}</div>
+            <div class="value">&euro;{% if society.account.tabulate_grants.total != None %}{{society.account.tabulate_grants.total}}{% else %}0{% endif %}</div>
 
           </div>
 
@@ -177,7 +177,7 @@
             <div class="title">Total transactions</div>
 
 
-            <div class="value">€{{society.account.tabulate_transactions.total}}</div>
+            <div class="value">&euro;{% if society.account.tabulate_transactions.total != None %}{{society.account.tabulate_transactions.total}}{% else %}0{% endif %}</div>
 
           </div>
 
@@ -190,7 +190,7 @@
             <div class="title">Account balance</div>
 
 
-            <div class="value">€{{society.account.tabulate_balance}}</div>
+            <div class="value">&euro;{% if society.account.tabulate_balance != None %}{{society.account.tabulate_balance}}{% else %}0{% endif %}</div>
 
           </div>
 
@@ -227,53 +227,6 @@
       "data": [
         {
           "x": "01",
-<<<<<<< HEAD
-          "y": "{{society.account.tabulate_transactions_jan}}"
-        },
-        {
-          "x": "02",
-          "y": "{{society.account.tabulate_transactions_feb}}"
-        },      
-        {
-          "x": "03",
-          "y": "{{society.account.tabulate_transactions_mar}}"
-        },
-        {
-          "x": "04",
-          "y": "{{society.account.tabulate_transactions_apr}}"
-        },      
-        {
-          "x": "05",
-          "y": "{{society.account.tabulate_transactions_may}}"
-        },
-        {
-          "x": "06",
-          "y": "{{society.account.tabulate_transactions_jun}}"
-        },      
-        {
-          "x": "07",
-          "y": "{{society.account.tabulate_transactions_jul}}"
-        },
-        {
-          "x": "08",
-          "y": "{{society.account.tabulate_transactions_aug}}"
-        },      
-        {
-          "x": "09",
-          "y": "{{society.account.tabulate_transactions_sep}}"
-        },
-        {
-          "x": "10",
-          "y": "{{society.account.tabulate_transactions_oct}}"
-        },      
-        {
-          "x": "11",
-          "y": "{{society.account.tabulate_transactions_nov}}"
-        },
-        {
-          "x": "12",
-          "y": "{{society.account.tabulate_transactions_dec}}"
-=======
           "y": {{monthlyTotals.0.1.total}}
         },
         {
@@ -319,7 +272,6 @@
         {
           "x": "12",
           "y": {{monthlyTotals.11.1.total}}
->>>>>>> edd70cfcbc5698232e5f7a0e0163cb7bc77f5c61
         }
       ]
     }
@@ -333,46 +285,6 @@
       //var myChart = new xChart('line', data, '#example1', opts);
       
     }());
-<<<<<<< HEAD
-
-    /* ---------- Main Chart ---------- */
-    if($('.main-chart')) {
-      
-      $('.main-chart > .bar').each(function(){
-        
-        var percent = $(this).find('.value').html();
-        
-        $(this).find('.value').html('');
-        
-        $(this).find('.value').animate({height:percent}, 2000);
-        
-      });
-      
-    }
-    
-</script>      
-{% endblock %}
-<!--
-  1: get last 12 months of spending in 12 month vars
-
-
-		author: Ross Kinsella	
-		date:   2014/feb/13
-}());
-		Displays a list of all the models in the accounting app.
-
--->
-<!--
-<ul>  
-	<li><a href="/accounting/accounts/">Accounts:<a></li>
-  <li><a href="/accounting/transaction_categories/">Transaction categories:<a></li>
-  <li><a href="/accounting/transaction_methods/">Transaction methods:<a></li>
-  <li><a href="/accounting/transactions/">Transactions:<a></li>
-  <li><a href="/accounting/bills/">Bills:<a></li>
-  <li><a href="/accounting/invoices/">Invoices:<a></li>
-  <li><a href="/accounting/grants/">Grants:<a></li>
-</ul>-->
-=======
 </script>  
 
 <script>
@@ -418,4 +330,3 @@
 });
 </script>
 {% endblock %}
->>>>>>> edd70cfcbc5698232e5f7a0e0163cb7bc77f5c61
