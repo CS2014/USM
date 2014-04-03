@@ -116,8 +116,9 @@ def dash_board(request, slug):
         try:
                 society = get_object_or_404(Society, slug=slug)
                 society.members.get(pk=request.user.id)
-                march = society.account.tabulate_transactions_month(3)
-                return render(request, 'accounting/index.html', {'society': society , 'march':march})
+                monthlyTotals = society.account.tabulate_transactions_past_year_by_month()
+                print(monthlyTotals)
+                return render(request, 'accounting/index.html', {'society': society , 'monthlyTotals':monthlyTotals})
         except (Http404, User.DoesNotExist):
                 messages.add_message(request, messages.INFO, 
                 "You do not have permission to access that account.",

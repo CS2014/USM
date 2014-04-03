@@ -26,13 +26,29 @@ class Account(models.Model):
 	'''
 	society = models.OneToOneField(Society)
 
-	def tabulate_transactions_month(self, month):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(date__month=month, date__year=today.year).aggregate(total=Sum('amount'))
+	def tabulate_transactions_month(self, start_date, end_date, month):
+		return self.transaction_set.all().filter(date__range=[start_date, end_date],
+			 		date__month= month).aggregate(total=Sum('amount'))
+		
 
-	def tabulate_transactions_year(self,month):
-		today = datetome.date.today()
-		start_month = month
+	def tabulate_transactions_past_year_by_month(self):
+		end_date = datetime.date.today()
+		start_date = datetime.date(end_date.year -1, end_date.month, end_date.day)
+		monthly_spending = (
+			("Jan", self.tabulate_transactions_month(start_date, end_date, 1)),
+			("Feb", self.tabulate_transactions_month(start_date, end_date, 2)),
+			("Mar", self.tabulate_transactions_month(start_date, end_date, 3)),
+			("Apr", self.tabulate_transactions_month(start_date, end_date, 4)),
+			("May", self.tabulate_transactions_month(start_date, end_date, 5)),
+			("Jun", self.tabulate_transactions_month(start_date, end_date, 6)),
+			("Jul", self.tabulate_transactions_month(start_date, end_date, 7)),
+			("Aug", self.tabulate_transactions_month(start_date, end_date, 8)),
+			("Sep", self.tabulate_transactions_month(start_date, end_date, 9)),
+			("Oct", self.tabulate_transactions_month(start_date, end_date, 10)),
+			("Nov", self.tabulate_transactions_month(start_date, end_date, 11)),
+			("Dec", self.tabulate_transactions_month(start_date, end_date, 12))
+		)
+		return monthly_spending
 
   #Get all transaction childrens' amounts
 	def tabulate_transactions(self):
