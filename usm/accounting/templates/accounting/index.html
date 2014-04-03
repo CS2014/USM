@@ -6,22 +6,49 @@
 <script src="{{ STATIC_URL }}assets/js/jquery.flot.pie.min.js"></script>
 
 <div class="row">
-    <div class="col-sm-6">
-      <div class="box">
-        <div class="box-header" data-original-title>
-          <h2><i class="fa fa-list-alt"></i><span class="break"></span>Spending by category</h2>
-          <div class="box-icon">
-            <a href="charts-flot.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+        <div class="col-sm-4">
+
+          <div class="smallchart green box mobileHalf">
+
+            <div class="title">Total grant funding</div>
+
+
+            <div class="value">€{{society.account.tabulate_grants.total}}</div>
+
           </div>
-        </div>
-        <div class="box-content">
-           <div id="donutchart" style="height: 300px;">
-             Insert pie chart here.
-           </div>
-        </div>
-      </div>
-    </div><!--/col-->    
-  <div class="col-sm-6">
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart red box mobileHalf">
+
+            <div class="title">Total transactions</div>
+
+
+            <div class="value">€{{society.account.tabulate_transactions.total}}</div>
+
+          </div>
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart blue box mobileHalf">
+
+            <div class="title">Account balance</div>
+
+
+            <div class="value">€{{society.account.tabulate_balance}}</div>
+
+          </div>
+
+        </div><!--/col-->
+</div>
+
+
+<div class="row">
+  
     <div class="box">
       <div class="box-header">
         <h2><i class="fa fa-bar-chart-o"></i>Spending by month</h2>
@@ -33,7 +60,7 @@
         <figure id="example1" style="height: 300px"></figure>
       </div>
     </div>
-  </div>
+  
 </div>
 
 <script>
@@ -107,5 +134,48 @@
       var myChart = new xChart('line', data, '#example1', opts);
       
     }());
-</script>      
+</script>  
+
+<script>
+(function () {
+  /* ---------- Pie chart ---------- */
+  var data = [
+  { label: "Internet Explorer",  data: 12},
+  { label: "Mobile",  data: 27},
+  { label: "Safari",  data: 85},
+  { label: "Opera",  data: 64},
+  { label: "Firefox",  data: 90},
+  { label: "Chrome",  data: 112}
+  ];
+  
+  if($("#piechart").length)
+  {
+    $.plot($("#piechart"), data,
+    {
+      series: {
+          pie: {
+              show: true
+          }
+      },
+      grid: {
+          hoverable: true,
+          clickable: true
+      },
+      legend: {
+        show: false
+      },
+      colors: ["#FA5833", "#2FABE9", "#FABB3D", "#78CD51"]
+    });
+    
+    function pieHover(event, pos, obj)
+    {
+      if (!obj)
+          return;
+      percent = parseFloat(obj.series.percent).toFixed(2);
+      $("#hover").html('<span style="font-weight: bold; color: '+obj.series.color+'">'+obj.series.label+' ('+percent+'%)</span>');
+    }
+    $("#piechart").bind("plothover", pieHover);
+  }
+});
+</script>
 {% endblock %}

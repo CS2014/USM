@@ -117,7 +117,6 @@ def dash_board(request, slug):
                 society = get_object_or_404(Society, slug=slug)
                 society.members.get(pk=request.user.id)
                 monthlyTotals = society.account.tabulate_transactions_past_year_by_month()
-                print(monthlyTotals)
                 return render(request, 'accounting/index.html', {'society': society , 'monthlyTotals':monthlyTotals})
         except (Http404, User.DoesNotExist):
                 messages.add_message(request, messages.INFO, 

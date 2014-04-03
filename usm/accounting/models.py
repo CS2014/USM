@@ -54,6 +54,14 @@ class Account(models.Model):
 	def tabulate_transactions(self):
 		return self.transaction_set.all().aggregate(total=Sum('amount'))
 
+	def tabulate_grants(self):
+		return self.grant_set.all().aggregate(total=Sum('amount'))
+
+	def tabulate_balance(self):
+		transactions =  self.transaction_set.all().aggregate(total=Sum('amount'))
+		grants = self.grant_set.all().aggregate(total=Sum('amount'))
+		return grants['total']-transactions['total']
+
 	def __unicode__(self):
 		return self.society.slug
 
