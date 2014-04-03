@@ -4,20 +4,8 @@
 
 	Models representing the accounting system.
 
-	Transaction, Bill and Invoice have a hook save which creteas a Log
-	instance whenever they are created / edited.
-
-	TODO: 
-	- Have the forms know which society it is.
-
-	- Create functionality for Account.
-	   eg. updateBalance()
-
-	- Many of the classes share the same attributes, eg. name | ammount 
-	  Is there a way to implement DRY in this respect?
-
 	BUGS:
-	- get_logs in bill & invoice returns blank, although the hook save is working.
+	- 
 """
 
 from django.db import models
@@ -29,8 +17,6 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django import forms
 
-
-
 class Account(models.Model):
 	'''
 	A holder of all of the above instances for a single Society.
@@ -39,60 +25,42 @@ class Account(models.Model):
 	- Balance field.
 	'''
 	society = models.OneToOneField(Society)
+	
+	def tabulate_transactions_month(self, start_date, end_date, month):
+		return self.transaction_set.all().filter(date__range=[start_date, end_date],
+			 		date__month= month).aggregate(total=Sum('amount'))
+		
 
-	def tabulate_transactions_jan(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='1').aggregate(total=Sum('ammount'))
+	def tabulate_transactions_past_year_by_month(self):
+		end_date = datetime.date.today()
+		start_date = datetime.date(end_date.year -1, end_date.month, end_date.day)
+		monthly_spending = (
+			("Jan", self.tabulate_transactions_month(start_date, end_date, 1)),
+			("Feb", self.tabulate_transactions_month(start_date, end_date, 2)),
+			("Mar", self.tabulate_transactions_month(start_date, end_date, 3)),
+			("Apr", self.tabulate_transactions_month(start_date, end_date, 4)),
+			("May", self.tabulate_transactions_month(start_date, end_date, 5)),
+			("Jun", self.tabulate_transactions_month(start_date, end_date, 6)),
+			("Jul", self.tabulate_transactions_month(start_date, end_date, 7)),
+			("Aug", self.tabulate_transactions_month(start_date, end_date, 8)),
+			("Sep", self.tabulate_transactions_month(start_date, end_date, 9)),
+			("Oct", self.tabulate_transactions_month(start_date, end_date, 10)),
+			("Nov", self.tabulate_transactions_month(start_date, end_date, 11)),
+			("Dec", self.tabulate_transactions_month(start_date, end_date, 12))
+		)
+		return monthly_spending
 
-	def tabulate_transactions_feb(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='2').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_mar(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='3').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_apr(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='4').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_may(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='5').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_jun(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='6').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_jul(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='7').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_aug(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='8').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_sep(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='9').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_oct(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='10').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_nov(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='11').aggregate(total=Sum('ammount'))
-
-	def tabulate_transactions_dec(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='12').aggregate(total=Sum('ammount'))				
-
-
-
-  #Get all transaction childrens' ammounts
+  #Get all transaction childrens' amounts
 	def tabulate_transactions(self):
-		return self.transaction_set.all().aggregate(total=Sum('ammount'))
+		return self.transaction_set.all().aggregate(total=Sum('amount'))
+
+	def tabulate_grants(self):
+		return self.grant_set.all().aggregate(total=Sum('amount'))
+
+	def tabulate_balance(self):
+		transactions =  self.transaction_set.all().aggregate(total=Sum('amount'))
+		grants = self.grant_set.all().aggregate(total=Sum('amount'))
+		return grants['total']-transactions['total']
 
 	def __unicode__(self):
 		return self.society.slug
@@ -108,7 +76,7 @@ class Log(models.Model):
 		Meta data for reviewing changes to enteries over timezone
 
 		TODO:
-		- Have some sort of array of ammounts|dates|users to see changes
+		- Have some sort of array of amounts|dates|users to see changes
 			over time to an entry
 		'''
 
@@ -130,7 +98,7 @@ class TransactionCategory(models.Model):
 		'''
 		account = models.ForeignKey(Account)	
 
-		name = models.CharField(max_length=20,unique=True)
+		name = models.CharField(max_length=20)
 		
 		def __unicode__(self):
 			return self.name
@@ -141,52 +109,25 @@ class TransactionCategoryForm(ModelForm):
 		fields = '__all__'
 
 
-class TransactionMethod(models.Model):
-		'''
-		A tag descriping how the transaction was conducted;
-		eg. was it in cash|cheque
-
-		Societies create their own tags.
-
-		TODO:
-		-reconsider the description field.
-		'''
-
-		PAYMENT_CHOICES = ( 
-			('Cash', 'cash'),
-			('Cheque', 'cheque'),
-		)
-		account = models.ForeignKey(Account)
-
-		name = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
-		description = models.CharField(max_length=300)
-		requires_bank_reconciliation = models.BooleanField(default = False)
-
-		def __unicode__(self):
-			return self.name
-
-class TransactionMethodForm(ModelForm):
-	class Meta:
-		model = TransactionMethod
-		fields = '__all__'
-
-
 class Transaction(models.Model):
 		''' 
 		A single transaction made by a society.
 		Can be given a tag to visualise spending by area.
-
-		TODO:
-		- Make bank_reconlliation_date manditory if cheque is the payment method.
 		'''
+		PAYMENT_CHOICES = ( 
+			('Cash', 'cash'),
+			('Cheque', 'cheque'),
+		)		
+
 		account = models.ForeignKey(Account)
 		logs = models.ManyToManyField(Log)
 		transaction_category = models.ForeignKey(TransactionCategory)
-		transaction_method = models.ForeignKey(TransactionMethod)
 
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		submit_date = models.DateTimeField(default=timezone.now, editable=True)
+		date = models.DateTimeField(default=timezone.now, editable=True)
+		amount = models.DecimalField(max_digits=8, decimal_places=2)
+		transaction_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
 		bank_reconlliation_date = models.DateTimeField('bank reconcilliation date', blank = True, null = True)
+		is_reconciled = models.BooleanField(default=False)
 		description = models.CharField(max_length=300)
 
 		def save(self, *args, **kwargs):
@@ -199,106 +140,41 @@ class Transaction(models.Model):
 		get_logs.short_description = 'Logs'
 
 		def get_stubbed_time(self):
-			return self.submit_date.strftime("%d/%m/%y")
+			return self.date.strftime("%d/%m/%Y")
 
 		def __unicode__(self):
 			return self.description
 
 class TransactionForm(ModelForm):
+	transaction_category = forms.CharField(max_length=20)
+
+	def save(self):
+			transaction_name = self.cleaned_data['transaction_category']
+			account = self.cleaned_data['account']
+			transaction_category, created = TransactionCategory.objects.get_or_create(name=transaction_name, account=account)
+			self.instance.transaction_category = transaction_category
+
+			return super(TransactionForm, self).save()
+
 	class Meta:
 		model = Transaction
-		exclude = ['logs']
-
-
-class Bill(models.Model):
-		'''
-		A paid obligation of the society.
-		Eg. venue fee.
-
-		TODO:
-		-functionality for a recurring bill.
-
-		CONSIDER:
-		-adding a transactionCategory?
-		'''
-		account = models.ForeignKey(Account)
-		logs = models.ManyToManyField(Log)
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		description = models.CharField(max_length=300)
-
-		'''
-		biller == payee | the receiver of the due ammount
-		'''
-		biller = models.CharField(max_length=30) 
-		creation_date = models.DateTimeField('creation date')
-		due_date = models.DateTimeField('due date')
-
-		def save(self, *args, **kwargs):
-			super(Bill, self).save(*args, **kwargs)
-			log = Log.objects.create(user = User(id=1), description="bill test") 
-			log.save
-
-		def get_logs(self):	
-			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
-		get_logs.short_description = 'Logs'
-
-		def __unicode__(self):
-			return self.description
-
-class BillForm(ModelForm):
-	class Meta:
-		model = Bill
-		exclude = ['logs']
-
-
-class Invoice(models.Model):
-		'''
-		An outstanding obligation of the society.
-		Eg. accomodation|travel fee. 
-
-		'''
-		account = models.ForeignKey(Account)
-		logs = models.ManyToManyField(Log)
-
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
-		description = models.CharField(max_length=300)
-		invoicee = models.CharField(max_length=30)
-		creation_date = models.DateTimeField('creation date')
-		due_date = models.DateTimeField('due date')
-
-		def save(self, *args, **kwargs):
-			super(Invoice, self).save(*args, **kwargs)
-			log = Log.objects.create(user = User(id=1), description="invoice test") 
-			log.save
-
-		def get_logs(self):	
-			return ",\n".join([l.user.username + ": "+ l.description for l in self.logs.all()])
-		get_logs.short_description = 'Logs'
-
-		def __unicode__(self):
-			return self.description
-
-class InvoiceForm(ModelForm):
-	class Meta:
-		model = Invoice
-		exclude = ['logs']
+		exclude = ['logs','is_reconciled','transaction_category']
 
 
 class Grant(models.Model):
 		'''
 		Money received by the society.
 		Eg. Trip grant from Trinity.
-
-		TODO:
-		- add a tagging system?
-		- add a log relationsip?
 		'''
 		account = models.ForeignKey(Account)
 
 		description = models.CharField(max_length=30)
 		creation_date = models.DateTimeField('creation date')
-		category = models.CharField(max_length=30)
-		ammount = models.DecimalField(max_digits=8, decimal_places=2)
+		purpose = models.CharField(max_length=30)
+		amount = models.DecimalField(max_digits=8, decimal_places=2)
+
+		def get_stubbed_time(self):
+			return self.creation_date.strftime("%d/%m/%Y")		
 
 class GrantForm(ModelForm):
 	class Meta:

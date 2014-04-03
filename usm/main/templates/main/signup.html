@@ -1,100 +1,38 @@
-<!--
-		author: Ross Kinsella	
-		date:   2014/march/22
+{% extends "main/login_base.html" %}
 
-		Registartion page with validation errors.
-	-->
-<html>
-<head>
-  <title>USM</title>
-	<meta name="keywords" content="sonic, responsive, free template, fluid layout, bootstrap, templatemo" />
-	<meta name="description" content="Sonic is one-page responsive free template using Bootstrap. This layout is suitable for creative portfolio showcase." />
-	<meta charset="utf-8">
-	<meta name="viewport" content="initial-scale=1">
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_misc.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_style.css">
-</head>
-<body>
-
-	<!-- This one in here is responsive menu for tablet and mobiles -->
-    <div class="responsive-navigation visible-sm visible-xs">
-        <a href="#" class="menu-toggle-btn">
-            <i class="fa fa-bars fa-2x"></i>
-        </a>
-        <div class="navigation responsive-menu">
-            <ul>
-              <li class="home"><a href="/">Home</a></li>
-	            <li class="about"><a href="/#about">About Us</a></li>
-	            <li class="services"><a href="/#services">Services</a></li>
-	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
-	           	<li class="contact"><a href="/login/">Sign in</a></li>	
-            </ul> <!-- /.main_menu -->
-        </div> <!-- /.responsive_menu -->
-    </div> <!-- /responsive_navigation -->
-	<div id="main-sidebar" class="hidden-xs hidden-sm">
-		<div class="logo">
-			<a href="/" rel="nofollow"><h1>USM</h1></a>
-			<span>A Management Tool</span>
-		</div> <!-- /.logo -->
-
-				<div class="navigation">
-	        <ul class="main-menu">
-	            <li class="home"><a href="/">Home</a></li>
-	            <li class="about"><a href="/#about">About Us</a></li>
-	            <li class="services"><a href="/#services">Services</a></li>
-	            <li class="portfolio"><a href="/#portfolio">Portfolio</a></li>
-	        </ul>
-		</div> <!-- /.navigation -->
+{% block login_content %}
+	<h1>MySociety</h1>
+	<form action= "/register/" method="post" id="loginform" class="form-horizontal">
+		{% csrf_token %} 
+		{% for message in messages %}
+			<div class="alert alert-danger">{{ message }}</div>
+		{% endfor %}
+		<fieldset>
+			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" name="username" id="username" type="text" placeholder="Username" required/>
+			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" name="email" id="email" type="text" placeholder="Email" required/>
+			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" name="password1" id="password1" type="password" placeholder="Password" required/>
+			<input style="background-color: #c4c6cb;" class="input-large col-xs-12" name="password2" id="password2" type="password" placeholder="Retype Password" required/>
+			<div class="clearfix"></div>
+			<button type="submit" class="btn btn-primary col-xs-12 request ladda-button" data-style="zoom-out">Create an account</button>
+		</fieldset>
+	</form>    
+	<div style="width:100%;text-align:center;">
+		<strong>or</strong>
 	</div>
+	<form action= "/login/" method="get" class="form-horizontal">
+		<fieldset>
+			<button type="submit" class="btn btn-default col-xs-12 ladda-button" data-style="zoom-out">Login</button>
+		</fieldset>
+	</form> 
+{% endblock %}
 
-	<div id="main-content">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="welcome-text" style="text-align:left">
-							<h3><b> Sign up:</b>  Its free</h3>
-								<div id="boxalign2" class="boxalign2" style="text-align: right; display: block; width: 370px">
-									<form action= "" method = "post" id="registrationForm">
-									{% csrf_token %} 
-								    <label>Username:
-								        <input class="registration-page" 
-								        				required id="id_username"  name="username" type="text" />
-								        {% if form.username.errors %}
-								        	<br>{{ form.username.errors.as_text }} <br><br>
-								        {% endif %}
-								    </label>
-								    <label>Password:
-								        <input class="registration-page" 
-								        				required id="id_password1" name="password1" type="password" />
-								        {% if form.password1.errors %}
-								        	<br>{{ form.password1.errors.as_text }} <br><br>
-								        {% endif %}
-								    </label>
-								    <label>Password Confirmation:
-								        <input class="registration-page" 
-								        				required id="id_password2" name="password2" type="password" />
-								        {% if form.password2.errors %}
-								        	<br>{{ form.password2.errors.as_text }} <br><br>
-								        {% endif %}
-								    </label>
-								    <label>Email:
-								        <input class="registration-page" 
-								        				required id= "id_email" name="email" type="email" />
-								        {% if form.email.errors %}
-								        	<br>{{ form.email.errors.as_text }} <br><br>
-								        {% endif %}
-								    </label>
-								    <input style="width:188px" type="submit" value="Register">
-								   </form>
-								</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	</div>
-</body>
-</html>
-
+{% block scripts %}
+		Ladda.bind( '.btn', { timeout: 2000 } );
+		$('#loginform').submit(function (e) {
+		    var form = this;
+		    e.preventDefault();
+		    setTimeout(function () {
+		        form.submit();
+		    }, 800); // in milliseconds
+		});
+{% endblock %}

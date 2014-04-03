@@ -1,481 +1,208 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <title>USM</title>
-	<meta name="keywords" content="sonic, responsive, free template, fluid layout, bootstrap, templatemo" />
-	<meta name="description" content="Sonic is one-page responsive free template using Bootstrap. This layout is suitable for creative portfolio showcase." />
-	<meta charset="utf-8">
-	<meta name="viewport" content="initial-scale=1">
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_misc.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/templatemo_style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MySociety</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}/landing-page/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom Google Web Font -->
+    <link href="{{ STATIC_URL }}/landing-page/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Add custom CSS here -->
+    <link href="{{ STATIC_URL }}/landing-page/css/landing-page.css" rel="stylesheet">
+
 </head>
+
 <body>
 
-	<!-- This one in here is responsive menu for tablet and mobiles -->
-    <div class="responsive-navigation visible-sm visible-xs">
-        <a href="#" class="menu-toggle-btn">
-            <i class="fa fa-bars fa-2x"></i>
-        </a>
-        <div class="navigation responsive-menu">
-            <ul>
-              <li class="home"><a href="#templatemo">Home</a></li>
-	            <li class="about"><a href="#about">About Us</a></li>
-	           	<li class="contact"><a href="/signup/">Sign Up</a></li>	
-	           	<li class="home"><a href="#log-in">Sign In</a></li>	
-            </ul> <!-- /.main_menu -->
-        </div> <!-- /.responsive_menu -->
-    </div> <!-- /responsive_navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">MySociety</a>
+            </div>
 
-	<div id="main-sidebar" class="hidden-xs hidden-sm">
-		<div class="logo">
-			<a href="/" rel="nofollow"><h1>USM</h1></a>
-			<span>A Management Tool</span>
-		</div> <!-- /.logo -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/login/">Login</a>
+                    </li>
+                    <li><a href="/register/">Signup</a>
+                    </li>
+                    <li><a href="#">|</a></li>
+                    <li><a href="#about">About</a>
+                    </li>
+                    <li><a href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
-		<div class="navigation">
-	        <ul class="main-menu">
-	            <li class="home"><a href="#templatemo">Home</a></li>
-	            <li class="about"><a href="#about">About Us</a></li>
-	           	<li class="contact"><a href="/signup/">Sign Up</a></li>	
-	           	<li class="home"><a href="#log-in">Log In</a></li>	
-	        </ul>
-		</div> <!-- /.navigation -->
+    <div class="intro-header">
 
-	</div> <!-- /#main-sidebar -->
+        <div class="container">
 
-	<div id="main-content">	
-		<div id="templatemo">
-			<div class="main-slider">
-				<div class="flexslider">
-					<ul class="slides">
-						<li>
-							<div class="slider-caption">
-								<h2>Minutes Management</h2>
-								<p>A rather dramatic &amp; dark picture in the background.</p>
-								<a href="/signup/" rel="nofollow" class="largeButton homeBgColor">Sign Up</a>
-							</div>
-							<img src="{{ STATIC_URL }}images/slide2.jpg" alt="Slide 2">
-						</li>
-						<li>
-							<div class="slider-caption">
-								<h2>Accounting Features</h2>
-								<p>These pictures are nice aren't they? Maybe we should make them a touch more relevant.</p>
-								<a href="/signup/" rel="nofollow" class="largeButton homeBgColor">Sign Up</a>
-							</div>
-							<img src="{{ STATIC_URL }}images/slide1.jpg" alt="Slide 1">
-						</li>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Organise Your Society</h1>
+                        <h3>Free tool to help you manage your <br />finances, minutes &amp; society members.</h3>
+                        <hr class="intro-divider">
+                        <ul class="list-inline intro-social-buttons">
+                            <li><a href="/login/" class="btn btn-default btn-lg"><!--<i class="fa fa-github fa-fw"></i>--> <span class="network-name">Login</span></a>
+                            </li>
+                            <li><a href="/register/" class="btn btn-default btn-lg"><!--<i class="fa fa-linkedin fa-fw"></i>--> <span class="network-name">Sign up (free!)</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-                        <li>
-							<div class="slider-caption">
-								<h2>Awesome Support</h2>
-								<p>The logs in the picture are supporting more logs, geddit?</p>
-								<a href="/signup/" rel="nofollow" class="largeButton homeBgColor">Sign Up</a>
-							</div>
-							<img src="{{ STATIC_URL }}images/slide3.jpg" alt="Slide 3">
-						</li>
+        </div>
+        <!-- /.container -->
 
-					</ul>
-				</div>
-			</div>
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="welcome-text">
-							<h2>Welcome to USM</h2>
-							<p>Sonic is provided by templatemo website for everyone. Credit goes to <a href="http://flexslider.woothemes.com" rel="nofollow">FlexSlider</a>. Maecenas adipiscing pellentesque elit eu volutpat. Integer vitae <a href="#">pulvinar magna</a>. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent auctor mi metus, nec sagittis purus ultrices id.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> <!-- /#sTop -->
+    </div>
+    <!-- /.intro-header -->
 
-		<div class="container-fluid">
+    <div class="content-section-a">
 
-			<div id="about" class="section-content">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2>About Us</h2>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="member-item">
-							<div class="member-thumb">
-								<img src="http://placehold.it/520x520" alt="girl 1">
-								<div class="overlay">
-									<ul class="social-member">
-										<li><a href="#" class="fa fa-facebook"></a></li>
-										<li><a href="#" class="fa fa-twitter"></a></li>
-										<li><a href="#" class="fa fa-linkedin"></a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="member-content">
-								<h4>TEAM 1</h4>
-								<p>Marketing Director</p>
-							</div>
-						</div>
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="member-item">
-							<div class="member-thumb">
-								<img src="http://placehold.it/520x520" alt="girl 2">
-								<div class="overlay">
-									<ul class="social-member">
-										<li><a href="#" class="fa fa-facebook"></a></li>
-										<li><a href="#" class="fa fa-twitter"></a></li>
-										<li><a href="#" class="fa fa-linkedin"></a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="member-content">
-								<h4>TEAM 2</h4>
-								<p>Creative Executive</p>
-							</div>
-						</div>
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="member-item">
-							<div class="member-thumb">
-								<img src="http://placehold.it/520x520" alt="girl 3">
-								<div class="overlay">
-									<ul class="social-member">
-										<li><a href="#" class="fa fa-facebook"></a></li>
-										<li><a href="#" class="fa fa-twitter"></a></li>
-										<li><a href="#" class="fa fa-linkedin"></a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="member-content">
-								<h4>TEAM 3</h4>
-								<p>Company President</p>
-							</div>
-						</div>
-					</div> <!-- /.col-md-4 -->
-				</div> <!-- /.row -->
-				<div class="row our-story">
-					<div class="col-md-8">
-						<h3>Our Management Team</h3>
-						Quisque in metus tristique, gravida dolor ut, varius neque. Maecenas ac risus aliquam, facilisis massa id, vulputate elit. Curabitur pretium arcu dictum, faucibus diam quis, commodo turpis. Proin viverra, risus eget egestas sodales, felis ante scelerisque ligula, eget condimentum diam ligula eu tellus.
-                        <br><br>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, exercitationem, laboriosam, modi non quisquam voluptas accusamus numquam ipsum reiciendis saepe veniam cupiditate explicabo autem. Repudiandae tempore dolore deserunt nemo voluptatum consectetur aspernatur expedita aliquid iste illo enim molestias vel animi quod.
-					</div>
-					<div class="col-md-4">
-						<div class="story-image">
-							<img src="{{ STATIC_URL }}images/responsive-design.jpg" alt="">
-						</div>
-					</div>
-				</div> <!-- /.row -->
-			</div> <!-- /#about -->
+        <div class="container">
 
-			<div id="services" class="section-content">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2>Services</h2>
-						</div> <!-- /.section-title -->
-					</div> <!-- /.col-md-12 -->
-				</div> <!-- /.row -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="service-item clearfix">
-							<div class="service-icon">
-								<i class="fa fa-bolt fa-2x"></i>
-							</div>
-							<div class="service-content">
-								<h3>The <a href="http://www.onlyimage.com" title="image files"  class="service_links" target="_blank">Best</a><br>Support Ever</h3>
-							</div>
-						</div> <!-- /.service-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="service-item">
-							<div class="service-icon">
-								<i class="fa fa-laptop fa-2x"></i>
-							</div>
-							<div class="service-content">
-								<h3>Fully<br>Responsive Design</h3>
-							</div>
-						</div> <!-- /.service-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="service-item">
-							<div class="service-icon">
-								<i class="fa fa-pencil fa-2x"></i>
-							</div>
-							<div class="service-content">
-								<h3>Unlimited<br>Layouts Options</h3>
-							</div>
-						</div> <!-- /.service-item -->
-					</div> <!-- /.col-md-4 -->
-				</div> <!-- /.row -->
-				<div class="row our-skills">
-					<div class="col-md-8">
-						<h3>Our Skills</h3>
-						Integer hendrerit erat sed tellus pretium, eu sodales eros dignissim. Duis augue eros, mollis ac velit at, rutrum tincidunt ipsum. Morbi semper dui id fringilla semper. Etiam vulputate sagittis vestibulum. Vivamus ac ante cursus, feugiat ipsum et, aliquet justo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, minima soluta numquam perferendis illum alias omnis commodi error veritatis a esse nostrum asperiores recusandae.
-					</div>
-					<div class="col-md-4">
-						<ul class="progess-bars">
-							<li>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">Graphics 90%</div>
-								</div>
-							</li>
-							<li>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">HTML5 CSS3 75%</div>
-								</div>
-							</li>
-							<li>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" style="width: 66%;">WordPress 66%</div>
-								</div>
-							</li>
-							<li>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" style="width: 88%;">Marketing 88%</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div> <!-- /#services -->
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Intuitive book keeping:</h2>
+                    <p class="lead">Keep your society's ledgers in one place. 
+                        <br> No more lost data from treasurer to treasurer.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="{{ STATIC_URL }}/landing-page/img/ipad.png" alt="">
+                </div>
+            </div>
 
-			<div id="portfolio" class="section-content">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2>Portfolio</h2>
-						</div> <!-- /.section-title -->
-					</div> <!-- /.col-md-12 -->
-				</div> <!-- /.row -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Fantasy">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Fantasy</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Botany">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Botany</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Universe">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Universe</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-				</div> <!-- /.row -->
-				<div class="row">
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Channel">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Channel</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Dragonfly">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Dragonfly</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<div class="portfolio-item">
-							<div class="portfolio-thumb">
-								<img src="http://placehold.it/520x480" alt="Titanium">
-								<div class="overlay-p">
-									<a href="http://placehold.it/520x480" data-gal="prettyPhoto">
-										<i class="fa fa-arrows-alt fa-2x"></i>
-									</a>
-								</div>
-							</div> <!-- /.portfolio-thumb -->
-							<h3 class="portfolio-title"><a href="#">Titanium</a></h3>
-						</div> <!-- /.portfolio-item -->
-					</div> <!-- /.col-md-4 -->
-				</div> <!-- /.row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="load-more">
-							<a href="#portfolio" class="largeButton portfolioBgColor">Load More</a>
-						</div>
-					</div>
-				</div>
-			</div> <!-- /#portfolio -->
+        </div>
+        <!-- /.container -->
 
-			<div id="contact" class="section-content">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2>Contact Us</h2>
-						</div> <!-- /.section-title -->
-					</div> <!-- /.col-md-12 -->
-				</div> <!-- /.row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="map-holder">
-							<div class="google-map-canvas" id="map-canvas" style="height: 400px;">
-                    		</div>
-						</div> <!-- /.map-holder -->
-					</div> <!-- /.col-md-12 -->
-				</div> <!-- /.row -->
-				<div class="row contact-form">
-					<div class="col-md-4">
-						<label for="name-id" class="required">Name:</label>
-						<input name="name-id" type="text" id="name-id" maxlength="40">
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<label for="email-id" class="required">Email:</label>
-						<input name="email-id" type="text" id="email-id" maxlength="40">
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-4">
-						<label for="subject-id">Subject:</label>
-						<input name="subject-id" type="text" id="subject-id" maxlength="60">
-					</div> <!-- /.col-md-4 -->
-					<div class="col-md-12">
-						<label for="message-id" class="required">Message:</label>
-						<textarea name="message-id" id="message-id" rows="6"></textarea>
-					</div> <!-- /.col-md-12 -->
-					<div class="col-md-12">
-						<div class="submit-btn">
-							<a href="#" class="largeButton contactBgColor">Send Message</a>
-						</div> <!-- /.submit-btn -->
-					</div> <!-- /.col-md-12 -->
-				</div>
-			</div> <!-- /#contact -->
+    </div>
+    <!-- /.content-section-a -->
 
-			<div id="log-in" class="section-content" style="height: 350px">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2>Log In</h2>
-						</div> <!-- /.section-title -->
-					</div> <!-- /.col-md-12 -->
-				</div> <!-- /.row -->
-			<div class="ar login_popup"style="text-align: right; display: block; width: 370px"> <!-- login-popup -->      
-		        <form id="user_login" action="" method="post">
-		        	{% csrf_token %}
-		            <span class="title">Username</span> <input name="username" type="text" /><br>
-		            <span class="title">Password</span> <input name="password" type="password" /><br>
-		            {% if messages %}
-								    <ul style="color: red">
-								        {% for message in messages %}
-								            {{ message }}*
-								        {% endfor %}
-								    </ul>
-								{% endif %}
-		            <input style="width:155px" type="submit" value="Log In">
-		        </form>
-			</div> <!-- /login-popup -->		
-		</div>		
+    <div class="content-section-b">
 
-		</div> <!-- /.container-fluid -->
+        <div class="container">
 
-		<div class="site-footer">
-			<div class="first-footer">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="social-footer">
-								<ul>
-									<li><a href="#" class="fa fa-facebook"></a></li>
-									<li><a href="#" class="fa fa-twitter"></a></li>
-									<li><a href="#" class="fa fa-dribbble"></a></li>
-									<li><a href="#" class="fa fa-linkedin"></a></li>
-									<li><a href="#" class="fa fa-rss"></a></li>
-								</ul>
-							</div> <!-- /.social-footer -->
-						</div> <!-- /.col-md-12 -->
-					</div> <!-- /.row -->
-				</div> <!-- /.container-fluid -->
-			</div> <!-- /.first-footer -->
-			<div class="bottom-footer">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-6">
-							<p class="copyright">Copyright © 2014 <a href="#">MySociety / Group 26</a>
-                            </p>
-						</div> <!-- /.col-md-6 -->
-						<div class="col-md-6 credits">
-						</div> <!-- /.col-md-6 -->
-					</div> <!-- /.row -->
-				</div> <!-- /.container-fluid -->
-			</div> <!-- /.bottom-footer -->
-		</div> <!-- /.site-footer -->
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">3D Device Mockups
+                        <br>by PSDCovers</h2>
+                    <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop actions by PSDCovers! <a target="_blank" href="http://www.psdcovers.com/">Visit their website</a> to download some of their awesome, free photoshop actions!</p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="{{ STATIC_URL }}/landing-page/img/doge.png" alt="">
+                </div>
+            </div>
 
-	</div> <!-- /#main-content -->
+        </div>
+        <!-- /.container -->
 
-	<!-- JavaScripts -->
-	<script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
-	<script src="{{ STATIC_URL }}js/jquery.singlePageNav.js"></script>
-	<script src="{{ STATIC_URL }}js/jquery.flexslider.js"></script>
-	<script src="{{ STATIC_URL }}js/jquery.prettyPhoto.js"></script>
-	<script src="{{ STATIC_URL }}js/custom.js"></script>
-	<script>
-		$(document).ready(function(){
-			$("a[data-gal^='prettyPhoto']").prettyPhoto({hook: 'data-gal'});
-		});
+    </div>
+    <!-- /.content-section-b -->
 
-        function initialize() {
-          var mapOptions = {
-            zoom: 11,
-            center: new google.maps.LatLng(53.3413378,-6.2585184)
-          };
+    <div class="content-section-a">
 
-          var map = new google.maps.Map(document.getElementById('map-canvas'),
-              mapOptions);
-        }
+        <div class="container">
 
-        function loadScript() {
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' +
-              'callback=initialize';
-          document.body.appendChild(script);
-        }
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Google Web Fonts and
+                        <br>Font Awesome Icons</h2>
+                    <p class="lead">This template features the 'Lato' font, part of the <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="{{ STATIC_URL }}/landing-page/img/phones.png" alt="">
+                </div>
+            </div>
 
-        window.onload = loadScript;
-    </script>
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="banner">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Connect to Start Bootstrap:</h2>
+                </div>
+                <div class="col-lg-6">
+                    <ul class="list-inline banner-social-buttons">
+                        <li><a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                        </li>
+                        <li><a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        </li>
+                        <li><a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li><a href="#home">Home</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="#about">About</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="#services">Services</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">Copyright &copy; Your Company 2013. All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ STATIC_URL }}/landing-page/js/jquery-1.10.2.js"></script>
+    <script src="{{ STATIC_URL }}/landing-page/js/bootstrap.js"></script>
 
 </body>
+
 </html>

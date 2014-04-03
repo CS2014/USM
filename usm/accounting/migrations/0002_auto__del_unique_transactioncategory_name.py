@@ -8,83 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Account'
-        db.create_table(u'accounting_account', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('society', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['main.Society'], unique=True)),
-        ))
-        db.send_create_signal(u'accounting', ['Account'])
-
-        # Adding model 'Log'
-        db.create_table(u'accounting_log', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-        ))
-        db.send_create_signal(u'accounting', ['Log'])
-
-        # Adding model 'TransactionCategory'
-        db.create_table(u'accounting_transactioncategory', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.Account'])),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
-        ))
-        db.send_create_signal(u'accounting', ['TransactionCategory'])
-
-        # Adding model 'Transaction'
-        db.create_table(u'accounting_transaction', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.Account'])),
-            ('transaction_category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.TransactionCategory'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('transaction_method', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('bank_reconlliation_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('is_reconciled', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=300)),
-        ))
-        db.send_create_signal(u'accounting', ['Transaction'])
-
-        # Adding M2M table for field logs on 'Transaction'
-        m2m_table_name = db.shorten_name(u'accounting_transaction_logs')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('transaction', models.ForeignKey(orm[u'accounting.transaction'], null=False)),
-            ('log', models.ForeignKey(orm[u'accounting.log'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['transaction_id', 'log_id'])
-
-        # Adding model 'Grant'
-        db.create_table(u'accounting_grant', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounting.Account'])),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('creation_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('purpose', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-        ))
-        db.send_create_signal(u'accounting', ['Grant'])
+        # Removing unique constraint on 'TransactionCategory', fields ['name']
+        db.delete_unique(u'accounting_transactioncategory', ['name'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Account'
-        db.delete_table(u'accounting_account')
-
-        # Deleting model 'Log'
-        db.delete_table(u'accounting_log')
-
-        # Deleting model 'TransactionCategory'
-        db.delete_table(u'accounting_transactioncategory')
-
-        # Deleting model 'Transaction'
-        db.delete_table(u'accounting_transaction')
-
-        # Removing M2M table for field logs on 'Transaction'
-        db.delete_table(db.shorten_name(u'accounting_transaction_logs'))
-
-        # Deleting model 'Grant'
-        db.delete_table(u'accounting_grant')
+        # Adding unique constraint on 'TransactionCategory', fields ['name']
+        db.create_unique(u'accounting_transactioncategory', ['name'])
 
 
     models = {
@@ -126,7 +56,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'TransactionCategory'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounting.Account']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},

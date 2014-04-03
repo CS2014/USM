@@ -5,23 +5,201 @@
 <script src="{{ STATIC_URL }}assets/js/jquery-2.1.0.min.js"></script>
 <script src="{{ STATIC_URL }}assets/js/jquery.flot.pie.min.js"></script>
 
-<div class="row">
-    <div class="col-sm-6">
-      <div class="box">
-        <div class="box-header" data-original-title>
-          <h2><i class="fa fa-list-alt"></i><span class="break"></span>Spending by category</h2>
-          <div class="box-icon">
-            <a href="charts-flot.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+      <div class="row">
+        
+        <div class="col-xs-12">
+        
+        <div class="main-chart">
+          <div class="bar simple">
+            
+            <div class="title">MAY</div>
+            <div class="value">100%</div>
+          
           </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">JUN</div>
+            <div class="value">60%</div>
+          
+          </div>
+          
+          <div class="bar">
+            
+            <div class="title">JUL</div>
+            <div class="value">50%</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">AUG</div>
+            <div class="value">40%</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">SEP</div>
+            <div class="value">10%</div>
+          
+          </div>  
+          
+          <div class="bar">
+            
+            <div class="title">OCT</div>
+            <div class="value">30%</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">NOV</div>
+            <div class="value">50%</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">DEC</div>
+            <div class="value">65%</div>
+          
+          </div>    
+
+          <div class="bar">
+            
+            <div class="title">JAN</div>
+            <div class="value">{{society.account.tabulate_transactions_jan}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">FEB</div>
+            <div class="value">{{society.account.tabulate_transactions_feb}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">MAR</div>
+            <div class="value">{{society.account.tabulate_transactions_mar}}</div>
+          
+          </div>
+          
+          <div class="bar">
+            
+            <div class="title">APR</div>
+            <div class="value">{{society.account.tabulate_transactions_apr}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">MAY</div>
+            <div class="value">{{society.account.tabulate_transactions_may}}</div>
+          
+          </div>  
+          
+          <div class="bar simple">
+            
+            <div class="title">JUN</div>
+            <div class="value">{{society.account.tabulate_transactions_jun}}</div>
+          
+          </div>
+          
+          <div class="bar">
+            
+            <div class="title">JUL</div>
+            <div class="value">{{society.account.tabulate_transactions_jul}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">AUG</div>
+            <div class="value">{{society.account.tabulate_transactions_aug}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">SEP</div>
+            <div class="value">{{society.account.tabulate_transactions_sep}}</div>
+          
+          </div>
+          
+          <div class="bar">
+            
+            <div class="title">OCT</div>
+            <div class="value">{{society.account.tabulate_transactions_oct}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">NOV</div>
+            <div class="value">{{society.account.tabulate_transactions_nov}}</div>
+          
+          </div>
+          
+          <div class="bar simple">
+            
+            <div class="title">DEC</div>
+            <div class="value">{{society.account.tabulate_transactions_dec}}</div>
+          
+          </div>
+          
         </div>
-        <div class="box-content">
-           <div id="donutchart" style="height: 300px;">
-             Insert pie chart here.
-           </div>
-        </div>
-      </div>
-    </div><!--/col-->    
-  <div class="col-sm-6">
+        
+        </div><!--/col--> 
+      
+      </div><!--/row--> 
+
+<div class="row">
+        <div class="col-sm-4">
+
+          <div class="smallchart green box mobileHalf">
+
+            <div class="title">Total grant funding</div>
+
+
+            <div class="value">&euro;{% if society.account.tabulate_grants.total != None %}{{society.account.tabulate_grants.total}}{% else %}0{% endif %}</div>
+
+          </div>
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart red box mobileHalf">
+
+            <div class="title">Total transactions</div>
+
+
+            <div class="value">&euro;{% if society.account.tabulate_transactions.total != None %}{{society.account.tabulate_transactions.total}}{% else %}0{% endif %}</div>
+
+          </div>
+
+        </div><!--/col-->
+
+                <div class="col-sm-4">
+
+          <div class="smallchart blue box mobileHalf">
+
+            <div class="title">Account balance</div>
+
+
+            <div class="value">&euro;{% if society.account.tabulate_balance != None %}{{society.account.tabulate_balance}}{% else %}0{% endif %}</div>
+
+          </div>
+
+        </div><!--/col-->
+</div>
+
+
+<div class="row">
+  
     <div class="box">
       <div class="box-header">
         <h2><i class="fa fa-bar-chart-o"></i>Spending by month</h2>
@@ -33,15 +211,12 @@
         <figure id="example1" style="height: 300px"></figure>
       </div>
     </div>
-  </div>
+  
 </div>
-
 
 <script>
       
 (function () {
-   
-
       var data = {
   "xScale": "time",
   "yScale": "linear",
@@ -52,83 +227,106 @@
       "data": [
         {
           "x": "01",
-          "y": "{{society.account.tabulate_transactions_jan.total}}"
+          "y": {{monthlyTotals.0.1.total}}
         },
         {
           "x": "02",
-          "y": "{{society.account.tabulate_transactions_feb.total}}"
+          "y": {{monthlyTotals.1.1.total}}
         },      
         {
           "x": "03",
-          "y": "{{society.account.tabulate_transactions_mar.total}}"
+          "y": {{monthlyTotals.2.1.total}}
         },
         {
           "x": "04",
-          "y": "{{society.account.tabulate_transactions_apr.total}}"
+          "y": {{monthlyTotals.3.1.total}}
         },      
         {
           "x": "05",
-          "y": "{{society.account.tabulate_transactions_may.total}}"
+          "y": {{monthlyTotals.4.1.total}}
         },
         {
           "x": "06",
-          "y": "{{society.account.tabulate_transactions_jun.total}}"
+          "y": {{monthlyTotals.5.1.total}}
         },      
         {
           "x": "07",
-          "y": "{{society.account.tabulate_transactions_jul.total}}"
+          "y": {{monthlyTotals.6.1.total}}
         },
         {
           "x": "08",
-          "y": "{{society.account.tabulate_transactions_aug.total}}"
+          "y": {{monthlyTotals.7.1.total}}
         },      
         {
           "x": "09",
-          "y": "{{society.account.tabulate_transactions_sep.total}}"
+          "y": {{monthlyTotals.8.1.total}}
         },
         {
           "x": "10",
-          "y": "{{society.account.tabulate_transactions_oct.total}}"
+          "y": {{monthlyTotals.9.1.total}}
         },      
         {
           "x": "11",
-          "y": "{{society.account.tabulate_transactions_nov.total}}"
+          "y": {{monthlyTotals.10.1.total}}
         },
         {
           "x": "12",
-          "y": "{{society.account.tabulate_transactions_dec.total}}"
+          "y": {{monthlyTotals.11.1.total}}
         }
       ]
     }
   ]
 };
       var opts = {
-  "dataFormatX": function (x) { return d3.time.format('%m').parse(x); },
-  "tickFormatX": function (x) { return d3.time.format('%b')(x); }
-};
+        "dataFormatX": function (x) { return d3.time.format('%m').parse(x); },
+        "tickFormatX": function (x) { return d3.time.format('%b')(x); }
+      };
       
-      var myChart = new xChart('line', data, '#example1', opts);
+      //var myChart = new xChart('line', data, '#example1', opts);
       
     }());
-</script>      
+</script>  
+
+<script>
+(function () {
+  /* ---------- Pie chart ---------- */
+  var data = [
+  { label: "Internet Explorer",  data: 12},
+  { label: "Mobile",  data: 27},
+  { label: "Safari",  data: 85},
+  { label: "Opera",  data: 64},
+  { label: "Firefox",  data: 90},
+  { label: "Chrome",  data: 112}
+  ];
+  
+  if($("#piechart").length)
+  {
+    $.plot($("#piechart"), data,
+    {
+      series: {
+          pie: {
+              show: true
+          }
+      },
+      grid: {
+          hoverable: true,
+          clickable: true
+      },
+      legend: {
+        show: false
+      },
+      colors: ["#FA5833", "#2FABE9", "#FABB3D", "#78CD51"]
+    });
+    
+    function pieHover(event, pos, obj)
+    {
+      if (!obj)
+          return;
+      percent = parseFloat(obj.series.percent).toFixed(2);
+      $("#hover").html('<span style="font-weight: bold; color: '+obj.series.color+'">'+obj.series.label+' ('+percent+'%)</span>');
+    }
+    $("#piechart").bind("plothover", pieHover);
+  }
+});
+</script>
 {% endblock %}
-<!--
-  1: get last 12 months of spending in 12 month vars
-
-
-		author: Ross Kinsella	
-		date:   2014/feb/13
-}());
-		Displays a list of all the models in the accounting app.
-
--->
-<!--
-<ul>  
-	<li><a href="/accounting/accounts/">Accounts:<a></li>
-  <li><a href="/accounting/transaction_categories/">Transaction categories:<a></li>
-  <li><a href="/accounting/transaction_methods/">Transaction methods:<a></li>
-  <li><a href="/accounting/transactions/">Transactions:<a></li>
-  <li><a href="/accounting/bills/">Bills:<a></li>
-  <li><a href="/accounting/invoices/">Invoices:<a></li>
-  <li><a href="/accounting/grants/">Grants:<a></li>
-</ul>-->

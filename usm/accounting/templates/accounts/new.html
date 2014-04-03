@@ -1,9 +1,0 @@
-<form method="post" action="/accounting/accounts/">
-	{% csrf_token %}
-	{% for field in form %}
-		<b>{{ field.label_tag }}</b>
-		{{ field }}
-		<br>
-  {% endfor %}
-  <p><input type="submit" value="Create"/></p>
-</form>
