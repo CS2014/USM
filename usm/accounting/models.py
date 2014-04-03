@@ -28,7 +28,7 @@ class Account(models.Model):
 
 	def tabulate_transactions_month(self, month):
 		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('amount'))
+		return self.transaction_set.all().filter(date__month=month, date__year=today.year).aggregate(total=Sum('amount'))
 
 	def tabulate_transactions_year(self,month):
 		today = datetome.date.today()
@@ -74,7 +74,7 @@ class TransactionCategory(models.Model):
 		'''
 		account = models.ForeignKey(Account)	
 
-		name = models.CharField(max_length=20,unique=True)
+		name = models.CharField(max_length=20)
 		
 		def __unicode__(self):
 			return self.name
