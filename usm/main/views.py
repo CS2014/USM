@@ -60,7 +60,6 @@ def create_society(request):
 Authentication views
 '''
 def user_login(request):
-
     if request.user.is_authenticated():
         return redirect("/")
         
@@ -104,7 +103,7 @@ def logout_view(request):
 '''
 Logged in user views
 '''     
-def dash_board(request, slug): 
+def dashboard(request, slug): 
         try:
                 society = get_object_or_404(Society, slug=slug)
                 society.members.get(pk=request.user.id)

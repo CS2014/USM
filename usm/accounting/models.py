@@ -42,61 +42,51 @@ class Account(models.Model):
 
 	def tabulate_transactions_month(self, month):
 		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
+		x = self.transaction_set.all().filter(submit_date__month=month).aggregate(total=Sum('ammount'))
+		if x["total"] != None:
+			return x["total"]
+		else:
+			return 0
 
 	def tabulate_transactions_year(self,month):
 		today = datetome.date.today()
 		start_month = month
 
-
-
 	def tabulate_transactions_jan(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='1').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(1)
 
 	def tabulate_transactions_feb(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='2').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(2)
 
 	def tabulate_transactions_mar(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='3').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(3)
 
 	def tabulate_transactions_apr(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='4').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(4)
 
 	def tabulate_transactions_may(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='5').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(5)
 
 	def tabulate_transactions_jun(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='6').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(6)
 
 	def tabulate_transactions_jul(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='7').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(7)
 
 	def tabulate_transactions_aug(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='8').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(8)
 
 	def tabulate_transactions_sep(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='9').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(9)
 
 	def tabulate_transactions_oct(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='10').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(10)
 
 	def tabulate_transactions_nov(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='11').aggregate(total=Sum('ammount'))
+		return self.tabulate_transactions_month(11)
 
 	def tabulate_transactions_dec(self):
-		today = datetime.date.today()
-		return self.transaction_set.all().filter(submit_date__month='12').aggregate(total=Sum('ammount'))				
+		return self.tabulate_transactions_month(12)
 
   #Get all transaction childrens' ammounts
 	def tabulate_transactions(self):
