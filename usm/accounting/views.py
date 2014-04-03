@@ -27,7 +27,7 @@ import datetime
 
 def get_transactions(request,account):
 		transaction_list = account.transaction_set.all()
-		paginator = Paginator(transaction_list, 15) # Show 25 contacts per page
+		paginator = Paginator(transaction_list, 8) # Show 8 transactions per page
 		page = request.GET.get('page')
 		try:
 				transactions = paginator.page(page)
