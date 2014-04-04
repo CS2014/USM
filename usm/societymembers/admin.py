@@ -16,7 +16,7 @@ class TagAdmin(admin.ModelAdmin):
 	fields = [ 'name', 'society' ]
 
 class SocietyMemberAdmin(admin.ModelAdmin):
-	fields = [ 'society', 'name', 'phone_number', 'email_address', 'join_date', 'tags']
+	fields = [ 'society', 'name', 'phone_number', 'email_address', 'tags']
 	list_display = ('name', 'get_tags')
 
 class MembershipFeeAdmin(admin.ModelAdmin):

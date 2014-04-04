@@ -18,43 +18,34 @@ from django.forms.models import model_to_dict
 from django.core.urlresolvers import reverse
 from societymembers.models import TagForm, SocietyMemberForm, MembershipFeeForm, DeleteSocietyMemberForm
 
-def member_index(request):
-		member_list = SocietyMember.objects.all()
-		context = {'member_list' : member_list}
-		if request.method == 'POST':
-			form = SocietyMemberForm(request.POST, request.FILES)
-			if form.is_valid():
-				form.save()
-		return render(request, 'societymembers/index.html', context)
+from main.models import *
 
-def member_add(request):
-		form = SocietyMemberForm
-		context = {'form': form}
-		return render(request, 'societymembers/new.html', context)
+def member_index(request, slug):
+	member_list = SocietyMember.objects.filter(society__slug=slug)
+	context = {'member_list' : member_list, 'slug': slug}
+	return render(request, 'societymembers/index.html', context)
 
-def member_delete(request):
-		member_toDelete = get_object_or_404(SocietyMember, pk=request.POST['member_id'])
-		user = request.user
-		allowed = 0
-		for x in member_toDelete.society.members.all():
-			if x == user:
-				allowed = 1
-		if request.method == 'POST':
-			if (allowed == 1 or user.is_superuser):
-				form = DeleteSocietyMemberForm(request.POST, instance=member_toDelete)
-				if form.is_valid():
-					member_toDelete.delete()
-					return HttpResponseRedirect(reverse('societymembers:member_index'))
-			else:
-				form = SocietyMemberForm(instance=member_toDelete)
-				return HttpResponseRedirect(reverse('societymembers:member_denied'))
-		else:
-			form = SocietyMemberForm(instance=member_toDelete)
+def member_add(request, slug):
+	form = SocietyMemberForm
+	if request.method == 'POST':
+		form = SocietyMemberForm(request.POST, request.FILES)
+		if form.is_valid():
+			mem = form.save()
+			mem.society = Society.objects.get(slug=slug)
+			mem.save()
+			return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
+	context = {'form': form}
+	return render(request, 'societymembers/new.html', context)
 
-		context = {'form': form}
-		return HttpResponseRedirect(reverse('societymembers:member_index'))
+def member_delete(request, slug, member_id):
+		member = get_object_or_404(SocietyMember, pk=member_id)
 
-def member_edit(request, member_id):
+		# Superusers or society admins can delete society members.
+		if request.user.is_superuser or request.user.society_set.filter(slug=slug).exists():
+				member.delete()
+		return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
+
+def member_edit(request, slug, member_id):
 		instance = get_object_or_404(SocietyMember, id=member_id)
 		user = request.user
 		allowed = 0
@@ -71,11 +62,11 @@ def member_edit(request, member_id):
 		object = SocietyMemberForm(data=model_to_dict(instance))
 		return render(request, 'societymembers/detail.html', {'object':object, 'member_id' : member_id})  
 
-def member_detail(request, member_id):
+def member_detail(request, slug, member_id):
 		member = get_object_or_404(SocietyMember, pk=member_id)
 		form = SocietyMemberForm(data=model_to_dict(member))
 		data=build_pretty_data_view(form_instance=form, model_object=member)
-		return render(request, 'societymembers/detail.html', {'data' : data, 'form' : form, 'member_id' : member_id})
+		return render(request, 'societymembers/detail.html', {'data' : data, 'form' : form, 'slug':slug, 'member_id' : member_id})
 
-def member_denied(request):
+def member_denied(request, slug):
 		return render(request, 'societymembers/denied.html')
