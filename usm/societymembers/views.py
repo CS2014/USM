@@ -34,7 +34,7 @@ def member_add(request, slug):
 			mem.society = Society.objects.get(slug=slug)
 			mem.save()
 			return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
-	context = {'form': form}
+	context = {'form': form, 'slug': slug}
 	return render(request, 'societymembers/new.html', context)
 
 def member_delete(request, slug, member_id):
@@ -47,16 +47,12 @@ def member_delete(request, slug, member_id):
 
 def member_edit(request, slug, member_id):
 		instance = get_object_or_404(SocietyMember, id=member_id)
-		user = request.user
-		allowed = 0
-		for x in instance.society.members.all():
-			if x == user:
-				allowed = 1
-		if (allowed == 1 or user.is_superuser):
+		# Superusers or society admins can delete society members.
+		if request.user.is_superuser or request.user.society_set.filter(slug=slug).exists():
 			form = SocietyMemberForm(request.POST or none, instance=instance)
 			if form.is_valid():
 				form.save()
-				return HttpResponseRedirect(reverse('societymembers:member_index'))
+				return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
 		else:
 			return HttpResponseRedirect(reverse('societymembers:member_denied'))
 		object = SocietyMemberForm(data=model_to_dict(instance))

@@ -233,6 +233,13 @@
 							</ul>
 						</li>
 						<li>
+							<a class="dropmenu" href="{% if slug %}{% url 'societymembers:member_index' slug %}{% else %}{% url 'societymembers:member_index' society.slug %}{% endif %}"><i class="fa fa-align-justify"></i><span class="hidden-sm"> Members</span></a>
+							<ul>
+								<li><a class="submenu" href="{% if slug %}{% url 'societymembers:member_add' slug %}{% else %}{% url 'societymembers:member_index' society.slug %}{% endif %}"><i class="fa fa-edit"></i><span class="hidden-sm"> Add New Member</span></a></li>
+								<li><a class="submenu" href="{% if slug %}{% url 'societymembers:member_index' slug %}{% else %}{% url 'societymembers:member_index' society.slug %}{% endif %}"><i class="fa fa-edit"></i><span class="hidden-sm"> View Members</span></a></li>
+							</ul>
+						</li>
+						<li>
 							<a class="dropmenu" href="index.html#"><i class="fa fa-list-alt"></i><span class="hidden-sm"> Accounting</span> <span class="label"></span></a>
 							<ul>
 								<li><a class="submenu" href="/{{society.slug}}/transactions"><i class="fa fa-list-alt"></i><span class="hidden-sm"> Transactions</span></a></li>
