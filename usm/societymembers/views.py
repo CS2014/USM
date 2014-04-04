@@ -2,11 +2,6 @@
 		author: Kevin O'Flanagan
 			Cian McDonnell
 		date:   2014/march/5
-
-
-		TODO:
-		-Implement views
-
 '''
 
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
@@ -46,7 +41,7 @@ def member_delete(request, slug, member_id):
 		return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
 
 def member_edit(request, slug, member_id):
-		instance = get_object_or_404(SocietyMember, id=member_id)
+		member = get_object_or_404(SocietyMember, id=member_id)
 		# Superusers or society admins can delete society members.
 		if request.user.is_superuser or request.user.society_set.filter(slug=slug).exists():
 			form = SocietyMemberForm(request.POST or none, instance=instance)
@@ -55,7 +50,7 @@ def member_edit(request, slug, member_id):
 				return HttpResponseRedirect(reverse('societymembers:member_index', args=[slug]))
 		else:
 			return HttpResponseRedirect(reverse('societymembers:member_denied'))
-		object = SocietyMemberForm(data=model_to_dict(instance))
+		object = SocietyMemberForm(data=model_to_dict(member))
 		return render(request, 'societymembers/detail.html', {'object':object, 'member_id' : member_id})  
 
 def member_detail(request, slug, member_id):

@@ -7,3 +7,14 @@ pystache==0.5.3
 static==1.0.2
 wsgiref==0.1.2
 psycopg2
+amqp==1.4.4
+anyjson==0.3.3
+billiard==3.3.0.16
+celery==3.1.10
+gunicorn==18.0
+kombu==3.0.143
+pytz==2014.2
+twilio
+httplib2
+six
+django-celery

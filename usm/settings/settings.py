@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     # Third Party Apps
     'gunicorn',
     'south',
+    'djcelery',
 
     # Local Apps
     'accounting',
@@ -96,6 +97,9 @@ USE_L10N = True
 
 USE_TZ = False
 
+
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERY_ALWAYS_EAGER = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

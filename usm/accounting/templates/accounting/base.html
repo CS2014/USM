@@ -229,9 +229,8 @@
 						<li>
 							<a class="dropmenu" href="index.html#"><i class="fa fa-envelope"></i><span class="hidden-sm"> Messaging</span> <span class="label">3</span></a>
 							<ul>
-								<li><a class="submenu" href="form-elements.html"><i class="fa fa-edit"></i><span class="hidden-sm"> To do </span></a></li>
-								<li><a class="submenu" href="form-wizard.html"><i class="fa fa-edit"></i><span class="hidden-sm"> To do</span></a></li>
-								<li><a class="submenu" href="form-dropzone.html"><i class="fa fa-edit"></i><span class="hidden-sm"> To do</span></a></li>
+								<li><a class="submenu" href="{% if slug %}{% url 'communications:send_sms' slug %}{% else %}{% url 'communications:send_sms' society.slug %}{% endif %}"><i class="fa fa-edit"></i><span class="hidden-sm"> Send SMS </span></a></li>
+								<li><a class="submenu" href="{% if slug %}{% url 'communications:send_email' slug %}{% else %}{% url 'communications:send_email' society.slug %}{% endif %}"><i class="fa fa-edit"></i><span class="hidden-sm"> Send Email</span></a></li>
 							</ul>
 						</li>
 						<li>
